@@ -1,0 +1,12 @@
+# Go temp
+/tmp
+
+# Go build output
+bin/
+
+# Git metadata
+.git/
+
+# Sensitive configuration
+*.env
+.DS_Store
