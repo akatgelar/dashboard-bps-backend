@@ -1,0 +1,12 @@
+services:
+  dashboard-bps-backend:
+    # build:
+    #   context: ../
+    #   dockerfile: .docker/Dockerfile
+    image: ghcr.io/akatgelar/dashboard-bps-backend:latest
+    container_name: dashboard-bps-backend
+    restart: unless-stopped 
+    env_file:
+      - ../.env
+    ports:
+      - "8081:8081"
