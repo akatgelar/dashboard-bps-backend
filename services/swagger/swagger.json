@@ -1,7 +1,7 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "REST API WebAPI BPS (master \u0026 insight endpoints) - schema webapi.",
+        "description": "REST API Dashboard BPS (master \u0026 insight endpoints) - schema webapi.",
         "title": "Dashboard BPS API",
         "contact": {},
         "version": "2.0"

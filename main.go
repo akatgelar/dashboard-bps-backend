@@ -2,7 +2,7 @@
 
 // @title Dashboard BPS API
 // @version 2.0
-// @description REST API WebAPI BPS (master & insight endpoints) - schema webapi.
+// @description REST API Dashboard BPS (master & insight endpoints) - schema webapi.
 // @host localhost:8080
 // @BasePath /
 package main

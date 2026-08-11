@@ -1051,7 +1051,7 @@ var SwaggerInfo = &swag.Spec{
 	BasePath:         "/",
 	Schemes:          []string{},
 	Title:            "Dashboard BPS API",
-	Description:      "REST API WebAPI BPS (master & insight endpoints) - schema webapi.",
+	Description:      "REST API Dashboard BPS (master & insight endpoints) - schema webapi.",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",
