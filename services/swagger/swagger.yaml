@@ -1,0 +1,690 @@
+basePath: /
+definitions:
+  models.BaseResponse:
+    properties:
+      data: {}
+      message:
+        type: string
+      metadata: {}
+      status:
+        type: boolean
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: REST API WebAPI BPS (master & insight endpoints) - schema webapi.
+  title: Dashboard BPS API
+  version: "2.0"
+paths:
+  /datacontent:
+    get:
+      consumes:
+      - application/json
+      description: Get list datacontent (payload data)
+      parameters:
+      - description: JSON array of {field,operator,value}
+        in: query
+        name: filter
+        type: string
+      - description: sort column (single)
+        in: query
+        name: sort
+        type: string
+      - description: asc | desc
+        in: query
+        name: order
+        type: string
+      - description: per page, default 20
+        in: query
+        name: per_page
+        type: integer
+      - description: page, 1-based
+        in: query
+        name: page
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+      summary: List datacontent
+      tags:
+      - master
+  /insight/big-number:
+    get:
+      consumes:
+      - application/json
+      description: Get aggregated big number (current & previous year comparison)
+        from webapi.datacontent
+      parameters:
+      - description: domain_id
+        in: query
+        name: domain_id
+        required: true
+        type: string
+      - description: var_id
+        in: query
+        name: var_id
+        required: true
+        type: string
+      - description: turvar_id
+        in: query
+        name: turvar_id
+        required: true
+        type: string
+      - description: tahun_id
+        in: query
+        name: tahun_id
+        required: true
+        type: string
+      - description: turtahun_id
+        in: query
+        name: turtahun_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+      summary: Insight big number
+      tags:
+      - insight
+  /insight/per-tahun:
+    get:
+      consumes:
+      - application/json
+      description: Get data per region (vervar) & per year from webapi.datacontent
+      parameters:
+      - description: domain_id
+        in: query
+        name: domain_id
+        required: true
+        type: string
+      - description: var_id
+        in: query
+        name: var_id
+        required: true
+        type: string
+      - description: turvar_id
+        in: query
+        name: turvar_id
+        required: true
+        type: string
+      - description: turtahun_id
+        in: query
+        name: turtahun_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+      summary: Insight per tahun
+      tags:
+      - insight
+  /insight/per-wilayah:
+    get:
+      consumes:
+      - application/json
+      description: Get data per region with percentile-based color clusters from webapi.datacontent
+      parameters:
+      - description: domain_id
+        in: query
+        name: domain_id
+        required: true
+        type: string
+      - description: var_id
+        in: query
+        name: var_id
+        required: true
+        type: string
+      - description: turvar_id
+        in: query
+        name: turvar_id
+        required: true
+        type: string
+      - description: tahun_id
+        in: query
+        name: tahun_id
+        required: true
+        type: string
+      - description: turtahun_id
+        in: query
+        name: turtahun_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+      summary: Insight per wilayah
+      tags:
+      - insight
+  /insight/per-wilayah-turvar:
+    get:
+      consumes:
+      - application/json
+      description: Get data per region & per variable turunan from webapi.datacontent
+      parameters:
+      - description: domain_id
+        in: query
+        name: domain_id
+        required: true
+        type: string
+      - description: var_id
+        in: query
+        name: var_id
+        required: true
+        type: string
+      - description: tahun_id
+        in: query
+        name: tahun_id
+        required: true
+        type: string
+      - description: turtahun_id
+        in: query
+        name: turtahun_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+      summary: Insight per wilayah - turvar
+      tags:
+      - insight
+  /master/domain:
+    get:
+      consumes:
+      - application/json
+      description: Get list master domain
+      parameters:
+      - description: JSON array of {field,operator,value}
+        in: query
+        name: filter
+        type: string
+      - description: sort column (single)
+        in: query
+        name: sort
+        type: string
+      - description: asc | desc
+        in: query
+        name: order
+        type: string
+      - description: per page, default 20
+        in: query
+        name: per_page
+        type: integer
+      - description: page, 1-based
+        in: query
+        name: page
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+      summary: List master domain
+      tags:
+      - master
+  /master/subjek:
+    get:
+      consumes:
+      - application/json
+      description: Get list master subject
+      parameters:
+      - description: JSON array of {field,operator,value}
+        in: query
+        name: filter
+        type: string
+      - description: sort column (single)
+        in: query
+        name: sort
+        type: string
+      - description: asc | desc
+        in: query
+        name: order
+        type: string
+      - description: per page, default 20
+        in: query
+        name: per_page
+        type: integer
+      - description: page, 1-based
+        in: query
+        name: page
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+      summary: List master subject
+      tags:
+      - master
+  /master/tahun:
+    get:
+      consumes:
+      - application/json
+      description: Get list master tahun
+      parameters:
+      - description: JSON array of {field,operator,value}
+        in: query
+        name: filter
+        type: string
+      - description: sort column (single)
+        in: query
+        name: sort
+        type: string
+      - description: asc | desc
+        in: query
+        name: order
+        type: string
+      - description: per page, default 20
+        in: query
+        name: per_page
+        type: integer
+      - description: page, 1-based
+        in: query
+        name: page
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+      summary: List master tahun
+      tags:
+      - master
+  /master/tahun-distinct:
+    get:
+      consumes:
+      - application/json
+      description: SELECT DISTINCT tahun_id, tahun_name FROM webapi.datacontent
+      parameters:
+      - description: JSON array of {field,operator,value}
+        in: query
+        name: filter
+        type: string
+      - description: sort column (single)
+        in: query
+        name: sort
+        type: string
+      - description: asc | desc
+        in: query
+        name: order
+        type: string
+      - description: per page, default 20
+        in: query
+        name: per_page
+        type: integer
+      - description: page, 1-based
+        in: query
+        name: page
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+      summary: List distinct tahun from datacontent
+      tags:
+      - master
+  /master/tahun-turunan:
+    get:
+      consumes:
+      - application/json
+      description: Get list master tahun turunan
+      parameters:
+      - description: JSON array of {field,operator,value}
+        in: query
+        name: filter
+        type: string
+      - description: sort column (single)
+        in: query
+        name: sort
+        type: string
+      - description: asc | desc
+        in: query
+        name: order
+        type: string
+      - description: per page, default 20
+        in: query
+        name: per_page
+        type: integer
+      - description: page, 1-based
+        in: query
+        name: page
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+      summary: List master tahun turunan
+      tags:
+      - master
+  /master/tahun-turunan-distinct:
+    get:
+      consumes:
+      - application/json
+      description: SELECT DISTINCT turtahun_id, turtahun_name FROM webapi.datacontent
+      parameters:
+      - description: JSON array of {field,operator,value}
+        in: query
+        name: filter
+        type: string
+      - description: sort column (single)
+        in: query
+        name: sort
+        type: string
+      - description: asc | desc
+        in: query
+        name: order
+        type: string
+      - description: per page, default 20
+        in: query
+        name: per_page
+        type: integer
+      - description: page, 1-based
+        in: query
+        name: page
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+      summary: List distinct tahun turunan from datacontent
+      tags:
+      - master
+  /master/variable:
+    get:
+      consumes:
+      - application/json
+      description: Get list master variable
+      parameters:
+      - description: JSON array of {field,operator,value}
+        in: query
+        name: filter
+        type: string
+      - description: sort column (single)
+        in: query
+        name: sort
+        type: string
+      - description: asc | desc
+        in: query
+        name: order
+        type: string
+      - description: per page, default 20
+        in: query
+        name: per_page
+        type: integer
+      - description: page, 1-based
+        in: query
+        name: page
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+      summary: List master variable
+      tags:
+      - master
+  /master/variable-distinct:
+    get:
+      consumes:
+      - application/json
+      description: Get list master variable that have variable_turunan
+      parameters:
+      - description: JSON array of {field,operator,value}
+        in: query
+        name: filter
+        type: string
+      - description: sort column (single)
+        in: query
+        name: sort
+        type: string
+      - description: asc | desc
+        in: query
+        name: order
+        type: string
+      - description: per page, default 20
+        in: query
+        name: per_page
+        type: integer
+      - description: page, 1-based
+        in: query
+        name: page
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+      summary: List master variable that have variable_turunan
+      tags:
+      - master
+  /master/variable-turunan:
+    get:
+      consumes:
+      - application/json
+      description: Get list master variable turunan
+      parameters:
+      - description: JSON array of {field,operator,value}
+        in: query
+        name: filter
+        type: string
+      - description: sort column (single)
+        in: query
+        name: sort
+        type: string
+      - description: asc | desc
+        in: query
+        name: order
+        type: string
+      - description: per page, default 20
+        in: query
+        name: per_page
+        type: integer
+      - description: page, 1-based
+        in: query
+        name: page
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+      summary: List master variable turunan
+      tags:
+      - master
+  /master/variable-vertical:
+    get:
+      consumes:
+      - application/json
+      description: Get list master variable vertical
+      parameters:
+      - description: JSON array of {field,operator,value}
+        in: query
+        name: filter
+        type: string
+      - description: sort column (single)
+        in: query
+        name: sort
+        type: string
+      - description: asc | desc
+        in: query
+        name: order
+        type: string
+      - description: per page, default 20
+        in: query
+        name: per_page
+        type: integer
+      - description: page, 1-based
+        in: query
+        name: page
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+      summary: List master variable vertical
+      tags:
+      - master
+swagger: "2.0"
