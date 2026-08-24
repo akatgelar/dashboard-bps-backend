@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"reflect"
 	"strconv"
 	"strings"
 	"time"
@@ -187,6 +188,31 @@ func fetchMaster(c *gin.Context, cfg masterConfig, model interface{}) {
 	if err := q.Limit(perPage).Offset(offset).Find(model).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, models.BaseResponse{Status: false, Message: "Failed to fetch data: " + err.Error()})
 		return
+	}
+
+	// Special case: VariableTurunan with empty result returns default value
+	rv := reflect.ValueOf(model)
+	if rv.Kind() == reflect.Ptr && rv.Elem().Kind() == reflect.Slice {
+		sliceVal := rv.Elem()
+		if sliceVal.Len() == 0 && sliceVal.Type().Elem() == reflect.TypeOf(ModelData.VariableTurunan{}) {
+			defaultData := []ModelData.VariableTurunan{
+				{TurvarID: "0", TurvarName: "Tidak Ada"},
+			}
+			c.JSON(http.StatusOK, models.BaseResponse{
+				Status:  true,
+				Message: "Get data success",
+				Data:     defaultData,
+				Metadata: models.BaseMetadata{
+					TotalData:      1,
+					TotalPage:      1,
+					PerPage:        perPage,
+					Page:           page,
+					LastUpdateData:     formatDateTime(lastDataValue(c, model, cfg)),
+					LastUpdatePipeline: formatDateTime(lastPipelineValue(model)),
+				},
+			})
+			return
+		}
 	}
 
 	// metadata timestamp
