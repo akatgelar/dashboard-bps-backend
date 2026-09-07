@@ -177,8 +177,8 @@ func GetBigNumberData(c *gin.Context) {
 	var meta BigNumberMetadata
 	if err := DB.DB_SQL_POSTGRES.QueryRow(
 		`SELECT
-		   to_char(MAX(last_updated_at), 'YYYY-MM-DD HH24:MI:SS'),
-		   to_char(MAX(get_at), 'YYYY-MM-DD HH24:MI:SS')
+		   COALESCE(to_char(MAX(last_updated_at), 'YYYY-MM-DD HH24:MI:SS'), ''),
+		   COALESCE(to_char(MAX(get_at), 'YYYY-MM-DD HH24:MI:SS'), '')
 		 FROM webapi.datacontent
 		 WHERE domain_id=$1 AND var_id=$2 AND turvar_id=$3 AND tahun_id=$4 AND turtahun_id=$5`,
 		domainID, varID, turvarID, tahunID, turtahunID,

@@ -123,8 +123,8 @@ func GetPerTahunData(c *gin.Context) {
 	var meta PerTahunMetadata
 	if err := DB.DB_SQL_POSTGRES.QueryRow(
 		`SELECT
-		   to_char(MAX(last_updated_at), 'YYYY-MM-DD HH24:MI:SS'),
-		   to_char(MAX(get_at), 'YYYY-MM-DD HH24:MI:SS')
+		   COALESCE(to_char(MAX(last_updated_at), 'YYYY-MM-DD HH24:MI:SS'), ''),
+		   COALESCE(to_char(MAX(get_at), 'YYYY-MM-DD HH24:MI:SS'), '')
 		 FROM webapi.datacontent
 		 WHERE domain_id=$1 AND var_id=$2 AND turvar_id=$3 AND turtahun_id=$4`,
 		domainID, varID, turvarID, turtahunID,
