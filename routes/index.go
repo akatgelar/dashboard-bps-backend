@@ -21,7 +21,8 @@ func RouteIndex(g *gin.RouterGroup) {
 	if ginMode == "debug" {
 		host = "localhost:" + appPort
 	} else if ginMode == "release" {
-		host = "https://dashboard-bps.akatgelar.app/api/"
+		// host = "https://dashboard-bps.akatgelar.app/api/"
+		host = "https://dashboard.ekosistemdata.dev/api-bps"
 	}
 	fmt.Print("host")
 	fmt.Print(host)
