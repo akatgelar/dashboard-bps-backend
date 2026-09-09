@@ -32,7 +32,7 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "example": "[{\"field\":\"domain_id\",\"operator\":\"eq\",\"value\":\"0000\"}]",
-                        "description": "JSON array of {field,operator,value}",
+                        "description": "JSON array of {field,operator,value}. Operator supports: eq, neq, gt, gte, lt, lte, like",
                         "name": "filter",
                         "in": "query"
                     },
@@ -400,7 +400,7 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "example": "[{\"field\":\"domain_id\",\"operator\":\"eq\",\"value\":\"0000\"}]",
-                        "description": "JSON array of {field,operator,value}",
+                        "description": "JSON array of {field,operator,value}. Operator supports: eq, neq, gt, gte, lt, lte, like",
                         "name": "filter",
                         "in": "query"
                     },
@@ -476,7 +476,7 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "example": "[{\"field\":\"domain_id\",\"operator\":\"eq\",\"value\":\"0000\"}]",
-                        "description": "JSON array of {field,operator,value}",
+                        "description": "JSON array of {field,operator,value}. Operator supports: eq, neq, gt, gte, lt, lte, like",
                         "name": "filter",
                         "in": "query"
                     },
@@ -552,7 +552,7 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "example": "[{\"field\":\"domain_id\",\"operator\":\"eq\",\"value\":\"0000\"}]",
-                        "description": "JSON array of {field,operator,value}",
+                        "description": "JSON array of {field,operator,value}. Operator supports: eq, neq, gt, gte, lt, lte, like",
                         "name": "filter",
                         "in": "query"
                     },
@@ -628,7 +628,7 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "example": "[{\"field\":\"domain_id\",\"operator\":\"eq\",\"value\":\"0000\"}]",
-                        "description": "JSON array of {field,operator,value}",
+                        "description": "JSON array of {field,operator,value}. Operator supports: eq, neq, gt, gte, lt, lte, like",
                         "name": "filter",
                         "in": "query"
                     },
@@ -704,7 +704,7 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "example": "[{\"field\":\"domain_id\",\"operator\":\"eq\",\"value\":\"0000\"}]",
-                        "description": "JSON array of {field,operator,value}",
+                        "description": "JSON array of {field,operator,value}. Operator supports: eq, neq, gt, gte, lt, lte, like",
                         "name": "filter",
                         "in": "query"
                     },
@@ -780,7 +780,7 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "example": "[{\"field\":\"domain_id\",\"operator\":\"eq\",\"value\":\"0000\"}]",
-                        "description": "JSON array of {field,operator,value}",
+                        "description": "JSON array of {field,operator,value}. Operator supports: eq, neq, gt, gte, lt, lte, like",
                         "name": "filter",
                         "in": "query"
                     },
@@ -856,7 +856,7 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "example": "[{\"field\":\"domain_id\",\"operator\":\"eq\",\"value\":\"0000\"}]",
-                        "description": "JSON array of {field,operator,value}",
+                        "description": "JSON array of {field,operator,value}. Operator supports: eq, neq, gt, gte, lt, lte, like",
                         "name": "filter",
                         "in": "query"
                     },
@@ -932,7 +932,7 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "example": "[{\"field\":\"domain_id\",\"operator\":\"eq\",\"value\":\"0000\"}]",
-                        "description": "JSON array of {field,operator,value}",
+                        "description": "JSON array of {field,operator,value}. Operator supports: eq, neq, gt, gte, lt, lte, like",
                         "name": "filter",
                         "in": "query"
                     },
@@ -1008,7 +1008,7 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "example": "[{\"field\":\"domain_id\",\"operator\":\"eq\",\"value\":\"0000\"}]",
-                        "description": "JSON array of {field,operator,value}",
+                        "description": "JSON array of {field,operator,value}. Operator supports: eq, neq, gt, gte, lt, lte, like",
                         "name": "filter",
                         "in": "query"
                     },
@@ -1084,7 +1084,7 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "example": "[{\"field\":\"domain_id\",\"operator\":\"eq\",\"value\":\"0000\"}]",
-                        "description": "JSON array of {field,operator,value}",
+                        "description": "JSON array of {field,operator,value}. Operator supports: eq, neq, gt, gte, lt, lte, like",
                         "name": "filter",
                         "in": "query"
                     },

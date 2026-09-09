@@ -14,7 +14,7 @@ import (
 // @Tags         master
 // @Accept       json
 // @Produce      json
-// @Param        filter    query string false "JSON array of {field,operator,value}" example([{"field":"domain_id","operator":"eq","value":"0000"}])
+// @Param        filter    query string false "JSON array of {field,operator,value}. Operator supports: eq, neq, gt, gte, lt, lte, like" example([{"field":"domain_id","operator":"eq","value":"0000"}])
 // @Param        sort      query string false "sort column (single)" example(domain_name)
 // @Param        order     query string false "asc | desc" Enums(asc,desc) default(asc)
 // @Param        per_page  query int    false "per page, default 20" example(20)
@@ -39,7 +39,7 @@ func GetDomainData(c *gin.Context) {
 // @Tags         master
 // @Accept       json
 // @Produce      json
-// @Param        filter    query string false "JSON array of {field,operator,value}" example([{"field":"domain_id","operator":"eq","value":"0000"}])
+// @Param        filter    query string false "JSON array of {field,operator,value}. Operator supports: eq, neq, gt, gte, lt, lte, like" example([{"field":"domain_id","operator":"eq","value":"0000"}])
 // @Param        sort      query string false "sort column (single)" example(sub_name)
 // @Param        order     query string false "asc | desc" Enums(asc,desc) default(asc)
 // @Param        per_page  query int    false "per page, default 20" example(20)
@@ -64,7 +64,7 @@ func GetSubjectData(c *gin.Context) {
 // @Tags         master
 // @Accept       json
 // @Produce      json
-// @Param        filter    query string false "JSON array of {field,operator,value}" example([{"field":"domain_id","operator":"eq","value":"0000"}])
+// @Param        filter    query string false "JSON array of {field,operator,value}. Operator supports: eq, neq, gt, gte, lt, lte, like" example([{"field":"domain_id","operator":"eq","value":"0000"}])
 // @Param        sort      query string false "sort column (single)" example(var_name)
 // @Param        order     query string false "asc | desc" Enums(asc,desc) default(asc)
 // @Param        per_page  query int    false "per page, default 20" example(20)
@@ -89,7 +89,7 @@ func GetVariableData(c *gin.Context) {
 // @Tags         master
 // @Accept       json
 // @Produce      json
-// @Param        filter    query string false "JSON array of {field,operator,value}" example([{"field":"domain_id","operator":"eq","value":"0000"}])
+// @Param        filter    query string false "JSON array of {field,operator,value}. Operator supports: eq, neq, gt, gte, lt, lte, like" example([{"field":"domain_id","operator":"eq","value":"0000"}])
 // @Param        sort      query string false "sort column (single)" example(var_name)
 // @Param        order     query string false "asc | desc" Enums(asc,desc) default(asc)
 // @Param        per_page  query int    false "per page, default 20" example(20)
@@ -118,7 +118,7 @@ func GetVariableDistinctData(c *gin.Context) {
 // @Tags         master
 // @Accept       json
 // @Produce      json
-// @Param        filter    query string false "JSON array of {field,operator,value}" example([{"field":"domain_id","operator":"eq","value":"0000"}])
+// @Param        filter    query string false "JSON array of {field,operator,value}. Operator supports: eq, neq, gt, gte, lt, lte, like" example([{"field":"domain_id","operator":"eq","value":"0000"}])
 // @Param        sort      query string false "sort column (single)" example(turvar_name)
 // @Param        order     query string false "asc | desc" Enums(asc,desc) default(asc)
 // @Param        per_page  query int    false "per page, default 20" example(20)
@@ -143,7 +143,7 @@ func GetVariableTurunanData(c *gin.Context) {
 // @Tags         master
 // @Accept       json
 // @Produce      json
-// @Param        filter    query string false "JSON array of {field,operator,value}" example([{"field":"domain_id","operator":"eq","value":"0000"}])
+// @Param        filter    query string false "JSON array of {field,operator,value}. Operator supports: eq, neq, gt, gte, lt, lte, like" example([{"field":"domain_id","operator":"eq","value":"0000"}])
 // @Param        sort      query string false "sort column (single)" example(vervar_name)
 // @Param        order     query string false "asc | desc" Enums(asc,desc) default(asc)
 // @Param        per_page  query int    false "per page, default 20" example(20)
@@ -168,7 +168,7 @@ func GetVariableVerticalData(c *gin.Context) {
 // @Tags         master
 // @Accept       json
 // @Produce      json
-// @Param        filter    query string false "JSON array of {field,operator,value}" example([{"field":"domain_id","operator":"eq","value":"0000"}])
+// @Param        filter    query string false "JSON array of {field,operator,value}. Operator supports: eq, neq, gt, gte, lt, lte, like" example([{"field":"domain_id","operator":"eq","value":"0000"}])
 // @Param        sort      query string false "sort column (single)" example(tahun_name)
 // @Param        order     query string false "asc | desc" Enums(asc,desc) default(asc)
 // @Param        per_page  query int    false "per page, default 20" example(20)
@@ -193,7 +193,7 @@ func GetTahunData(c *gin.Context) {
 // @Tags         master
 // @Accept       json
 // @Produce      json
-// @Param        filter    query string false "JSON array of {field,operator,value}" example([{"field":"domain_id","operator":"eq","value":"0000"}])
+// @Param        filter    query string false "JSON array of {field,operator,value}. Operator supports: eq, neq, gt, gte, lt, lte, like" example([{"field":"domain_id","operator":"eq","value":"0000"}])
 // @Param        sort      query string false "sort column (single)" example(turtahun_name)
 // @Param        order     query string false "asc | desc" Enums(asc,desc) default(asc)
 // @Param        per_page  query int    false "per page, default 20" example(20)
@@ -218,7 +218,7 @@ func GetTahunTurunanData(c *gin.Context) {
 // @Tags         master
 // @Accept       json
 // @Produce      json
-// @Param        filter    query string false "JSON array of {field,operator,value}" example([{"field":"domain_id","operator":"eq","value":"0000"}])
+// @Param        filter    query string false "JSON array of {field,operator,value}. Operator supports: eq, neq, gt, gte, lt, lte, like" example([{"field":"domain_id","operator":"eq","value":"0000"}])
 // @Param        sort      query string false "sort column (single)" example(datacontent_value)
 // @Param        order     query string false "asc | desc" Enums(asc,desc) default(asc)
 // @Param        per_page  query int    false "per page, default 20" example(20)
@@ -244,7 +244,7 @@ func GetDataContentData(c *gin.Context) {
 // @Tags         master
 // @Accept       json
 // @Produce      json
-// @Param        filter    query string false "JSON array of {field,operator,value}" example([{"field":"domain_id","operator":"eq","value":"0000"}])
+// @Param        filter    query string false "JSON array of {field,operator,value}. Operator supports: eq, neq, gt, gte, lt, lte, like" example([{"field":"domain_id","operator":"eq","value":"0000"}])
 // @Param        sort      query string false "sort column (single)" example(turtahun_id)
 // @Param        order     query string false "asc | desc" Enums(asc,desc) default(asc)
 // @Param        per_page  query int    false "per page, default 20" example(20)
@@ -269,7 +269,7 @@ func GetTahunTurunanDistinctData(c *gin.Context) {
 // @Tags         master
 // @Accept       json
 // @Produce      json
-// @Param        filter    query string false "JSON array of {field,operator,value}" example([{"field":"domain_id","operator":"eq","value":"0000"}])
+// @Param        filter    query string false "JSON array of {field,operator,value}. Operator supports: eq, neq, gt, gte, lt, lte, like" example([{"field":"domain_id","operator":"eq","value":"0000"}])
 // @Param        sort      query string false "sort column (single)" example(tahun_id)
 // @Param        order     query string false "asc | desc" Enums(asc,desc) default(asc)
 // @Param        per_page  query int    false "per page, default 20" example(20)

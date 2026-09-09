@@ -548,7 +548,8 @@ paths:
       - application/json
       description: Get list datacontent (payload data)
       parameters:
-      - description: JSON array of {field,operator,value}
+      - description: 'JSON array of {field,operator,value}. Operator supports: eq,
+          neq, gt, gte, lt, lte, like'
         example: '[{"field":"domain_id","operator":"eq","value":"0000"}]'
         in: query
         name: filter
@@ -805,7 +806,8 @@ paths:
       - application/json
       description: Get list master domain
       parameters:
-      - description: JSON array of {field,operator,value}
+      - description: 'JSON array of {field,operator,value}. Operator supports: eq,
+          neq, gt, gte, lt, lte, like'
         example: '[{"field":"domain_id","operator":"eq","value":"0000"}]'
         in: query
         name: filter
@@ -857,7 +859,8 @@ paths:
       - application/json
       description: Get list master subject
       parameters:
-      - description: JSON array of {field,operator,value}
+      - description: 'JSON array of {field,operator,value}. Operator supports: eq,
+          neq, gt, gte, lt, lte, like'
         example: '[{"field":"domain_id","operator":"eq","value":"0000"}]'
         in: query
         name: filter
@@ -909,7 +912,8 @@ paths:
       - application/json
       description: Get list master tahun
       parameters:
-      - description: JSON array of {field,operator,value}
+      - description: 'JSON array of {field,operator,value}. Operator supports: eq,
+          neq, gt, gte, lt, lte, like'
         example: '[{"field":"domain_id","operator":"eq","value":"0000"}]'
         in: query
         name: filter
@@ -961,7 +965,8 @@ paths:
       - application/json
       description: SELECT DISTINCT tahun_id, tahun_name FROM webapi.datacontent
       parameters:
-      - description: JSON array of {field,operator,value}
+      - description: 'JSON array of {field,operator,value}. Operator supports: eq,
+          neq, gt, gte, lt, lte, like'
         example: '[{"field":"domain_id","operator":"eq","value":"0000"}]'
         in: query
         name: filter
@@ -1013,7 +1018,8 @@ paths:
       - application/json
       description: Get list master tahun turunan
       parameters:
-      - description: JSON array of {field,operator,value}
+      - description: 'JSON array of {field,operator,value}. Operator supports: eq,
+          neq, gt, gte, lt, lte, like'
         example: '[{"field":"domain_id","operator":"eq","value":"0000"}]'
         in: query
         name: filter
@@ -1065,7 +1071,8 @@ paths:
       - application/json
       description: SELECT DISTINCT turtahun_id, turtahun_name FROM webapi.datacontent
       parameters:
-      - description: JSON array of {field,operator,value}
+      - description: 'JSON array of {field,operator,value}. Operator supports: eq,
+          neq, gt, gte, lt, lte, like'
         example: '[{"field":"domain_id","operator":"eq","value":"0000"}]'
         in: query
         name: filter
@@ -1117,7 +1124,8 @@ paths:
       - application/json
       description: Get list master variable
       parameters:
-      - description: JSON array of {field,operator,value}
+      - description: 'JSON array of {field,operator,value}. Operator supports: eq,
+          neq, gt, gte, lt, lte, like'
         example: '[{"field":"domain_id","operator":"eq","value":"0000"}]'
         in: query
         name: filter
@@ -1169,7 +1177,8 @@ paths:
       - application/json
       description: Get list master variable that have variable_turunan
       parameters:
-      - description: JSON array of {field,operator,value}
+      - description: 'JSON array of {field,operator,value}. Operator supports: eq,
+          neq, gt, gte, lt, lte, like'
         example: '[{"field":"domain_id","operator":"eq","value":"0000"}]'
         in: query
         name: filter
@@ -1221,7 +1230,8 @@ paths:
       - application/json
       description: Get list master variable turunan
       parameters:
-      - description: JSON array of {field,operator,value}
+      - description: 'JSON array of {field,operator,value}. Operator supports: eq,
+          neq, gt, gte, lt, lte, like'
         example: '[{"field":"domain_id","operator":"eq","value":"0000"}]'
         in: query
         name: filter
@@ -1273,7 +1283,8 @@ paths:
       - application/json
       description: Get list master variable vertical
       parameters:
-      - description: JSON array of {field,operator,value}
+      - description: 'JSON array of {field,operator,value}. Operator supports: eq,
+          neq, gt, gte, lt, lte, like'
         example: '[{"field":"domain_id","operator":"eq","value":"0000"}]'
         in: query
         name: filter
