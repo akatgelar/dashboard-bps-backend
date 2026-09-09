@@ -31,30 +31,39 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
+                        "example": "[{\"field\":\"domain_id\",\"operator\":\"eq\",\"value\":\"0000\"}]",
                         "description": "JSON array of {field,operator,value}",
                         "name": "filter",
                         "in": "query"
                     },
                     {
                         "type": "string",
+                        "example": "datacontent_value",
                         "description": "sort column (single)",
                         "name": "sort",
                         "in": "query"
                     },
                     {
+                        "enum": [
+                            "asc",
+                            "desc"
+                        ],
                         "type": "string",
+                        "default": "asc",
                         "description": "asc | desc",
                         "name": "order",
                         "in": "query"
                     },
                     {
                         "type": "integer",
+                        "example": 20,
                         "description": "per page, default 20",
                         "name": "per_page",
                         "in": "query"
                     },
                     {
                         "type": "integer",
+                        "example": 1,
                         "description": "page, 1-based",
                         "name": "page",
                         "in": "query"
@@ -98,6 +107,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
+                        "example": "0000",
                         "description": "domain_id",
                         "name": "domain_id",
                         "in": "query",
@@ -105,6 +115,7 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
+                        "example": "286",
                         "description": "var_id",
                         "name": "var_id",
                         "in": "query",
@@ -112,6 +123,7 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
+                        "example": "530",
                         "description": "turvar_id",
                         "name": "turvar_id",
                         "in": "query",
@@ -119,6 +131,7 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
+                        "example": "125",
                         "description": "tahun_id",
                         "name": "tahun_id",
                         "in": "query",
@@ -126,6 +139,7 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
+                        "example": "0",
                         "description": "turtahun_id",
                         "name": "turtahun_id",
                         "in": "query",
@@ -170,6 +184,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
+                        "example": "0000",
                         "description": "domain_id",
                         "name": "domain_id",
                         "in": "query",
@@ -177,6 +192,7 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
+                        "example": "286",
                         "description": "var_id",
                         "name": "var_id",
                         "in": "query",
@@ -184,6 +200,7 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
+                        "example": "530",
                         "description": "turvar_id",
                         "name": "turvar_id",
                         "in": "query",
@@ -191,6 +208,7 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
+                        "example": "0",
                         "description": "turtahun_id",
                         "name": "turtahun_id",
                         "in": "query",
@@ -235,6 +253,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
+                        "example": "0000",
                         "description": "domain_id",
                         "name": "domain_id",
                         "in": "query",
@@ -242,6 +261,7 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
+                        "example": "286",
                         "description": "var_id",
                         "name": "var_id",
                         "in": "query",
@@ -249,6 +269,7 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
+                        "example": "530",
                         "description": "turvar_id",
                         "name": "turvar_id",
                         "in": "query",
@@ -256,6 +277,7 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
+                        "example": "125",
                         "description": "tahun_id",
                         "name": "tahun_id",
                         "in": "query",
@@ -263,6 +285,7 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
+                        "example": "0",
                         "description": "turtahun_id",
                         "name": "turtahun_id",
                         "in": "query",
@@ -307,6 +330,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
+                        "example": "0000",
                         "description": "domain_id",
                         "name": "domain_id",
                         "in": "query",
@@ -314,6 +338,7 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
+                        "example": "286",
                         "description": "var_id",
                         "name": "var_id",
                         "in": "query",
@@ -321,6 +346,7 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
+                        "example": "125",
                         "description": "tahun_id",
                         "name": "tahun_id",
                         "in": "query",
@@ -328,6 +354,7 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
+                        "example": "0",
                         "description": "turtahun_id",
                         "name": "turtahun_id",
                         "in": "query",
@@ -372,30 +399,39 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
+                        "example": "[{\"field\":\"domain_id\",\"operator\":\"eq\",\"value\":\"0000\"}]",
                         "description": "JSON array of {field,operator,value}",
                         "name": "filter",
                         "in": "query"
                     },
                     {
                         "type": "string",
+                        "example": "domain_name",
                         "description": "sort column (single)",
                         "name": "sort",
                         "in": "query"
                     },
                     {
+                        "enum": [
+                            "asc",
+                            "desc"
+                        ],
                         "type": "string",
+                        "default": "asc",
                         "description": "asc | desc",
                         "name": "order",
                         "in": "query"
                     },
                     {
                         "type": "integer",
+                        "example": 20,
                         "description": "per page, default 20",
                         "name": "per_page",
                         "in": "query"
                     },
                     {
                         "type": "integer",
+                        "example": 1,
                         "description": "page, 1-based",
                         "name": "page",
                         "in": "query"
@@ -439,30 +475,39 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
+                        "example": "[{\"field\":\"domain_id\",\"operator\":\"eq\",\"value\":\"0000\"}]",
                         "description": "JSON array of {field,operator,value}",
                         "name": "filter",
                         "in": "query"
                     },
                     {
                         "type": "string",
+                        "example": "sub_name",
                         "description": "sort column (single)",
                         "name": "sort",
                         "in": "query"
                     },
                     {
+                        "enum": [
+                            "asc",
+                            "desc"
+                        ],
                         "type": "string",
+                        "default": "asc",
                         "description": "asc | desc",
                         "name": "order",
                         "in": "query"
                     },
                     {
                         "type": "integer",
+                        "example": 20,
                         "description": "per page, default 20",
                         "name": "per_page",
                         "in": "query"
                     },
                     {
                         "type": "integer",
+                        "example": 1,
                         "description": "page, 1-based",
                         "name": "page",
                         "in": "query"
@@ -506,30 +551,39 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
+                        "example": "[{\"field\":\"domain_id\",\"operator\":\"eq\",\"value\":\"0000\"}]",
                         "description": "JSON array of {field,operator,value}",
                         "name": "filter",
                         "in": "query"
                     },
                     {
                         "type": "string",
+                        "example": "tahun_name",
                         "description": "sort column (single)",
                         "name": "sort",
                         "in": "query"
                     },
                     {
+                        "enum": [
+                            "asc",
+                            "desc"
+                        ],
                         "type": "string",
+                        "default": "asc",
                         "description": "asc | desc",
                         "name": "order",
                         "in": "query"
                     },
                     {
                         "type": "integer",
+                        "example": 20,
                         "description": "per page, default 20",
                         "name": "per_page",
                         "in": "query"
                     },
                     {
                         "type": "integer",
+                        "example": 1,
                         "description": "page, 1-based",
                         "name": "page",
                         "in": "query"
@@ -573,30 +627,39 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
+                        "example": "[{\"field\":\"domain_id\",\"operator\":\"eq\",\"value\":\"0000\"}]",
                         "description": "JSON array of {field,operator,value}",
                         "name": "filter",
                         "in": "query"
                     },
                     {
                         "type": "string",
+                        "example": "tahun_id",
                         "description": "sort column (single)",
                         "name": "sort",
                         "in": "query"
                     },
                     {
+                        "enum": [
+                            "asc",
+                            "desc"
+                        ],
                         "type": "string",
+                        "default": "asc",
                         "description": "asc | desc",
                         "name": "order",
                         "in": "query"
                     },
                     {
                         "type": "integer",
+                        "example": 20,
                         "description": "per page, default 20",
                         "name": "per_page",
                         "in": "query"
                     },
                     {
                         "type": "integer",
+                        "example": 1,
                         "description": "page, 1-based",
                         "name": "page",
                         "in": "query"
@@ -640,30 +703,39 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
+                        "example": "[{\"field\":\"domain_id\",\"operator\":\"eq\",\"value\":\"0000\"}]",
                         "description": "JSON array of {field,operator,value}",
                         "name": "filter",
                         "in": "query"
                     },
                     {
                         "type": "string",
+                        "example": "turtahun_name",
                         "description": "sort column (single)",
                         "name": "sort",
                         "in": "query"
                     },
                     {
+                        "enum": [
+                            "asc",
+                            "desc"
+                        ],
                         "type": "string",
+                        "default": "asc",
                         "description": "asc | desc",
                         "name": "order",
                         "in": "query"
                     },
                     {
                         "type": "integer",
+                        "example": 20,
                         "description": "per page, default 20",
                         "name": "per_page",
                         "in": "query"
                     },
                     {
                         "type": "integer",
+                        "example": 1,
                         "description": "page, 1-based",
                         "name": "page",
                         "in": "query"
@@ -707,30 +779,39 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
+                        "example": "[{\"field\":\"domain_id\",\"operator\":\"eq\",\"value\":\"0000\"}]",
                         "description": "JSON array of {field,operator,value}",
                         "name": "filter",
                         "in": "query"
                     },
                     {
                         "type": "string",
+                        "example": "turtahun_id",
                         "description": "sort column (single)",
                         "name": "sort",
                         "in": "query"
                     },
                     {
+                        "enum": [
+                            "asc",
+                            "desc"
+                        ],
                         "type": "string",
+                        "default": "asc",
                         "description": "asc | desc",
                         "name": "order",
                         "in": "query"
                     },
                     {
                         "type": "integer",
+                        "example": 20,
                         "description": "per page, default 20",
                         "name": "per_page",
                         "in": "query"
                     },
                     {
                         "type": "integer",
+                        "example": 1,
                         "description": "page, 1-based",
                         "name": "page",
                         "in": "query"
@@ -774,30 +855,39 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
+                        "example": "[{\"field\":\"domain_id\",\"operator\":\"eq\",\"value\":\"0000\"}]",
                         "description": "JSON array of {field,operator,value}",
                         "name": "filter",
                         "in": "query"
                     },
                     {
                         "type": "string",
+                        "example": "var_name",
                         "description": "sort column (single)",
                         "name": "sort",
                         "in": "query"
                     },
                     {
+                        "enum": [
+                            "asc",
+                            "desc"
+                        ],
                         "type": "string",
+                        "default": "asc",
                         "description": "asc | desc",
                         "name": "order",
                         "in": "query"
                     },
                     {
                         "type": "integer",
+                        "example": 20,
                         "description": "per page, default 20",
                         "name": "per_page",
                         "in": "query"
                     },
                     {
                         "type": "integer",
+                        "example": 1,
                         "description": "page, 1-based",
                         "name": "page",
                         "in": "query"
@@ -841,30 +931,39 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
+                        "example": "[{\"field\":\"domain_id\",\"operator\":\"eq\",\"value\":\"0000\"}]",
                         "description": "JSON array of {field,operator,value}",
                         "name": "filter",
                         "in": "query"
                     },
                     {
                         "type": "string",
+                        "example": "var_name",
                         "description": "sort column (single)",
                         "name": "sort",
                         "in": "query"
                     },
                     {
+                        "enum": [
+                            "asc",
+                            "desc"
+                        ],
                         "type": "string",
+                        "default": "asc",
                         "description": "asc | desc",
                         "name": "order",
                         "in": "query"
                     },
                     {
                         "type": "integer",
+                        "example": 20,
                         "description": "per page, default 20",
                         "name": "per_page",
                         "in": "query"
                     },
                     {
                         "type": "integer",
+                        "example": 1,
                         "description": "page, 1-based",
                         "name": "page",
                         "in": "query"
@@ -908,30 +1007,39 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
+                        "example": "[{\"field\":\"domain_id\",\"operator\":\"eq\",\"value\":\"0000\"}]",
                         "description": "JSON array of {field,operator,value}",
                         "name": "filter",
                         "in": "query"
                     },
                     {
                         "type": "string",
+                        "example": "turvar_name",
                         "description": "sort column (single)",
                         "name": "sort",
                         "in": "query"
                     },
                     {
+                        "enum": [
+                            "asc",
+                            "desc"
+                        ],
                         "type": "string",
+                        "default": "asc",
                         "description": "asc | desc",
                         "name": "order",
                         "in": "query"
                     },
                     {
                         "type": "integer",
+                        "example": 20,
                         "description": "per page, default 20",
                         "name": "per_page",
                         "in": "query"
                     },
                     {
                         "type": "integer",
+                        "example": 1,
                         "description": "page, 1-based",
                         "name": "page",
                         "in": "query"
@@ -975,30 +1083,39 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
+                        "example": "[{\"field\":\"domain_id\",\"operator\":\"eq\",\"value\":\"0000\"}]",
                         "description": "JSON array of {field,operator,value}",
                         "name": "filter",
                         "in": "query"
                     },
                     {
                         "type": "string",
+                        "example": "vervar_name",
                         "description": "sort column (single)",
                         "name": "sort",
                         "in": "query"
                     },
                     {
+                        "enum": [
+                            "asc",
+                            "desc"
+                        ],
                         "type": "string",
+                        "default": "asc",
                         "description": "asc | desc",
                         "name": "order",
                         "in": "query"
                     },
                     {
                         "type": "integer",
+                        "example": 20,
                         "description": "per page, default 20",
                         "name": "per_page",
                         "in": "query"
                     },
                     {
                         "type": "integer",
+                        "example": 1,
                         "description": "page, 1-based",
                         "name": "page",
                         "in": "query"

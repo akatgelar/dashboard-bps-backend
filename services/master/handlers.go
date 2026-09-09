@@ -14,11 +14,11 @@ import (
 // @Tags         master
 // @Accept       json
 // @Produce      json
-// @Param        filter    query string false "JSON array of {field,operator,value}"
-// @Param        sort      query string false "sort column (single)"
-// @Param        order     query string false "asc | desc"
-// @Param        per_page  query int    false "per page, default 20"
-// @Param        page      query int    false "page, 1-based"
+// @Param        filter    query string false "JSON array of {field,operator,value}" example([{"field":"domain_id","operator":"eq","value":"0000"}])
+// @Param        sort      query string false "sort column (single)" example(domain_name)
+// @Param        order     query string false "asc | desc" Enums(asc,desc) default(asc)
+// @Param        per_page  query int    false "per page, default 20" example(20)
+// @Param        page      query int    false "page, 1-based" example(1)
 // @Success      200  {object}  DomainListResponse
 // @Failure      400  {object}  models.BaseResponse
 // @Failure      500  {object}  models.BaseResponse
@@ -39,11 +39,11 @@ func GetDomainData(c *gin.Context) {
 // @Tags         master
 // @Accept       json
 // @Produce      json
-// @Param        filter    query string false "JSON array of {field,operator,value}"
-// @Param        sort      query string false "sort column (single)"
-// @Param        order     query string false "asc | desc"
-// @Param        per_page  query int    false "per page, default 20"
-// @Param        page      query int    false "page, 1-based"
+// @Param        filter    query string false "JSON array of {field,operator,value}" example([{"field":"domain_id","operator":"eq","value":"0000"}])
+// @Param        sort      query string false "sort column (single)" example(sub_name)
+// @Param        order     query string false "asc | desc" Enums(asc,desc) default(asc)
+// @Param        per_page  query int    false "per page, default 20" example(20)
+// @Param        page      query int    false "page, 1-based" example(1)
 // @Success      200  {object}  SubjectListResponse
 // @Failure      400  {object}  models.BaseResponse
 // @Failure      500  {object}  models.BaseResponse
@@ -64,11 +64,11 @@ func GetSubjectData(c *gin.Context) {
 // @Tags         master
 // @Accept       json
 // @Produce      json
-// @Param        filter    query string false "JSON array of {field,operator,value}"
-// @Param        sort      query string false "sort column (single)"
-// @Param        order     query string false "asc | desc"
-// @Param        per_page  query int    false "per page, default 20"
-// @Param        page      query int    false "page, 1-based"
+// @Param        filter    query string false "JSON array of {field,operator,value}" example([{"field":"domain_id","operator":"eq","value":"0000"}])
+// @Param        sort      query string false "sort column (single)" example(var_name)
+// @Param        order     query string false "asc | desc" Enums(asc,desc) default(asc)
+// @Param        per_page  query int    false "per page, default 20" example(20)
+// @Param        page      query int    false "page, 1-based" example(1)
 // @Success      200  {object}  VariableListResponse
 // @Failure      400  {object}  models.BaseResponse
 // @Failure      500  {object}  models.BaseResponse
@@ -89,11 +89,11 @@ func GetVariableData(c *gin.Context) {
 // @Tags         master
 // @Accept       json
 // @Produce      json
-// @Param        filter    query string false "JSON array of {field,operator,value}"
-// @Param        sort      query string false "sort column (single)"
-// @Param        order     query string false "asc | desc"
-// @Param        per_page  query int    false "per page, default 20"
-// @Param        page      query int    false "page, 1-based"
+// @Param        filter    query string false "JSON array of {field,operator,value}" example([{"field":"domain_id","operator":"eq","value":"0000"}])
+// @Param        sort      query string false "sort column (single)" example(var_name)
+// @Param        order     query string false "asc | desc" Enums(asc,desc) default(asc)
+// @Param        per_page  query int    false "per page, default 20" example(20)
+// @Param        page      query int    false "page, 1-based" example(1)
 // @Success      200  {object}  VariableDistinctListResponse
 // @Failure      400  {object}  models.BaseResponse
 // @Failure      500  {object}  models.BaseResponse
@@ -118,11 +118,11 @@ func GetVariableDistinctData(c *gin.Context) {
 // @Tags         master
 // @Accept       json
 // @Produce      json
-// @Param        filter    query string false "JSON array of {field,operator,value}"
-// @Param        sort      query string false "sort column (single)"
-// @Param        order     query string false "asc | desc"
-// @Param        per_page  query int    false "per page, default 20"
-// @Param        page      query int    false "page, 1-based"
+// @Param        filter    query string false "JSON array of {field,operator,value}" example([{"field":"domain_id","operator":"eq","value":"0000"}])
+// @Param        sort      query string false "sort column (single)" example(turvar_name)
+// @Param        order     query string false "asc | desc" Enums(asc,desc) default(asc)
+// @Param        per_page  query int    false "per page, default 20" example(20)
+// @Param        page      query int    false "page, 1-based" example(1)
 // @Success      200  {object}  VariableTurunanListResponse
 // @Failure      400  {object}  models.BaseResponse
 // @Failure      500  {object}  models.BaseResponse
@@ -143,11 +143,11 @@ func GetVariableTurunanData(c *gin.Context) {
 // @Tags         master
 // @Accept       json
 // @Produce      json
-// @Param        filter    query string false "JSON array of {field,operator,value}"
-// @Param        sort      query string false "sort column (single)"
-// @Param        order     query string false "asc | desc"
-// @Param        per_page  query int    false "per page, default 20"
-// @Param        page      query int    false "page, 1-based"
+// @Param        filter    query string false "JSON array of {field,operator,value}" example([{"field":"domain_id","operator":"eq","value":"0000"}])
+// @Param        sort      query string false "sort column (single)" example(vervar_name)
+// @Param        order     query string false "asc | desc" Enums(asc,desc) default(asc)
+// @Param        per_page  query int    false "per page, default 20" example(20)
+// @Param        page      query int    false "page, 1-based" example(1)
 // @Success      200  {object}  VariableVerticalListResponse
 // @Failure      400  {object}  models.BaseResponse
 // @Failure      500  {object}  models.BaseResponse
@@ -168,11 +168,11 @@ func GetVariableVerticalData(c *gin.Context) {
 // @Tags         master
 // @Accept       json
 // @Produce      json
-// @Param        filter    query string false "JSON array of {field,operator,value}"
-// @Param        sort      query string false "sort column (single)"
-// @Param        order     query string false "asc | desc"
-// @Param        per_page  query int    false "per page, default 20"
-// @Param        page      query int    false "page, 1-based"
+// @Param        filter    query string false "JSON array of {field,operator,value}" example([{"field":"domain_id","operator":"eq","value":"0000"}])
+// @Param        sort      query string false "sort column (single)" example(tahun_name)
+// @Param        order     query string false "asc | desc" Enums(asc,desc) default(asc)
+// @Param        per_page  query int    false "per page, default 20" example(20)
+// @Param        page      query int    false "page, 1-based" example(1)
 // @Success      200  {object}  TahunListResponse
 // @Failure      400  {object}  models.BaseResponse
 // @Failure      500  {object}  models.BaseResponse
@@ -193,11 +193,11 @@ func GetTahunData(c *gin.Context) {
 // @Tags         master
 // @Accept       json
 // @Produce      json
-// @Param        filter    query string false "JSON array of {field,operator,value}"
-// @Param        sort      query string false "sort column (single)"
-// @Param        order     query string false "asc | desc"
-// @Param        per_page  query int    false "per page, default 20"
-// @Param        page      query int    false "page, 1-based"
+// @Param        filter    query string false "JSON array of {field,operator,value}" example([{"field":"domain_id","operator":"eq","value":"0000"}])
+// @Param        sort      query string false "sort column (single)" example(turtahun_name)
+// @Param        order     query string false "asc | desc" Enums(asc,desc) default(asc)
+// @Param        per_page  query int    false "per page, default 20" example(20)
+// @Param        page      query int    false "page, 1-based" example(1)
 // @Success      200  {object}  TahunTurunanListResponse
 // @Failure      400  {object}  models.BaseResponse
 // @Failure      500  {object}  models.BaseResponse
@@ -218,11 +218,11 @@ func GetTahunTurunanData(c *gin.Context) {
 // @Tags         master
 // @Accept       json
 // @Produce      json
-// @Param        filter    query string false "JSON array of {field,operator,value}"
-// @Param        sort      query string false "sort column (single)"
-// @Param        order     query string false "asc | desc"
-// @Param        per_page  query int    false "per page, default 20"
-// @Param        page      query int    false "page, 1-based"
+// @Param        filter    query string false "JSON array of {field,operator,value}" example([{"field":"domain_id","operator":"eq","value":"0000"}])
+// @Param        sort      query string false "sort column (single)" example(datacontent_value)
+// @Param        order     query string false "asc | desc" Enums(asc,desc) default(asc)
+// @Param        per_page  query int    false "per page, default 20" example(20)
+// @Param        page      query int    false "page, 1-based" example(1)
 // @Success      200  {object}  DataContentListResponse
 // @Failure      400  {object}  models.BaseResponse
 // @Failure      500  {object}  models.BaseResponse
@@ -244,11 +244,11 @@ func GetDataContentData(c *gin.Context) {
 // @Tags         master
 // @Accept       json
 // @Produce      json
-// @Param        filter    query string false "JSON array of {field,operator,value}"
-// @Param        sort      query string false "sort column (single)"
-// @Param        order     query string false "asc | desc"
-// @Param        per_page  query int    false "per page, default 20"
-// @Param        page      query int    false "page, 1-based"
+// @Param        filter    query string false "JSON array of {field,operator,value}" example([{"field":"domain_id","operator":"eq","value":"0000"}])
+// @Param        sort      query string false "sort column (single)" example(turtahun_id)
+// @Param        order     query string false "asc | desc" Enums(asc,desc) default(asc)
+// @Param        per_page  query int    false "per page, default 20" example(20)
+// @Param        page      query int    false "page, 1-based" example(1)
 // @Success      200  {object}  TahunTurunanDistinctListResponse
 // @Failure      400  {object}  models.BaseResponse
 // @Failure      500  {object}  models.BaseResponse
@@ -269,11 +269,11 @@ func GetTahunTurunanDistinctData(c *gin.Context) {
 // @Tags         master
 // @Accept       json
 // @Produce      json
-// @Param        filter    query string false "JSON array of {field,operator,value}"
-// @Param        sort      query string false "sort column (single)"
-// @Param        order     query string false "asc | desc"
-// @Param        per_page  query int    false "per page, default 20"
-// @Param        page      query int    false "page, 1-based"
+// @Param        filter    query string false "JSON array of {field,operator,value}" example([{"field":"domain_id","operator":"eq","value":"0000"}])
+// @Param        sort      query string false "sort column (single)" example(tahun_id)
+// @Param        order     query string false "asc | desc" Enums(asc,desc) default(asc)
+// @Param        per_page  query int    false "per page, default 20" example(20)
+// @Param        page      query int    false "page, 1-based" example(1)
 // @Success      200  {object}  TahunDistinctListResponse
 // @Failure      400  {object}  models.BaseResponse
 // @Failure      500  {object}  models.BaseResponse

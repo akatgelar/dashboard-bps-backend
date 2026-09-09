@@ -37,10 +37,10 @@ type PerWilayahTurvarMetadata struct {
 // @Tags         insight
 // @Accept       json
 // @Produce      json
-// @Param        domain_id    query string true  "domain_id"
-// @Param        var_id       query string true  "var_id"
-// @Param        tahun_id     query string true  "tahun_id"
-// @Param        turtahun_id  query string true  "turtahun_id"
+// @Param        domain_id    query string true  "domain_id" example(0000)
+// @Param        var_id       query string true  "var_id" example(286)
+// @Param        tahun_id     query string true  "tahun_id" example(125)
+// @Param        turtahun_id  query string true  "turtahun_id" example(0)
 // @Success      200  {object}  PerWilayahTurvarResponse
 // @Failure      400  {object}  models.BaseResponse
 // @Failure      500  {object}  models.BaseResponse

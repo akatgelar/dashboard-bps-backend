@@ -549,22 +549,30 @@ paths:
       description: Get list datacontent (payload data)
       parameters:
       - description: JSON array of {field,operator,value}
+        example: '[{"field":"domain_id","operator":"eq","value":"0000"}]'
         in: query
         name: filter
         type: string
       - description: sort column (single)
+        example: datacontent_value
         in: query
         name: sort
         type: string
-      - description: asc | desc
+      - default: asc
+        description: asc | desc
+        enum:
+        - asc
+        - desc
         in: query
         name: order
         type: string
       - description: per page, default 20
+        example: 20
         in: query
         name: per_page
         type: integer
       - description: page, 1-based
+        example: 1
         in: query
         name: page
         type: integer
@@ -594,26 +602,31 @@ paths:
         from webapi.datacontent
       parameters:
       - description: domain_id
+        example: "0000"
         in: query
         name: domain_id
         required: true
         type: string
       - description: var_id
+        example: "286"
         in: query
         name: var_id
         required: true
         type: string
       - description: turvar_id
+        example: "530"
         in: query
         name: turvar_id
         required: true
         type: string
       - description: tahun_id
+        example: "125"
         in: query
         name: tahun_id
         required: true
         type: string
       - description: turtahun_id
+        example: "0"
         in: query
         name: turtahun_id
         required: true
@@ -643,21 +656,25 @@ paths:
       description: Get data per region (vervar) & per year from webapi.datacontent
       parameters:
       - description: domain_id
+        example: "0000"
         in: query
         name: domain_id
         required: true
         type: string
       - description: var_id
+        example: "286"
         in: query
         name: var_id
         required: true
         type: string
       - description: turvar_id
+        example: "530"
         in: query
         name: turvar_id
         required: true
         type: string
       - description: turtahun_id
+        example: "0"
         in: query
         name: turtahun_id
         required: true
@@ -687,26 +704,31 @@ paths:
       description: Get data per region with percentile-based color clusters from webapi.datacontent
       parameters:
       - description: domain_id
+        example: "0000"
         in: query
         name: domain_id
         required: true
         type: string
       - description: var_id
+        example: "286"
         in: query
         name: var_id
         required: true
         type: string
       - description: turvar_id
+        example: "530"
         in: query
         name: turvar_id
         required: true
         type: string
       - description: tahun_id
+        example: "125"
         in: query
         name: tahun_id
         required: true
         type: string
       - description: turtahun_id
+        example: "0"
         in: query
         name: turtahun_id
         required: true
@@ -736,21 +758,25 @@ paths:
       description: Get data per region & per variable turunan from webapi.datacontent
       parameters:
       - description: domain_id
+        example: "0000"
         in: query
         name: domain_id
         required: true
         type: string
       - description: var_id
+        example: "286"
         in: query
         name: var_id
         required: true
         type: string
       - description: tahun_id
+        example: "125"
         in: query
         name: tahun_id
         required: true
         type: string
       - description: turtahun_id
+        example: "0"
         in: query
         name: turtahun_id
         required: true
@@ -780,22 +806,30 @@ paths:
       description: Get list master domain
       parameters:
       - description: JSON array of {field,operator,value}
+        example: '[{"field":"domain_id","operator":"eq","value":"0000"}]'
         in: query
         name: filter
         type: string
       - description: sort column (single)
+        example: domain_name
         in: query
         name: sort
         type: string
-      - description: asc | desc
+      - default: asc
+        description: asc | desc
+        enum:
+        - asc
+        - desc
         in: query
         name: order
         type: string
       - description: per page, default 20
+        example: 20
         in: query
         name: per_page
         type: integer
       - description: page, 1-based
+        example: 1
         in: query
         name: page
         type: integer
@@ -824,22 +858,30 @@ paths:
       description: Get list master subject
       parameters:
       - description: JSON array of {field,operator,value}
+        example: '[{"field":"domain_id","operator":"eq","value":"0000"}]'
         in: query
         name: filter
         type: string
       - description: sort column (single)
+        example: sub_name
         in: query
         name: sort
         type: string
-      - description: asc | desc
+      - default: asc
+        description: asc | desc
+        enum:
+        - asc
+        - desc
         in: query
         name: order
         type: string
       - description: per page, default 20
+        example: 20
         in: query
         name: per_page
         type: integer
       - description: page, 1-based
+        example: 1
         in: query
         name: page
         type: integer
@@ -868,22 +910,30 @@ paths:
       description: Get list master tahun
       parameters:
       - description: JSON array of {field,operator,value}
+        example: '[{"field":"domain_id","operator":"eq","value":"0000"}]'
         in: query
         name: filter
         type: string
       - description: sort column (single)
+        example: tahun_name
         in: query
         name: sort
         type: string
-      - description: asc | desc
+      - default: asc
+        description: asc | desc
+        enum:
+        - asc
+        - desc
         in: query
         name: order
         type: string
       - description: per page, default 20
+        example: 20
         in: query
         name: per_page
         type: integer
       - description: page, 1-based
+        example: 1
         in: query
         name: page
         type: integer
@@ -912,22 +962,30 @@ paths:
       description: SELECT DISTINCT tahun_id, tahun_name FROM webapi.datacontent
       parameters:
       - description: JSON array of {field,operator,value}
+        example: '[{"field":"domain_id","operator":"eq","value":"0000"}]'
         in: query
         name: filter
         type: string
       - description: sort column (single)
+        example: tahun_id
         in: query
         name: sort
         type: string
-      - description: asc | desc
+      - default: asc
+        description: asc | desc
+        enum:
+        - asc
+        - desc
         in: query
         name: order
         type: string
       - description: per page, default 20
+        example: 20
         in: query
         name: per_page
         type: integer
       - description: page, 1-based
+        example: 1
         in: query
         name: page
         type: integer
@@ -956,22 +1014,30 @@ paths:
       description: Get list master tahun turunan
       parameters:
       - description: JSON array of {field,operator,value}
+        example: '[{"field":"domain_id","operator":"eq","value":"0000"}]'
         in: query
         name: filter
         type: string
       - description: sort column (single)
+        example: turtahun_name
         in: query
         name: sort
         type: string
-      - description: asc | desc
+      - default: asc
+        description: asc | desc
+        enum:
+        - asc
+        - desc
         in: query
         name: order
         type: string
       - description: per page, default 20
+        example: 20
         in: query
         name: per_page
         type: integer
       - description: page, 1-based
+        example: 1
         in: query
         name: page
         type: integer
@@ -1000,22 +1066,30 @@ paths:
       description: SELECT DISTINCT turtahun_id, turtahun_name FROM webapi.datacontent
       parameters:
       - description: JSON array of {field,operator,value}
+        example: '[{"field":"domain_id","operator":"eq","value":"0000"}]'
         in: query
         name: filter
         type: string
       - description: sort column (single)
+        example: turtahun_id
         in: query
         name: sort
         type: string
-      - description: asc | desc
+      - default: asc
+        description: asc | desc
+        enum:
+        - asc
+        - desc
         in: query
         name: order
         type: string
       - description: per page, default 20
+        example: 20
         in: query
         name: per_page
         type: integer
       - description: page, 1-based
+        example: 1
         in: query
         name: page
         type: integer
@@ -1044,22 +1118,30 @@ paths:
       description: Get list master variable
       parameters:
       - description: JSON array of {field,operator,value}
+        example: '[{"field":"domain_id","operator":"eq","value":"0000"}]'
         in: query
         name: filter
         type: string
       - description: sort column (single)
+        example: var_name
         in: query
         name: sort
         type: string
-      - description: asc | desc
+      - default: asc
+        description: asc | desc
+        enum:
+        - asc
+        - desc
         in: query
         name: order
         type: string
       - description: per page, default 20
+        example: 20
         in: query
         name: per_page
         type: integer
       - description: page, 1-based
+        example: 1
         in: query
         name: page
         type: integer
@@ -1088,22 +1170,30 @@ paths:
       description: Get list master variable that have variable_turunan
       parameters:
       - description: JSON array of {field,operator,value}
+        example: '[{"field":"domain_id","operator":"eq","value":"0000"}]'
         in: query
         name: filter
         type: string
       - description: sort column (single)
+        example: var_name
         in: query
         name: sort
         type: string
-      - description: asc | desc
+      - default: asc
+        description: asc | desc
+        enum:
+        - asc
+        - desc
         in: query
         name: order
         type: string
       - description: per page, default 20
+        example: 20
         in: query
         name: per_page
         type: integer
       - description: page, 1-based
+        example: 1
         in: query
         name: page
         type: integer
@@ -1132,22 +1222,30 @@ paths:
       description: Get list master variable turunan
       parameters:
       - description: JSON array of {field,operator,value}
+        example: '[{"field":"domain_id","operator":"eq","value":"0000"}]'
         in: query
         name: filter
         type: string
       - description: sort column (single)
+        example: turvar_name
         in: query
         name: sort
         type: string
-      - description: asc | desc
+      - default: asc
+        description: asc | desc
+        enum:
+        - asc
+        - desc
         in: query
         name: order
         type: string
       - description: per page, default 20
+        example: 20
         in: query
         name: per_page
         type: integer
       - description: page, 1-based
+        example: 1
         in: query
         name: page
         type: integer
@@ -1176,22 +1274,30 @@ paths:
       description: Get list master variable vertical
       parameters:
       - description: JSON array of {field,operator,value}
+        example: '[{"field":"domain_id","operator":"eq","value":"0000"}]'
         in: query
         name: filter
         type: string
       - description: sort column (single)
+        example: vervar_name
         in: query
         name: sort
         type: string
-      - description: asc | desc
+      - default: asc
+        description: asc | desc
+        enum:
+        - asc
+        - desc
         in: query
         name: order
         type: string
       - description: per page, default 20
+        example: 20
         in: query
         name: per_page
         type: integer
       - description: page, 1-based
+        example: 1
         in: query
         name: page
         type: integer
