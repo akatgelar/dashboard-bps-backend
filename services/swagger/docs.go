@@ -64,7 +64,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.BaseResponse"
+                            "$ref": "#/definitions/services.DataContentListResponse"
                         }
                     },
                     "400": {
@@ -136,7 +136,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.BaseResponse"
+                            "$ref": "#/definitions/services.BigNumberResponse"
                         }
                     },
                     "400": {
@@ -201,7 +201,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.BaseResponse"
+                            "$ref": "#/definitions/services.PerTahunResponse"
                         }
                     },
                     "400": {
@@ -273,7 +273,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.BaseResponse"
+                            "$ref": "#/definitions/services.PerWilayahResponse"
                         }
                     },
                     "400": {
@@ -338,7 +338,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.BaseResponse"
+                            "$ref": "#/definitions/services.PerWilayahTurvarResponse"
                         }
                     },
                     "400": {
@@ -405,7 +405,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.BaseResponse"
+                            "$ref": "#/definitions/services.DomainListResponse"
                         }
                     },
                     "400": {
@@ -472,7 +472,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.BaseResponse"
+                            "$ref": "#/definitions/services.SubjectListResponse"
                         }
                     },
                     "400": {
@@ -539,7 +539,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.BaseResponse"
+                            "$ref": "#/definitions/services.TahunListResponse"
                         }
                     },
                     "400": {
@@ -606,7 +606,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.BaseResponse"
+                            "$ref": "#/definitions/services.TahunDistinctListResponse"
                         }
                     },
                     "400": {
@@ -673,7 +673,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.BaseResponse"
+                            "$ref": "#/definitions/services.TahunTurunanListResponse"
                         }
                     },
                     "400": {
@@ -740,7 +740,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.BaseResponse"
+                            "$ref": "#/definitions/services.TahunTurunanDistinctListResponse"
                         }
                     },
                     "400": {
@@ -807,7 +807,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.BaseResponse"
+                            "$ref": "#/definitions/services.VariableListResponse"
                         }
                     },
                     "400": {
@@ -874,7 +874,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.BaseResponse"
+                            "$ref": "#/definitions/services.VariableDistinctListResponse"
                         }
                     },
                     "400": {
@@ -941,7 +941,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.BaseResponse"
+                            "$ref": "#/definitions/services.VariableTurunanListResponse"
                         }
                     },
                     "400": {
@@ -1008,7 +1008,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.BaseResponse"
+                            "$ref": "#/definitions/services.VariableVerticalListResponse"
                         }
                     },
                     "400": {
@@ -1028,6 +1028,29 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "models.BaseMetadata": {
+            "type": "object",
+            "properties": {
+                "last_update_data": {
+                    "type": "string"
+                },
+                "last_update_pipeline": {
+                    "type": "string"
+                },
+                "page": {
+                    "type": "integer"
+                },
+                "per_page": {
+                    "type": "integer"
+                },
+                "total_data": {
+                    "type": "integer"
+                },
+                "total_page": {
+                    "type": "integer"
+                }
+            }
+        },
         "models.BaseResponse": {
             "type": "object",
             "properties": {
@@ -1036,6 +1059,792 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "metadata": {},
+                "status": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "models.DataContent": {
+            "type": "object",
+            "properties": {
+                "datacontent_id": {
+                    "type": "string"
+                },
+                "datacontent_value": {
+                    "type": "number"
+                },
+                "domain_id": {
+                    "type": "string"
+                },
+                "get_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "last_updated_at": {
+                    "type": "string"
+                },
+                "sub_name": {
+                    "type": "string"
+                },
+                "tahun_id": {
+                    "type": "string"
+                },
+                "tahun_name": {
+                    "type": "string"
+                },
+                "turtahun_id": {
+                    "type": "string"
+                },
+                "turtahun_name": {
+                    "type": "string"
+                },
+                "turvar_id": {
+                    "type": "string"
+                },
+                "turvar_name": {
+                    "type": "string"
+                },
+                "var_id": {
+                    "type": "string"
+                },
+                "var_name": {
+                    "type": "string"
+                },
+                "var_unit": {
+                    "type": "string"
+                },
+                "vervar_id": {
+                    "type": "string"
+                },
+                "vervar_name": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.Domain": {
+            "type": "object",
+            "properties": {
+                "domain_id": {
+                    "type": "string"
+                },
+                "domain_name": {
+                    "type": "string"
+                },
+                "domain_url": {
+                    "type": "string"
+                },
+                "get_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "is_active": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "models.Subject": {
+            "type": "object",
+            "properties": {
+                "domain_id": {
+                    "type": "string"
+                },
+                "get_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "sub_id": {
+                    "type": "string"
+                },
+                "sub_name": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.Tahun": {
+            "type": "object",
+            "properties": {
+                "domain_id": {
+                    "type": "string"
+                },
+                "get_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "is_active": {
+                    "type": "boolean"
+                },
+                "tahun_id": {
+                    "type": "string"
+                },
+                "tahun_name": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.TahunDistinct": {
+            "type": "object",
+            "properties": {
+                "tahun_id": {
+                    "type": "string"
+                },
+                "tahun_name": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.TahunTurunan": {
+            "type": "object",
+            "properties": {
+                "domain_id": {
+                    "type": "string"
+                },
+                "get_at": {
+                    "type": "string"
+                },
+                "group_turth_id": {
+                    "type": "string"
+                },
+                "group_turth_name": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "turtahun_id": {
+                    "type": "string"
+                },
+                "turtahun_name": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.TahunTurunanDistinct": {
+            "type": "object",
+            "properties": {
+                "turtahun_id": {
+                    "type": "string"
+                },
+                "turtahun_name": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.Variable": {
+            "type": "object",
+            "properties": {
+                "domain_id": {
+                    "type": "string"
+                },
+                "get_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "notes": {
+                    "type": "string"
+                },
+                "sub_id": {
+                    "type": "string"
+                },
+                "sub_name": {
+                    "type": "string"
+                },
+                "unit": {
+                    "type": "string"
+                },
+                "var_id": {
+                    "type": "string"
+                },
+                "var_name": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.VariableTurunan": {
+            "type": "object",
+            "properties": {
+                "domain_id": {
+                    "type": "string"
+                },
+                "get_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "turvar_id": {
+                    "type": "string"
+                },
+                "turvar_name": {
+                    "type": "string"
+                },
+                "var_id": {
+                    "type": "string"
+                },
+                "var_name": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.VariableVertical": {
+            "type": "object",
+            "properties": {
+                "domain_id": {
+                    "type": "string"
+                },
+                "get_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "var_id": {
+                    "type": "string"
+                },
+                "var_name": {
+                    "type": "string"
+                },
+                "vervar_id": {
+                    "type": "string"
+                },
+                "vervar_name": {
+                    "type": "string"
+                }
+            }
+        },
+        "services.BigNumberData": {
+            "type": "object",
+            "properties": {
+                "tahun_sebelumnya_data": {
+                    "$ref": "#/definitions/services.BigPrevYearData"
+                },
+                "tahun_sebelumnya_id": {
+                    "type": "string"
+                },
+                "tahun_sebelumnya_name": {
+                    "type": "string"
+                },
+                "tahun_sekarang_data": {
+                    "$ref": "#/definitions/services.BigYearData"
+                },
+                "tahun_sekarang_id": {
+                    "type": "string"
+                },
+                "tahun_sekarang_name": {
+                    "type": "string"
+                }
+            }
+        },
+        "services.BigNumberMetadata": {
+            "type": "object",
+            "properties": {
+                "last_update_data": {
+                    "type": "string"
+                },
+                "last_update_pipeline": {
+                    "type": "string"
+                }
+            }
+        },
+        "services.BigNumberResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/services.BigNumberData"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "metadata": {
+                    "$ref": "#/definitions/services.BigNumberMetadata"
+                },
+                "status": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "services.BigPrevYearData": {
+            "type": "object",
+            "properties": {
+                "avg_persen": {
+                    "type": "number"
+                },
+                "avg_value": {
+                    "type": "number"
+                },
+                "indo_persen": {
+                    "type": "number"
+                },
+                "indo_value": {
+                    "type": "number"
+                }
+            }
+        },
+        "services.BigYearData": {
+            "type": "object",
+            "properties": {
+                "avg_value": {
+                    "type": "number"
+                },
+                "indo_value": {
+                    "type": "number"
+                },
+                "max_name": {
+                    "type": "string"
+                },
+                "max_value": {
+                    "type": "number"
+                },
+                "min_name": {
+                    "type": "string"
+                },
+                "min_value": {
+                    "type": "number"
+                }
+            }
+        },
+        "services.DataContentListResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.DataContent"
+                    }
+                },
+                "message": {
+                    "type": "string"
+                },
+                "metadata": {
+                    "$ref": "#/definitions/models.BaseMetadata"
+                },
+                "status": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "services.DomainListResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.Domain"
+                    }
+                },
+                "message": {
+                    "type": "string"
+                },
+                "metadata": {
+                    "$ref": "#/definitions/models.BaseMetadata"
+                },
+                "status": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "services.PerTahunMetadata": {
+            "type": "object",
+            "properties": {
+                "last_update_data": {
+                    "type": "string"
+                },
+                "last_update_pipeline": {
+                    "type": "string"
+                }
+            }
+        },
+        "services.PerTahunResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/services.PerTahunRow"
+                    }
+                },
+                "message": {
+                    "type": "string"
+                },
+                "metadata": {
+                    "$ref": "#/definitions/services.PerTahunMetadata"
+                },
+                "status": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "services.PerTahunRow": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/services.PerTahunYearEntry"
+                    }
+                },
+                "vervar_id": {
+                    "type": "string"
+                },
+                "vervar_name": {
+                    "type": "string"
+                }
+            }
+        },
+        "services.PerTahunYearEntry": {
+            "type": "object",
+            "properties": {
+                "datacontent_id": {
+                    "type": "string"
+                },
+                "datacontent_value": {
+                    "type": "number"
+                },
+                "tahun_id": {
+                    "type": "string"
+                },
+                "tahun_name": {
+                    "type": "string"
+                }
+            }
+        },
+        "services.PerWilayahData": {
+            "type": "object",
+            "properties": {
+                "range": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/services.PerWilayahRange"
+                    }
+                },
+                "value": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/services.PerWilayahValue"
+                    }
+                }
+            }
+        },
+        "services.PerWilayahMetadata": {
+            "type": "object",
+            "properties": {
+                "last_update_data": {
+                    "type": "string"
+                },
+                "last_update_pipeline": {
+                    "type": "string"
+                }
+            }
+        },
+        "services.PerWilayahRange": {
+            "type": "object",
+            "properties": {
+                "color": {
+                    "type": "string"
+                },
+                "from": {
+                    "type": "number"
+                },
+                "to": {
+                    "type": "number"
+                },
+                "total_cluster": {
+                    "type": "integer"
+                }
+            }
+        },
+        "services.PerWilayahResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/services.PerWilayahData"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "metadata": {
+                    "$ref": "#/definitions/services.PerWilayahMetadata"
+                },
+                "status": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "services.PerWilayahTurvarEntry": {
+            "type": "object",
+            "properties": {
+                "datacontent_id": {
+                    "type": "string"
+                },
+                "datacontent_value": {
+                    "type": "number"
+                },
+                "turvar_id": {
+                    "type": "string"
+                },
+                "turvar_name": {
+                    "type": "string"
+                }
+            }
+        },
+        "services.PerWilayahTurvarMetadata": {
+            "type": "object",
+            "properties": {
+                "last_update_data": {
+                    "type": "string"
+                },
+                "last_update_pipeline": {
+                    "type": "string"
+                }
+            }
+        },
+        "services.PerWilayahTurvarResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/services.PerWilayahTurvarValue"
+                    }
+                },
+                "message": {
+                    "type": "string"
+                },
+                "metadata": {
+                    "$ref": "#/definitions/services.PerWilayahTurvarMetadata"
+                },
+                "status": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "services.PerWilayahTurvarValue": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/services.PerWilayahTurvarEntry"
+                    }
+                },
+                "vervar_id": {
+                    "type": "string"
+                },
+                "vervar_name": {
+                    "type": "string"
+                }
+            }
+        },
+        "services.PerWilayahValue": {
+            "type": "object",
+            "properties": {
+                "color": {
+                    "type": "string"
+                },
+                "datacontent_id": {
+                    "type": "string"
+                },
+                "datacontent_value": {
+                    "type": "number"
+                },
+                "unit": {
+                    "type": "string"
+                },
+                "value": {
+                    "type": "number"
+                },
+                "vervar_id": {
+                    "type": "string"
+                },
+                "vervar_name": {
+                    "type": "string"
+                }
+            }
+        },
+        "services.SubjectListResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.Subject"
+                    }
+                },
+                "message": {
+                    "type": "string"
+                },
+                "metadata": {
+                    "$ref": "#/definitions/models.BaseMetadata"
+                },
+                "status": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "services.TahunDistinctListResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.TahunDistinct"
+                    }
+                },
+                "message": {
+                    "type": "string"
+                },
+                "metadata": {
+                    "$ref": "#/definitions/models.BaseMetadata"
+                },
+                "status": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "services.TahunListResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.Tahun"
+                    }
+                },
+                "message": {
+                    "type": "string"
+                },
+                "metadata": {
+                    "$ref": "#/definitions/models.BaseMetadata"
+                },
+                "status": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "services.TahunTurunanDistinctListResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.TahunTurunanDistinct"
+                    }
+                },
+                "message": {
+                    "type": "string"
+                },
+                "metadata": {
+                    "$ref": "#/definitions/models.BaseMetadata"
+                },
+                "status": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "services.TahunTurunanListResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.TahunTurunan"
+                    }
+                },
+                "message": {
+                    "type": "string"
+                },
+                "metadata": {
+                    "$ref": "#/definitions/models.BaseMetadata"
+                },
+                "status": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "services.VariableDistinctListResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.Variable"
+                    }
+                },
+                "message": {
+                    "type": "string"
+                },
+                "metadata": {
+                    "$ref": "#/definitions/models.BaseMetadata"
+                },
+                "status": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "services.VariableListResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.Variable"
+                    }
+                },
+                "message": {
+                    "type": "string"
+                },
+                "metadata": {
+                    "$ref": "#/definitions/models.BaseMetadata"
+                },
+                "status": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "services.VariableTurunanListResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.VariableTurunan"
+                    }
+                },
+                "message": {
+                    "type": "string"
+                },
+                "metadata": {
+                    "$ref": "#/definitions/models.BaseMetadata"
+                },
+                "status": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "services.VariableVerticalListResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.VariableVertical"
+                    }
+                },
+                "message": {
+                    "type": "string"
+                },
+                "metadata": {
+                    "$ref": "#/definitions/models.BaseMetadata"
+                },
                 "status": {
                     "type": "boolean"
                 }

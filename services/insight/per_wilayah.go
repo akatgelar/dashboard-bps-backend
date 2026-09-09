@@ -79,7 +79,7 @@ func lerpColor(f float64) string {
 // @Param        turvar_id    query string true  "turvar_id"
 // @Param        tahun_id     query string true  "tahun_id"
 // @Param        turtahun_id  query string true  "turtahun_id"
-// @Success      200  {object}  models.BaseResponse
+// @Success      200  {object}  PerWilayahResponse
 // @Failure      400  {object}  models.BaseResponse
 // @Failure      500  {object}  models.BaseResponse
 // @Router       /insight/per-wilayah [get]

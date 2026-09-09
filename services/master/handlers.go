@@ -19,7 +19,7 @@ import (
 // @Param        order     query string false "asc | desc"
 // @Param        per_page  query int    false "per page, default 20"
 // @Param        page      query int    false "page, 1-based"
-// @Success      200  {object}  models.BaseResponse
+// @Success      200  {object}  DomainListResponse
 // @Failure      400  {object}  models.BaseResponse
 // @Failure      500  {object}  models.BaseResponse
 // @Router       /master/domain [get]
@@ -44,7 +44,7 @@ func GetDomainData(c *gin.Context) {
 // @Param        order     query string false "asc | desc"
 // @Param        per_page  query int    false "per page, default 20"
 // @Param        page      query int    false "page, 1-based"
-// @Success      200  {object}  models.BaseResponse
+// @Success      200  {object}  SubjectListResponse
 // @Failure      400  {object}  models.BaseResponse
 // @Failure      500  {object}  models.BaseResponse
 // @Router       /master/subjek [get]
@@ -69,7 +69,7 @@ func GetSubjectData(c *gin.Context) {
 // @Param        order     query string false "asc | desc"
 // @Param        per_page  query int    false "per page, default 20"
 // @Param        page      query int    false "page, 1-based"
-// @Success      200  {object}  models.BaseResponse
+// @Success      200  {object}  VariableListResponse
 // @Failure      400  {object}  models.BaseResponse
 // @Failure      500  {object}  models.BaseResponse
 // @Router       /master/variable [get]
@@ -94,7 +94,7 @@ func GetVariableData(c *gin.Context) {
 // @Param        order     query string false "asc | desc"
 // @Param        per_page  query int    false "per page, default 20"
 // @Param        page      query int    false "page, 1-based"
-// @Success      200  {object}  models.BaseResponse
+// @Success      200  {object}  VariableDistinctListResponse
 // @Failure      400  {object}  models.BaseResponse
 // @Failure      500  {object}  models.BaseResponse
 // @Router       /master/variable-distinct [get]
@@ -123,7 +123,7 @@ func GetVariableDistinctData(c *gin.Context) {
 // @Param        order     query string false "asc | desc"
 // @Param        per_page  query int    false "per page, default 20"
 // @Param        page      query int    false "page, 1-based"
-// @Success      200  {object}  models.BaseResponse
+// @Success      200  {object}  VariableTurunanListResponse
 // @Failure      400  {object}  models.BaseResponse
 // @Failure      500  {object}  models.BaseResponse
 // @Router       /master/variable-turunan [get]
@@ -148,7 +148,7 @@ func GetVariableTurunanData(c *gin.Context) {
 // @Param        order     query string false "asc | desc"
 // @Param        per_page  query int    false "per page, default 20"
 // @Param        page      query int    false "page, 1-based"
-// @Success      200  {object}  models.BaseResponse
+// @Success      200  {object}  VariableVerticalListResponse
 // @Failure      400  {object}  models.BaseResponse
 // @Failure      500  {object}  models.BaseResponse
 // @Router       /master/variable-vertical [get]
@@ -173,7 +173,7 @@ func GetVariableVerticalData(c *gin.Context) {
 // @Param        order     query string false "asc | desc"
 // @Param        per_page  query int    false "per page, default 20"
 // @Param        page      query int    false "page, 1-based"
-// @Success      200  {object}  models.BaseResponse
+// @Success      200  {object}  TahunListResponse
 // @Failure      400  {object}  models.BaseResponse
 // @Failure      500  {object}  models.BaseResponse
 // @Router       /master/tahun [get]
@@ -198,7 +198,7 @@ func GetTahunData(c *gin.Context) {
 // @Param        order     query string false "asc | desc"
 // @Param        per_page  query int    false "per page, default 20"
 // @Param        page      query int    false "page, 1-based"
-// @Success      200  {object}  models.BaseResponse
+// @Success      200  {object}  TahunTurunanListResponse
 // @Failure      400  {object}  models.BaseResponse
 // @Failure      500  {object}  models.BaseResponse
 // @Router       /master/tahun-turunan [get]
@@ -223,7 +223,7 @@ func GetTahunTurunanData(c *gin.Context) {
 // @Param        order     query string false "asc | desc"
 // @Param        per_page  query int    false "per page, default 20"
 // @Param        page      query int    false "page, 1-based"
-// @Success      200  {object}  models.BaseResponse
+// @Success      200  {object}  DataContentListResponse
 // @Failure      400  {object}  models.BaseResponse
 // @Failure      500  {object}  models.BaseResponse
 // @Router       /datacontent [get]
@@ -249,7 +249,7 @@ func GetDataContentData(c *gin.Context) {
 // @Param        order     query string false "asc | desc"
 // @Param        per_page  query int    false "per page, default 20"
 // @Param        page      query int    false "page, 1-based"
-// @Success      200  {object}  models.BaseResponse
+// @Success      200  {object}  TahunTurunanDistinctListResponse
 // @Failure      400  {object}  models.BaseResponse
 // @Failure      500  {object}  models.BaseResponse
 // @Router       /master/tahun-turunan-distinct [get]
@@ -274,7 +274,7 @@ func GetTahunTurunanDistinctData(c *gin.Context) {
 // @Param        order     query string false "asc | desc"
 // @Param        per_page  query int    false "per page, default 20"
 // @Param        page      query int    false "page, 1-based"
-// @Success      200  {object}  models.BaseResponse
+// @Success      200  {object}  TahunDistinctListResponse
 // @Failure      400  {object}  models.BaseResponse
 // @Failure      500  {object}  models.BaseResponse
 // @Router       /master/tahun-distinct [get]

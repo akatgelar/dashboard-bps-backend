@@ -1,11 +1,537 @@
 basePath: /
 definitions:
+  models.BaseMetadata:
+    properties:
+      last_update_data:
+        type: string
+      last_update_pipeline:
+        type: string
+      page:
+        type: integer
+      per_page:
+        type: integer
+      total_data:
+        type: integer
+      total_page:
+        type: integer
+    type: object
   models.BaseResponse:
     properties:
       data: {}
       message:
         type: string
       metadata: {}
+      status:
+        type: boolean
+    type: object
+  models.DataContent:
+    properties:
+      datacontent_id:
+        type: string
+      datacontent_value:
+        type: number
+      domain_id:
+        type: string
+      get_at:
+        type: string
+      id:
+        type: integer
+      last_updated_at:
+        type: string
+      sub_name:
+        type: string
+      tahun_id:
+        type: string
+      tahun_name:
+        type: string
+      turtahun_id:
+        type: string
+      turtahun_name:
+        type: string
+      turvar_id:
+        type: string
+      turvar_name:
+        type: string
+      var_id:
+        type: string
+      var_name:
+        type: string
+      var_unit:
+        type: string
+      vervar_id:
+        type: string
+      vervar_name:
+        type: string
+    type: object
+  models.Domain:
+    properties:
+      domain_id:
+        type: string
+      domain_name:
+        type: string
+      domain_url:
+        type: string
+      get_at:
+        type: string
+      id:
+        type: integer
+      is_active:
+        type: boolean
+    type: object
+  models.Subject:
+    properties:
+      domain_id:
+        type: string
+      get_at:
+        type: string
+      id:
+        type: integer
+      sub_id:
+        type: string
+      sub_name:
+        type: string
+    type: object
+  models.Tahun:
+    properties:
+      domain_id:
+        type: string
+      get_at:
+        type: string
+      id:
+        type: integer
+      is_active:
+        type: boolean
+      tahun_id:
+        type: string
+      tahun_name:
+        type: string
+    type: object
+  models.TahunDistinct:
+    properties:
+      tahun_id:
+        type: string
+      tahun_name:
+        type: string
+    type: object
+  models.TahunTurunan:
+    properties:
+      domain_id:
+        type: string
+      get_at:
+        type: string
+      group_turth_id:
+        type: string
+      group_turth_name:
+        type: string
+      id:
+        type: integer
+      turtahun_id:
+        type: string
+      turtahun_name:
+        type: string
+    type: object
+  models.TahunTurunanDistinct:
+    properties:
+      turtahun_id:
+        type: string
+      turtahun_name:
+        type: string
+    type: object
+  models.Variable:
+    properties:
+      domain_id:
+        type: string
+      get_at:
+        type: string
+      id:
+        type: integer
+      notes:
+        type: string
+      sub_id:
+        type: string
+      sub_name:
+        type: string
+      unit:
+        type: string
+      var_id:
+        type: string
+      var_name:
+        type: string
+    type: object
+  models.VariableTurunan:
+    properties:
+      domain_id:
+        type: string
+      get_at:
+        type: string
+      id:
+        type: integer
+      turvar_id:
+        type: string
+      turvar_name:
+        type: string
+      var_id:
+        type: string
+      var_name:
+        type: string
+    type: object
+  models.VariableVertical:
+    properties:
+      domain_id:
+        type: string
+      get_at:
+        type: string
+      id:
+        type: integer
+      var_id:
+        type: string
+      var_name:
+        type: string
+      vervar_id:
+        type: string
+      vervar_name:
+        type: string
+    type: object
+  services.BigNumberData:
+    properties:
+      tahun_sebelumnya_data:
+        $ref: '#/definitions/services.BigPrevYearData'
+      tahun_sebelumnya_id:
+        type: string
+      tahun_sebelumnya_name:
+        type: string
+      tahun_sekarang_data:
+        $ref: '#/definitions/services.BigYearData'
+      tahun_sekarang_id:
+        type: string
+      tahun_sekarang_name:
+        type: string
+    type: object
+  services.BigNumberMetadata:
+    properties:
+      last_update_data:
+        type: string
+      last_update_pipeline:
+        type: string
+    type: object
+  services.BigNumberResponse:
+    properties:
+      data:
+        $ref: '#/definitions/services.BigNumberData'
+      message:
+        type: string
+      metadata:
+        $ref: '#/definitions/services.BigNumberMetadata'
+      status:
+        type: boolean
+    type: object
+  services.BigPrevYearData:
+    properties:
+      avg_persen:
+        type: number
+      avg_value:
+        type: number
+      indo_persen:
+        type: number
+      indo_value:
+        type: number
+    type: object
+  services.BigYearData:
+    properties:
+      avg_value:
+        type: number
+      indo_value:
+        type: number
+      max_name:
+        type: string
+      max_value:
+        type: number
+      min_name:
+        type: string
+      min_value:
+        type: number
+    type: object
+  services.DataContentListResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/models.DataContent'
+        type: array
+      message:
+        type: string
+      metadata:
+        $ref: '#/definitions/models.BaseMetadata'
+      status:
+        type: boolean
+    type: object
+  services.DomainListResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/models.Domain'
+        type: array
+      message:
+        type: string
+      metadata:
+        $ref: '#/definitions/models.BaseMetadata'
+      status:
+        type: boolean
+    type: object
+  services.PerTahunMetadata:
+    properties:
+      last_update_data:
+        type: string
+      last_update_pipeline:
+        type: string
+    type: object
+  services.PerTahunResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/services.PerTahunRow'
+        type: array
+      message:
+        type: string
+      metadata:
+        $ref: '#/definitions/services.PerTahunMetadata'
+      status:
+        type: boolean
+    type: object
+  services.PerTahunRow:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/services.PerTahunYearEntry'
+        type: array
+      vervar_id:
+        type: string
+      vervar_name:
+        type: string
+    type: object
+  services.PerTahunYearEntry:
+    properties:
+      datacontent_id:
+        type: string
+      datacontent_value:
+        type: number
+      tahun_id:
+        type: string
+      tahun_name:
+        type: string
+    type: object
+  services.PerWilayahData:
+    properties:
+      range:
+        items:
+          $ref: '#/definitions/services.PerWilayahRange'
+        type: array
+      value:
+        items:
+          $ref: '#/definitions/services.PerWilayahValue'
+        type: array
+    type: object
+  services.PerWilayahMetadata:
+    properties:
+      last_update_data:
+        type: string
+      last_update_pipeline:
+        type: string
+    type: object
+  services.PerWilayahRange:
+    properties:
+      color:
+        type: string
+      from:
+        type: number
+      to:
+        type: number
+      total_cluster:
+        type: integer
+    type: object
+  services.PerWilayahResponse:
+    properties:
+      data:
+        $ref: '#/definitions/services.PerWilayahData'
+      message:
+        type: string
+      metadata:
+        $ref: '#/definitions/services.PerWilayahMetadata'
+      status:
+        type: boolean
+    type: object
+  services.PerWilayahTurvarEntry:
+    properties:
+      datacontent_id:
+        type: string
+      datacontent_value:
+        type: number
+      turvar_id:
+        type: string
+      turvar_name:
+        type: string
+    type: object
+  services.PerWilayahTurvarMetadata:
+    properties:
+      last_update_data:
+        type: string
+      last_update_pipeline:
+        type: string
+    type: object
+  services.PerWilayahTurvarResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/services.PerWilayahTurvarValue'
+        type: array
+      message:
+        type: string
+      metadata:
+        $ref: '#/definitions/services.PerWilayahTurvarMetadata'
+      status:
+        type: boolean
+    type: object
+  services.PerWilayahTurvarValue:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/services.PerWilayahTurvarEntry'
+        type: array
+      vervar_id:
+        type: string
+      vervar_name:
+        type: string
+    type: object
+  services.PerWilayahValue:
+    properties:
+      color:
+        type: string
+      datacontent_id:
+        type: string
+      datacontent_value:
+        type: number
+      unit:
+        type: string
+      value:
+        type: number
+      vervar_id:
+        type: string
+      vervar_name:
+        type: string
+    type: object
+  services.SubjectListResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/models.Subject'
+        type: array
+      message:
+        type: string
+      metadata:
+        $ref: '#/definitions/models.BaseMetadata'
+      status:
+        type: boolean
+    type: object
+  services.TahunDistinctListResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/models.TahunDistinct'
+        type: array
+      message:
+        type: string
+      metadata:
+        $ref: '#/definitions/models.BaseMetadata'
+      status:
+        type: boolean
+    type: object
+  services.TahunListResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/models.Tahun'
+        type: array
+      message:
+        type: string
+      metadata:
+        $ref: '#/definitions/models.BaseMetadata'
+      status:
+        type: boolean
+    type: object
+  services.TahunTurunanDistinctListResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/models.TahunTurunanDistinct'
+        type: array
+      message:
+        type: string
+      metadata:
+        $ref: '#/definitions/models.BaseMetadata'
+      status:
+        type: boolean
+    type: object
+  services.TahunTurunanListResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/models.TahunTurunan'
+        type: array
+      message:
+        type: string
+      metadata:
+        $ref: '#/definitions/models.BaseMetadata'
+      status:
+        type: boolean
+    type: object
+  services.VariableDistinctListResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/models.Variable'
+        type: array
+      message:
+        type: string
+      metadata:
+        $ref: '#/definitions/models.BaseMetadata'
+      status:
+        type: boolean
+    type: object
+  services.VariableListResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/models.Variable'
+        type: array
+      message:
+        type: string
+      metadata:
+        $ref: '#/definitions/models.BaseMetadata'
+      status:
+        type: boolean
+    type: object
+  services.VariableTurunanListResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/models.VariableTurunan'
+        type: array
+      message:
+        type: string
+      metadata:
+        $ref: '#/definitions/models.BaseMetadata'
+      status:
+        type: boolean
+    type: object
+  services.VariableVerticalListResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/models.VariableVertical'
+        type: array
+      message:
+        type: string
+      metadata:
+        $ref: '#/definitions/models.BaseMetadata'
       status:
         type: boolean
     type: object
@@ -48,7 +574,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.BaseResponse'
+            $ref: '#/definitions/services.DataContentListResponse'
         "400":
           description: Bad Request
           schema:
@@ -98,7 +624,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.BaseResponse'
+            $ref: '#/definitions/services.BigNumberResponse'
         "400":
           description: Bad Request
           schema:
@@ -142,7 +668,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.BaseResponse'
+            $ref: '#/definitions/services.PerTahunResponse'
         "400":
           description: Bad Request
           schema:
@@ -191,7 +717,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.BaseResponse'
+            $ref: '#/definitions/services.PerWilayahResponse'
         "400":
           description: Bad Request
           schema:
@@ -235,7 +761,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.BaseResponse'
+            $ref: '#/definitions/services.PerWilayahTurvarResponse'
         "400":
           description: Bad Request
           schema:
@@ -279,7 +805,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.BaseResponse'
+            $ref: '#/definitions/services.DomainListResponse'
         "400":
           description: Bad Request
           schema:
@@ -323,7 +849,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.BaseResponse'
+            $ref: '#/definitions/services.SubjectListResponse'
         "400":
           description: Bad Request
           schema:
@@ -367,7 +893,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.BaseResponse'
+            $ref: '#/definitions/services.TahunListResponse'
         "400":
           description: Bad Request
           schema:
@@ -411,7 +937,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.BaseResponse'
+            $ref: '#/definitions/services.TahunDistinctListResponse'
         "400":
           description: Bad Request
           schema:
@@ -455,7 +981,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.BaseResponse'
+            $ref: '#/definitions/services.TahunTurunanListResponse'
         "400":
           description: Bad Request
           schema:
@@ -499,7 +1025,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.BaseResponse'
+            $ref: '#/definitions/services.TahunTurunanDistinctListResponse'
         "400":
           description: Bad Request
           schema:
@@ -543,7 +1069,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.BaseResponse'
+            $ref: '#/definitions/services.VariableListResponse'
         "400":
           description: Bad Request
           schema:
@@ -587,7 +1113,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.BaseResponse'
+            $ref: '#/definitions/services.VariableDistinctListResponse'
         "400":
           description: Bad Request
           schema:
@@ -631,7 +1157,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.BaseResponse'
+            $ref: '#/definitions/services.VariableTurunanListResponse'
         "400":
           description: Bad Request
           schema:
@@ -675,7 +1201,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.BaseResponse'
+            $ref: '#/definitions/services.VariableVerticalListResponse'
         "400":
           description: Bad Request
           schema:

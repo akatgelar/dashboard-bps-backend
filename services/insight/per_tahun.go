@@ -41,7 +41,7 @@ type PerTahunMetadata struct {
 // @Param        var_id       query string true  "var_id"
 // @Param        turvar_id    query string true  "turvar_id"
 // @Param        turtahun_id  query string true  "turtahun_id"
-// @Success      200  {object}  models.BaseResponse
+// @Success      200  {object}  PerTahunResponse
 // @Failure      400  {object}  models.BaseResponse
 // @Failure      500  {object}  models.BaseResponse
 // @Router       /insight/per-tahun [get]
