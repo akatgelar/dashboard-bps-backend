@@ -13,21 +13,25 @@ import (
 
 // BigYearData holds aggregated values for one year /insight/big-number.
 type BigYearData struct {
-	MaxValue  *float64 `json:"max_value"`
-	MaxName   string   `json:"max_name"`
-	MinValue  *float64 `json:"min_value"`
-	MinName   string   `json:"min_name"`
-	AvgValue  *float64 `json:"avg_value"`
-	IndoValue *float64 `json:"indo_value"`
+	MaxValue    *float64 `json:"max_value"`
+	MaxName     string   `json:"max_name"`
+	MinValue    *float64 `json:"min_value"`
+	MinName     string   `json:"min_name"`
+	AvgValue    *float64 `json:"avg_value"`
+	MedianValue *float64 `json:"median_value"`
+	IndoValue   *float64 `json:"indo_value"`
+	JabarValue  *float64 `json:"jabar_value"`
 }
 
 // BigPrevYearData holds aggregated values of the previous year plus the
 // comparison percentages against the current year.
 type BigPrevYearData struct {
-	AvgValue   *float64 `json:"avg_value"`
-	IndoValue  *float64 `json:"indo_value"`
-	AvgPersen  *float64 `json:"avg_persen"`
-	IndoPersen *float64 `json:"indo_persen"`
+	AvgValue    *float64 `json:"avg_value"`
+	MedianValue *float64 `json:"median_value"`
+	IndoValue   *float64 `json:"indo_value"`
+	JabarValue  *float64 `json:"jabar_value"`
+	AvgPersen   *float64 `json:"avg_persen"`
+	IndoPersen  *float64 `json:"indo_persen"`
 }
 
 // BigNumberData is the data payload of /insight/big-number.
@@ -48,8 +52,11 @@ type BigNumberMetadata struct {
 
 const indonesiaFilter = "LOWER(vervar_name) <> 'indonesia'"
 
+// jabarVervarID is the vervar_id of Jawa Barat (3200) in the dataset.
+const jabarVervarID = "3200"
+
 // qryYearData runs the raw aggregation SQL for a given tahun and returns its
-// six statistical fields.
+// statistical fields.
 func qryYearData(domainID, varID, turvarID, tahunID, turtahunID string) (BigYearData, error) {
 	var d BigYearData
 	var maxName, minName sql.NullString
@@ -72,12 +79,19 @@ func qryYearData(domainID, varID, turvarID, tahunID, turtahunID string) (BigYear
 		  (SELECT AVG(datacontent_value) FROM webapi.datacontent
 		     WHERE domain_id=$1 AND var_id=$2 AND turvar_id=$3 AND tahun_id=$4 AND turtahun_id=$5
 		       AND ` + indonesiaFilter + `) AS avg_value,
+		  (SELECT percentile_cont(0.5) WITHIN GROUP (ORDER BY datacontent_value)
+		     FROM webapi.datacontent
+		     WHERE domain_id=$1 AND var_id=$2 AND turvar_id=$3 AND tahun_id=$4 AND turtahun_id=$5
+		       AND ` + indonesiaFilter + `) AS median_value,
 		  (SELECT datacontent_value FROM webapi.datacontent
 		     WHERE domain_id=$1 AND var_id=$2 AND turvar_id=$3 AND tahun_id=$4 AND turtahun_id=$5
-		       AND LOWER(vervar_name) = 'indonesia' LIMIT 1) AS indo_value
+		       AND LOWER(vervar_name) = 'indonesia' LIMIT 1) AS indo_value,
+		  (SELECT datacontent_value FROM webapi.datacontent
+		     WHERE domain_id=$1 AND var_id=$2 AND turvar_id=$3 AND tahun_id=$4 AND turtahun_id=$5
+		       AND vervar_id = $6 LIMIT 1) AS jabar_value
 	`
-	err := DB.DB_SQL_POSTGRES.QueryRow(q, domainID, varID, turvarID, tahunID, turtahunID).Scan(
-		&d.MaxValue, &maxName, &d.MinValue, &minName, &d.AvgValue, &d.IndoValue,
+	err := DB.DB_SQL_POSTGRES.QueryRow(q, domainID, varID, turvarID, tahunID, turtahunID, jabarVervarID).Scan(
+		&d.MaxValue, &maxName, &d.MinValue, &minName, &d.AvgValue, &d.MedianValue, &d.IndoValue, &d.JabarValue,
 	)
 	d.MaxName = maxName.String
 	d.MinName = minName.String
@@ -165,10 +179,12 @@ func GetBigNumberData(c *gin.Context) {
 		prevData, err := qryYearData(domainID, varID, turvarID, data.TahunSebelumnyaID, turtahunID)
 		if err == nil {
 			data.TahunSebelumnyaData = BigPrevYearData{
-				AvgValue:   prevData.AvgValue,
-				IndoValue:  prevData.IndoValue,
-				AvgPersen:  pct(curData.AvgValue, prevData.AvgValue),
-				IndoPersen: pct(curData.IndoValue, prevData.IndoValue),
+				AvgValue:    prevData.AvgValue,
+				MedianValue: prevData.MedianValue,
+				IndoValue:   prevData.IndoValue,
+				JabarValue:  prevData.JabarValue,
+				AvgPersen:   pct(curData.AvgValue, prevData.AvgValue),
+				IndoPersen:  pct(curData.IndoValue, prevData.IndoValue),
 			}
 		}
 	}

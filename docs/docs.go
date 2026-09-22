@@ -1503,6 +1503,12 @@ const docTemplate = `{
                 },
                 "indo_value": {
                     "type": "number"
+                },
+                "jabar_value": {
+                    "type": "number"
+                },
+                "median_value": {
+                    "type": "number"
                 }
             }
         },
@@ -1515,10 +1521,16 @@ const docTemplate = `{
                 "indo_value": {
                     "type": "number"
                 },
+                "jabar_value": {
+                    "type": "number"
+                },
                 "max_name": {
                     "type": "string"
                 },
                 "max_value": {
+                    "type": "number"
+                },
+                "median_value": {
                     "type": "number"
                 },
                 "min_name": {

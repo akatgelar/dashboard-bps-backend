@@ -235,6 +235,10 @@ definitions:
         type: number
       indo_value:
         type: number
+      jabar_value:
+        type: number
+      median_value:
+        type: number
     type: object
   services.BigYearData:
     properties:
@@ -242,9 +246,13 @@ definitions:
         type: number
       indo_value:
         type: number
+      jabar_value:
+        type: number
       max_name:
         type: string
       max_value:
+        type: number
+      median_value:
         type: number
       min_name:
         type: string

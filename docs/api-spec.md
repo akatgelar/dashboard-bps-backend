@@ -401,13 +401,19 @@ Response `data` (object):
 | `tahun_sekarang_data.min_value` | Nilai terendah (excl. Indonesia) |
 | `tahun_sekarang_data.min_name` | Nama wilayah nilai terendah |
 | `tahun_sekarang_data.avg_value` | Rata-rata (excl. Indonesia) |
+| `tahun_sekarang_data.median_value` | Median (excl. Indonesia) |
 | `tahun_sekarang_data.indo_value` | Nilai Indonesia (`vervar_name = Indonesia`) |
+| `tahun_sekarang_data.jabar_value` | Nilai Jawa Barat (`vervar_id = 3200`) |
 | `tahun_sebelumnya_id` | Kode tahun sebelumnya (`tahun_name - 1`) |
 | `tahun_sebelumnya_name` | Label tahun sebelumnya |
 | `tahun_sebelumnya_data.avg_value` | Rata-rata tahun sebelumnya |
+| `tahun_sebelumnya_data.median_value` | Median tahun sebelumnya |
 | `tahun_sebelumnya_data.indo_value` | Nilai Indonesia tahun sebelumnya |
+| `tahun_sebelumnya_data.jabar_value` | Nilai Jawa Barat tahun sebelumnya |
 | `tahun_sebelumnya_data.avg_persen` | `((avg_sekarang - avg_sebelumnya)/avg_sebelumnya) * 100` |
 | `tahun_sebelumnya_data.indo_persen` | `((indo_sekarang - indo_sebelumnya)/indo_sebelumnya) * 100` |
+
+> `median_value` dihitung dengan `percentile_cont(0.5)`, memakai filter yang sama dengan `avg_value` (excl. `vervar_name = Indonesia`). `jabar_value` diambil dari baris `vervar_id = 3200` (Jawa Barat) — rumusnya sama dengan `indo_value`, hanya beda kode. Nilai `null` bila barisnya tidak ada (mis. `indo_value` di domain `3200`).
 
 ```
 GET /insight/big-number?domain_id=0000&var_id=286&turvar_id=530&tahun_id=125&turtahun_id=0
@@ -425,13 +431,17 @@ GET /insight/big-number?domain_id=0000&var_id=286&turvar_id=530&tahun_id=125&tur
       "min_value": 28377.77,
       "min_name": "PAPUA PEGUNUNGAN",
       "avg_value": 622000.6855263158,
-      "indo_value": 23821103.6
+      "median_value": 249279.065,
+      "indo_value": 23821103.6,
+      "jabar_value": 3038667.95
     },
     "tahun_sebelumnya_id": "124",
     "tahun_sebelumnya_name": "2024",
     "tahun_sebelumnya_data": {
       "avg_value": 579549.7536842105,
+      "median_value": 233033.325,
       "indo_value": 22138990.8,
+      "jabar_value": 2823451.79,
       "avg_persen": 7.324812334444773,
       "indo_persen": 7.597965124950505
     }
