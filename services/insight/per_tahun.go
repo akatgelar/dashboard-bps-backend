@@ -37,10 +37,11 @@ type PerTahunMetadata struct {
 // @Tags         insight
 // @Accept       json
 // @Produce      json
-// @Param        domain_id    query string true  "domain_id" example(0000)
-// @Param        var_id       query string true  "var_id" example(286)
-// @Param        turvar_id    query string true  "turvar_id" example(530)
-// @Param        turtahun_id  query string true  "turtahun_id" example(0)
+// @Param        domain_id            query string true  "domain_id" example(0000)
+// @Param        var_id               query string true  "var_id" example(286)
+// @Param        turvar_id            query string true  "turvar_id" example(530)
+// @Param        turtahun_id          query string true  "turtahun_id" example(0)
+// @Param        turtahun_group_id    query string false "optional, filter turtahun by group (group_turth_id)" example(1)
 // @Success      200  {object}  PerTahunResponse
 // @Failure      400  {object}  models.BaseResponse
 // @Failure      500  {object}  models.BaseResponse
@@ -50,6 +51,7 @@ func GetPerTahunData(c *gin.Context) {
 	varID := c.Query("var_id")
 	turvarID := c.Query("turvar_id")
 	turtahunID := c.Query("turtahun_id")
+	turtahunGroupID := c.Query("turtahun_group_id")
 
 	if domainID == "" || varID == "" || turvarID == "" || turtahunID == "" {
 		c.JSON(http.StatusBadRequest, models.BaseResponse{
@@ -59,8 +61,8 @@ func GetPerTahunData(c *gin.Context) {
 		return
 	}
 
-	rows, err := DB.DB_SQL_POSTGRES.Query(
-		`SELECT
+	dataArgs := []interface{}{domainID, varID, turvarID, turtahunID}
+	dataQuery := `SELECT
 		   vervar_id,
 		   vervar_name,
 		   tahun_id,
@@ -68,10 +70,11 @@ func GetPerTahunData(c *gin.Context) {
 		   datacontent_id,
 		   datacontent_value
 		 FROM webapi.datacontent
-		 WHERE domain_id=$1 AND var_id=$2 AND turvar_id=$3 AND turtahun_id=$4
-		 ORDER BY vervar_name ASC, tahun_id ASC`,
-		domainID, varID, turvarID, turtahunID,
-	)
+		 WHERE domain_id=$1 AND var_id=$2 AND turvar_id=$3 AND turtahun_id=$4` +
+		turtahunGroupFilter(domainID, turtahunGroupID, &dataArgs) +
+		` ORDER BY vervar_name ASC, tahun_id ASC`
+
+	rows, err := DB.DB_SQL_POSTGRES.Query(dataQuery, dataArgs...)
 	if err != nil {
 		sentry.CaptureException(err)
 		c.JSON(http.StatusInternalServerError, models.BaseResponse{Status: false, Message: "Internal server error: " + err.Error()})
@@ -121,14 +124,14 @@ func GetPerTahunData(c *gin.Context) {
 	}
 
 	var meta PerTahunMetadata
-	if err := DB.DB_SQL_POSTGRES.QueryRow(
-		`SELECT
+	metaArgs := []interface{}{domainID, varID, turvarID, turtahunID}
+	metaQuery := `SELECT
 		   COALESCE(to_char(MAX(last_updated_at), 'YYYY-MM-DD HH24:MI:SS'), ''),
 		   COALESCE(to_char(MAX(get_at), 'YYYY-MM-DD HH24:MI:SS'), '')
 		 FROM webapi.datacontent
-		 WHERE domain_id=$1 AND var_id=$2 AND turvar_id=$3 AND turtahun_id=$4`,
-		domainID, varID, turvarID, turtahunID,
-	).Scan(&meta.LastUpdateData, &meta.LastUpdatePipeline); err != nil {
+		 WHERE domain_id=$1 AND var_id=$2 AND turvar_id=$3 AND turtahun_id=$4` +
+		turtahunGroupFilter(domainID, turtahunGroupID, &metaArgs)
+	if err := DB.DB_SQL_POSTGRES.QueryRow(metaQuery, metaArgs...).Scan(&meta.LastUpdateData, &meta.LastUpdatePipeline); err != nil {
 		sentry.CaptureException(err)
 		c.JSON(http.StatusInternalServerError, models.BaseResponse{Status: false, Message: "Internal server error: " + err.Error()})
 		return

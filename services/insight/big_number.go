@@ -56,41 +56,44 @@ const indonesiaFilter = "LOWER(vervar_name) <> 'indonesia'"
 const jabarVervarID = "3200"
 
 // qryYearData runs the raw aggregation SQL for a given tahun and returns its
-// statistical fields.
-func qryYearData(domainID, varID, turvarID, tahunID, turtahunID string) (BigYearData, error) {
+// statistical fields. turtahunGroupID is optional: when set, rows are limited
+// to the turtahun members of that group (AND-combined with turtahunID).
+func qryYearData(domainID, varID, turvarID, tahunID, turtahunID, turtahunGroupID string) (BigYearData, error) {
 	var d BigYearData
 	var maxName, minName sql.NullString
+	args := []interface{}{domainID, varID, turvarID, tahunID, turtahunID, jabarVervarID}
+	gf := turtahunGroupFilter(domainID, turtahunGroupID, &args)
 	q := `
 		SELECT
 		  (SELECT MAX(datacontent_value) FROM webapi.datacontent
 		     WHERE domain_id=$1 AND var_id=$2 AND turvar_id=$3 AND tahun_id=$4 AND turtahun_id=$5
-		       AND ` + indonesiaFilter + `) AS max_value,
+		       AND ` + indonesiaFilter + gf + `) AS max_value,
 		  (SELECT vervar_name FROM webapi.datacontent
 		     WHERE domain_id=$1 AND var_id=$2 AND turvar_id=$3 AND tahun_id=$4 AND turtahun_id=$5
-		       AND ` + indonesiaFilter + `
+		       AND ` + indonesiaFilter + gf + `
 		     ORDER BY datacontent_value DESC NULLS LAST LIMIT 1) AS max_name,
 		  (SELECT MIN(datacontent_value) FROM webapi.datacontent
 		     WHERE domain_id=$1 AND var_id=$2 AND turvar_id=$3 AND tahun_id=$4 AND turtahun_id=$5
-		       AND ` + indonesiaFilter + `) AS min_value,
+		       AND ` + indonesiaFilter + gf + `) AS min_value,
 		  (SELECT vervar_name FROM webapi.datacontent
 		     WHERE domain_id=$1 AND var_id=$2 AND turvar_id=$3 AND tahun_id=$4 AND turtahun_id=$5
-		       AND ` + indonesiaFilter + `
+		       AND ` + indonesiaFilter + gf + `
 		     ORDER BY datacontent_value ASC NULLS LAST LIMIT 1) AS min_name,
 		  (SELECT AVG(datacontent_value) FROM webapi.datacontent
 		     WHERE domain_id=$1 AND var_id=$2 AND turvar_id=$3 AND tahun_id=$4 AND turtahun_id=$5
-		       AND ` + indonesiaFilter + `) AS avg_value,
+		       AND ` + indonesiaFilter + gf + `) AS avg_value,
 		  (SELECT percentile_cont(0.5) WITHIN GROUP (ORDER BY datacontent_value)
 		     FROM webapi.datacontent
 		     WHERE domain_id=$1 AND var_id=$2 AND turvar_id=$3 AND tahun_id=$4 AND turtahun_id=$5
-		       AND ` + indonesiaFilter + `) AS median_value,
+		       AND ` + indonesiaFilter + gf + `) AS median_value,
 		  (SELECT datacontent_value FROM webapi.datacontent
 		     WHERE domain_id=$1 AND var_id=$2 AND turvar_id=$3 AND tahun_id=$4 AND turtahun_id=$5
-		       AND LOWER(vervar_name) = 'indonesia' LIMIT 1) AS indo_value,
+		       AND LOWER(vervar_name) = 'indonesia'` + gf + ` LIMIT 1) AS indo_value,
 		  (SELECT datacontent_value FROM webapi.datacontent
 		     WHERE domain_id=$1 AND var_id=$2 AND turvar_id=$3 AND tahun_id=$4 AND turtahun_id=$5
-		       AND vervar_id = $6 LIMIT 1) AS jabar_value
+		       AND vervar_id = $6` + gf + ` LIMIT 1) AS jabar_value
 	`
-	err := DB.DB_SQL_POSTGRES.QueryRow(q, domainID, varID, turvarID, tahunID, turtahunID, jabarVervarID).Scan(
+	err := DB.DB_SQL_POSTGRES.QueryRow(q, args...).Scan(
 		&d.MaxValue, &maxName, &d.MinValue, &minName, &d.AvgValue, &d.MedianValue, &d.IndoValue, &d.JabarValue,
 	)
 	d.MaxName = maxName.String
@@ -112,11 +115,12 @@ func pct(cur, prev *float64) *float64 {
 // @Tags         insight
 // @Accept       json
 // @Produce      json
-// @Param        domain_id    query string true  "domain_id" example(0000)
-// @Param        var_id       query string true  "var_id" example(286)
-// @Param        turvar_id    query string true  "turvar_id" example(530)
-// @Param        tahun_id     query string true  "tahun_id" example(125)
-// @Param        turtahun_id  query string true  "turtahun_id" example(0)
+// @Param        domain_id            query string true  "domain_id" example(0000)
+// @Param        var_id               query string true  "var_id" example(286)
+// @Param        turvar_id            query string true  "turvar_id" example(530)
+// @Param        tahun_id             query string true  "tahun_id" example(125)
+// @Param        turtahun_id          query string true  "turtahun_id" example(0)
+// @Param        turtahun_group_id    query string false "optional, filter turtahun by group (group_turth_id)" example(0)
 // @Success      200  {object}  BigNumberResponse
 // @Failure      400  {object}  models.BaseResponse
 // @Failure      500  {object}  models.BaseResponse
@@ -127,6 +131,7 @@ func GetBigNumberData(c *gin.Context) {
 	turvarID := c.Query("turvar_id")
 	tahunID := c.Query("tahun_id")
 	turtahunID := c.Query("turtahun_id")
+	turtahunGroupID := c.Query("turtahun_group_id")
 
 	if domainID == "" || varID == "" || turvarID == "" || tahunID == "" || turtahunID == "" {
 		c.JSON(http.StatusBadRequest, models.BaseResponse{
@@ -166,7 +171,7 @@ func GetBigNumberData(c *gin.Context) {
 	}
 
 	// aggregate for current year
-	curData, err := qryYearData(domainID, varID, turvarID, tahunID, turtahunID)
+	curData, err := qryYearData(domainID, varID, turvarID, tahunID, turtahunID, turtahunGroupID)
 	if err != nil {
 		sentry.CaptureException(err)
 		c.JSON(http.StatusInternalServerError, models.BaseResponse{Status: false, Message: "Internal server error: " + err.Error()})
@@ -176,7 +181,7 @@ func GetBigNumberData(c *gin.Context) {
 
 	// aggregate for previous year (if any) and compute percentages
 	if data.TahunSebelumnyaID != "" {
-		prevData, err := qryYearData(domainID, varID, turvarID, data.TahunSebelumnyaID, turtahunID)
+		prevData, err := qryYearData(domainID, varID, turvarID, data.TahunSebelumnyaID, turtahunID, turtahunGroupID)
 		if err == nil {
 			data.TahunSebelumnyaData = BigPrevYearData{
 				AvgValue:    prevData.AvgValue,
@@ -191,14 +196,14 @@ func GetBigNumberData(c *gin.Context) {
 
 	// metadata from the current year rows
 	var meta BigNumberMetadata
-	if err := DB.DB_SQL_POSTGRES.QueryRow(
-		`SELECT
+	metaArgs := []interface{}{domainID, varID, turvarID, tahunID, turtahunID}
+	metaQuery := `SELECT
 		   COALESCE(to_char(MAX(last_updated_at), 'YYYY-MM-DD HH24:MI:SS'), ''),
 		   COALESCE(to_char(MAX(get_at), 'YYYY-MM-DD HH24:MI:SS'), '')
 		 FROM webapi.datacontent
-		 WHERE domain_id=$1 AND var_id=$2 AND turvar_id=$3 AND tahun_id=$4 AND turtahun_id=$5`,
-		domainID, varID, turvarID, tahunID, turtahunID,
-	).Scan(&meta.LastUpdateData, &meta.LastUpdatePipeline); err != nil {
+		 WHERE domain_id=$1 AND var_id=$2 AND turvar_id=$3 AND tahun_id=$4 AND turtahun_id=$5` +
+		turtahunGroupFilter(domainID, turtahunGroupID, &metaArgs)
+	if err := DB.DB_SQL_POSTGRES.QueryRow(metaQuery, metaArgs...).Scan(&meta.LastUpdateData, &meta.LastUpdatePipeline); err != nil {
 		sentry.CaptureException(err)
 		c.JSON(http.StatusInternalServerError, models.BaseResponse{Status: false, Message: "Internal server error: " + err.Error()})
 		return

@@ -675,6 +675,11 @@ paths:
         name: turtahun_id
         required: true
         type: string
+      - description: optional, filter turtahun by group (group_turth_id)
+        example: "0"
+        in: query
+        name: turtahun_group_id
+        type: string
       produces:
       - application/json
       responses:
@@ -722,6 +727,11 @@ paths:
         in: query
         name: turtahun_id
         required: true
+        type: string
+      - description: optional, filter turtahun by group (group_turth_id)
+        example: "1"
+        in: query
+        name: turtahun_group_id
         type: string
       produces:
       - application/json
@@ -777,6 +787,11 @@ paths:
         name: turtahun_id
         required: true
         type: string
+      - description: optional, filter turtahun by group (group_turth_id)
+        example: "0"
+        in: query
+        name: turtahun_group_id
+        type: string
       produces:
       - application/json
       responses:
@@ -824,6 +839,11 @@ paths:
         in: query
         name: turtahun_id
         required: true
+        type: string
+      - description: optional, filter turtahun by group (group_turth_id)
+        example: "0"
+        in: query
+        name: turtahun_group_id
         type: string
       produces:
       - application/json

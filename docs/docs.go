@@ -144,6 +144,13 @@ const docTemplate = `{
                         "name": "turtahun_id",
                         "in": "query",
                         "required": true
+                    },
+                    {
+                        "type": "string",
+                        "example": "0",
+                        "description": "optional, filter turtahun by group (group_turth_id)",
+                        "name": "turtahun_group_id",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -213,6 +220,13 @@ const docTemplate = `{
                         "name": "turtahun_id",
                         "in": "query",
                         "required": true
+                    },
+                    {
+                        "type": "string",
+                        "example": "1",
+                        "description": "optional, filter turtahun by group (group_turth_id)",
+                        "name": "turtahun_group_id",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -290,6 +304,13 @@ const docTemplate = `{
                         "name": "turtahun_id",
                         "in": "query",
                         "required": true
+                    },
+                    {
+                        "type": "string",
+                        "example": "0",
+                        "description": "optional, filter turtahun by group (group_turth_id)",
+                        "name": "turtahun_group_id",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -359,6 +380,13 @@ const docTemplate = `{
                         "name": "turtahun_id",
                         "in": "query",
                         "required": true
+                    },
+                    {
+                        "type": "string",
+                        "example": "0",
+                        "description": "optional, filter turtahun by group (group_turth_id)",
+                        "name": "turtahun_group_id",
+                        "in": "query"
                     }
                 ],
                 "responses": {

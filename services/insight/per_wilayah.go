@@ -74,11 +74,12 @@ func lerpColor(f float64) string {
 // @Tags         insight
 // @Accept       json
 // @Produce      json
-// @Param        domain_id    query string true  "domain_id" example(0000)
-// @Param        var_id       query string true  "var_id" example(286)
-// @Param        turvar_id    query string true  "turvar_id" example(530)
-// @Param        tahun_id     query string true  "tahun_id" example(125)
-// @Param        turtahun_id  query string true  "turtahun_id" example(0)
+// @Param        domain_id            query string true  "domain_id" example(0000)
+// @Param        var_id               query string true  "var_id" example(286)
+// @Param        turvar_id            query string true  "turvar_id" example(530)
+// @Param        tahun_id             query string true  "tahun_id" example(125)
+// @Param        turtahun_id          query string true  "turtahun_id" example(0)
+// @Param        turtahun_group_id    query string false "optional, filter turtahun by group (group_turth_id)" example(0)
 // @Success      200  {object}  PerWilayahResponse
 // @Failure      400  {object}  models.BaseResponse
 // @Failure      500  {object}  models.BaseResponse
@@ -89,6 +90,7 @@ func GetPerWilayahData(c *gin.Context) {
 	turvarID := c.Query("turvar_id")
 	tahunID := c.Query("tahun_id")
 	turtahunID := c.Query("turtahun_id")
+	turtahunGroupID := c.Query("turtahun_group_id")
 
 	if domainID == "" || varID == "" || turvarID == "" || tahunID == "" || turtahunID == "" {
 		c.JSON(http.StatusBadRequest, models.BaseResponse{
@@ -98,13 +100,14 @@ func GetPerWilayahData(c *gin.Context) {
 		return
 	}
 
-	rows, err := DB.DB_SQL_POSTGRES.Query(
-		`SELECT vervar_id, vervar_name, datacontent_id, datacontent_value, unit
+	dataArgs := []interface{}{domainID, varID, turvarID, tahunID, turtahunID}
+	dataQuery := `SELECT vervar_id, vervar_name, datacontent_id, datacontent_value, unit
 		 FROM webapi.datacontent
-		 WHERE domain_id=$1 AND var_id=$2 AND turvar_id=$3 AND tahun_id=$4 AND turtahun_id=$5
-		 ORDER BY vervar_name ASC`,
-		domainID, varID, turvarID, tahunID, turtahunID,
-	)
+		 WHERE domain_id=$1 AND var_id=$2 AND turvar_id=$3 AND tahun_id=$4 AND turtahun_id=$5` +
+		turtahunGroupFilter(domainID, turtahunGroupID, &dataArgs) +
+		` ORDER BY vervar_name ASC`
+
+	rows, err := DB.DB_SQL_POSTGRES.Query(dataQuery, dataArgs...)
 	if err != nil {
 		sentry.CaptureException(err)
 		c.JSON(http.StatusInternalServerError, models.BaseResponse{Status: false, Message: "Internal server error: " + err.Error()})
@@ -157,14 +160,14 @@ func GetPerWilayahData(c *gin.Context) {
 
 	// metadata
 	var meta PerWilayahMetadata
-	if err := DB.DB_SQL_POSTGRES.QueryRow(
-		`SELECT
+	metaArgs := []interface{}{domainID, varID, turvarID, tahunID, turtahunID}
+	metaQuery := `SELECT
 		   COALESCE(to_char(MAX(last_updated_at), 'YYYY-MM-DD HH24:MI:SS'), ''),
 		   COALESCE(to_char(MAX(get_at), 'YYYY-MM-DD HH24:MI:SS'), '')
 		 FROM webapi.datacontent
-		 WHERE domain_id=$1 AND var_id=$2 AND turvar_id=$3 AND tahun_id=$4 AND turtahun_id=$5`,
-		domainID, varID, turvarID, tahunID, turtahunID,
-	).Scan(&meta.LastUpdateData, &meta.LastUpdatePipeline); err != nil {
+		 WHERE domain_id=$1 AND var_id=$2 AND turvar_id=$3 AND tahun_id=$4 AND turtahun_id=$5` +
+		turtahunGroupFilter(domainID, turtahunGroupID, &metaArgs)
+	if err := DB.DB_SQL_POSTGRES.QueryRow(metaQuery, metaArgs...).Scan(&meta.LastUpdateData, &meta.LastUpdatePipeline); err != nil {
 		sentry.CaptureException(err)
 		c.JSON(http.StatusInternalServerError, models.BaseResponse{Status: false, Message: "Internal server error: " + err.Error()})
 		return

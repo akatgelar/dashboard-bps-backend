@@ -392,6 +392,17 @@ Param wajib per endpoint insight (semuanya kode, diambil dari `webapi.dataconten
 
 Missing param → `400`.
 
+Semua endpoint insight juga mendukung param **opsional** `turtahun_group_id` (kode `group_turth_id`). Kalau dikirim, baris dibatasi ke `turtahun_id` milik group tersebut untuk `domain_id` yang sama:
+
+```sql
+AND turtahun_id IN (
+  SELECT turtahun_id FROM webapi.master_tahun_turunan
+  WHERE domain_id = $domain_id AND group_turth_id = $turtahun_group_id
+)
+```
+
+Param ini digabung **AND** dengan `turtahun_id` (kalau `turtahun_id` di luar group → hasil kosong). Kalau kosong/tidak dikirim, filter tidak dipasang. Group yang tersedia mis. `0` Tahunan, `1` Bulanan, `3` Triwulanan, `6` Semesteran.
+
 ### 4.2 Payload Response Insight
 
 ```json
