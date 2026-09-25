@@ -20,12 +20,14 @@ const masterDefaultPerPage = 20
 
 // masterConfig defines how a master endpoint should query its source table.
 type masterConfig struct {
-	defaultSort        string   // default sort column
-	sortable           []string // columns allowed in sort
-	filterable         []string // columns allowed in filter
-	lastUpdateCol      string   // column used for metadata.last_update_data
-	lastUpdateFiltered bool     // whether the filter applies to the last_update computation
-	extraWhere         string   // additional raw WHERE clause applied to data & count queries
+	defaultSort        string            // default sort column
+	sortable           []string          // columns allowed in sort
+	filterable         []string          // columns allowed in filter
+	lastUpdateCol      string            // column used for metadata.last_update_data
+	lastUpdateFiltered bool              // whether the filter applies to the last_update computation
+	extraWhere         string            // additional raw WHERE clause applied to data & count queries
+	filterColumn       map[string]string // optional filter field -> qualified column (for joins)
+	sortColumn         map[string]string // optional sort field -> qualified column (for joins)
 }
 
 func (cfg masterConfig) sortableSet() map[string]bool {
@@ -113,23 +115,30 @@ func applyFilter(q *gorm.DB, c *gin.Context, cfg masterConfig) bool {
 			continue
 		}
 
+		col := fmt.Sprintf(`"%s"`, field)
+		if cfg.filterColumn != nil {
+			if qualified, ok := cfg.filterColumn[field]; ok {
+				col = qualified
+			}
+		}
+
 		operator := strings.ToLower(filter.Operator)
 		switch operator {
 		case "eq":
-			q.Where(fmt.Sprintf(`"%s" = ?`, field), filter.Value)
+			q.Where(fmt.Sprintf(`%s = ?`, col), filter.Value)
 		case "neq":
-			q.Where(fmt.Sprintf(`"%s" != ?`, field), filter.Value)
+			q.Where(fmt.Sprintf(`%s != ?`, col), filter.Value)
 		case "gt":
-			q.Where(fmt.Sprintf(`"%s" > ?`, field), filter.Value)
+			q.Where(fmt.Sprintf(`%s > ?`, col), filter.Value)
 		case "gte":
-			q.Where(fmt.Sprintf(`"%s" >= ?`, field), filter.Value)
+			q.Where(fmt.Sprintf(`%s >= ?`, col), filter.Value)
 		case "lt":
-			q.Where(fmt.Sprintf(`"%s" < ?`, field), filter.Value)
+			q.Where(fmt.Sprintf(`%s < ?`, col), filter.Value)
 		case "lte":
-			q.Where(fmt.Sprintf(`"%s" <= ?`, field), filter.Value)
+			q.Where(fmt.Sprintf(`%s <= ?`, col), filter.Value)
 		case "like":
 			if val, ok := filter.Value.(string); ok {
-				q.Where(fmt.Sprintf(`"%s" ILIKE ?`, field), "%"+val+"%")
+				q.Where(fmt.Sprintf(`%s ILIKE ?`, col), "%"+val+"%")
 			}
 		}
 	}
@@ -149,10 +158,17 @@ func buildOrder(c *gin.Context, cfg masterConfig) (bool, string) {
 		if cfg.defaultSort == "" {
 			return false, ""
 		}
-		return true, fmt.Sprintf(`"%s" %s`, cfg.defaultSort, dir)
+		sortCol = cfg.defaultSort
 	}
 
-	return true, fmt.Sprintf(`"%s" %s`, sortCol, dir)
+	col := fmt.Sprintf(`"%s"`, sortCol)
+	if cfg.sortColumn != nil {
+		if qualified, ok := cfg.sortColumn[sortCol]; ok {
+			col = qualified
+		}
+	}
+
+	return true, fmt.Sprintf(`%s %s`, col, dir)
 }
 
 // fetchMaster runs the shared read-only master query and writes the response.
@@ -201,12 +217,12 @@ func fetchMaster(c *gin.Context, cfg masterConfig, model interface{}) {
 			c.JSON(http.StatusOK, models.BaseResponse{
 				Status:  true,
 				Message: "Get data success",
-				Data:     defaultData,
+				Data:    defaultData,
 				Metadata: models.BaseMetadata{
-					TotalData:      1,
-					TotalPage:      1,
-					PerPage:        perPage,
-					Page:           page,
+					TotalData:          1,
+					TotalPage:          1,
+					PerPage:            perPage,
+					Page:               page,
 					LastUpdateData:     formatDateTime(lastDataValue(c, model, cfg)),
 					LastUpdatePipeline: formatDateTime(lastPipelineValue(model)),
 				},
@@ -307,4 +323,122 @@ func fetchTahunTurunanDistinct(c *gin.Context, cfg masterConfig) {
 func fetchTahunDistinct(c *gin.Context, cfg masterConfig) {
 	var results []ModelData.TahunDistinct
 	fetchDistinct(c, cfg, `"tahun_id", "tahun_name"`, &results)
+}
+
+// fetchTahunTurunanGroup serves /master/tahun-turunan-group (distinct=false) and
+// /master/tahun-turunan-group-distinct (distinct=true): the period group of
+// tahun turunan, resolved by INNER JOIN datacontent (for domain_id/var_id
+// filter) with master_tahun_turunan (for group_turth_id/group_turth_name).
+//
+// The non-distinct variant keeps one row per master_tahun_turunan row (GROUP BY
+// m.id), so the join does not multiply by datacontent rows and the result stays
+// bounded like the other base master endpoints.
+func fetchTahunTurunanGroup(c *gin.Context, cfg masterConfig, distinct bool) {
+	var results []ModelData.TahunTurunanGroup
+
+	perPage := queryInt(c, "per_page", masterDefaultPerPage)
+	page := queryInt(c, "page", 1)
+	offset := (page - 1) * perPage
+
+	const from = "webapi.datacontent AS d"
+	const join = "INNER JOIN webapi.master_tahun_turunan AS m ON m.domain_id = d.domain_id AND m.turtahun_id = d.turtahun_id"
+	const groupCols = "m.group_turth_id AS turtahun_group_id, m.group_turth_name AS turtahun_group_name"
+
+	// shape sets the SELECT (and GROUP BY for the non-distinct variant).
+	shape := func(q *gorm.DB) *gorm.DB {
+		if distinct {
+			return q.Select("DISTINCT " + groupCols)
+		}
+		return q.Select(groupCols).Group("m.id, m.group_turth_id, m.group_turth_name")
+	}
+
+	// newQuery builds a join query with the request filter applied. Returns nil
+	// (after writing an error response) when the filter is invalid.
+	newQuery := func() *gorm.DB {
+		q := database.DB_POSTGRES.Table(from).Joins(join)
+		if !applyFilter(q, c, cfg) {
+			return nil
+		}
+		return shape(q)
+	}
+
+	// data
+	query := newQuery()
+	if query == nil {
+		return
+	}
+	if hasOrder, orderClause := buildOrder(c, cfg); hasOrder {
+		query = query.Order(orderClause)
+	}
+	if err := query.Limit(perPage).Offset(offset).Scan(&results).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, models.BaseResponse{Status: false, Message: "Failed to fetch data: " + err.Error()})
+		return
+	}
+
+	// count
+	sub := newQuery()
+	if sub == nil {
+		return
+	}
+	var totalData int64
+	if err := database.DB_POSTGRES.Table("(?) AS sub", sub).Count(&totalData).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, models.BaseResponse{Status: false, Message: "Failed to count records: " + err.Error()})
+		return
+	}
+
+	totalPage := int(totalData) / perPage
+	if int(totalData)%perPage > 0 {
+		totalPage++
+	}
+
+	// metadata: last_update_data = MAX(d.last_updated_at) under the filter,
+	// last_update_pipeline = MAX(get_at) of datacontent.
+	lastDataQ := database.DB_POSTGRES.Table(from).Joins(join)
+	if !applyFilter(lastDataQ, c, cfg) {
+		return
+	}
+	lastData := maxColumnValue(lastDataQ, "d.last_updated_at")
+	lastPipeline := lastPipelineValue(&ModelData.DataContent{})
+
+	metadata := models.BaseMetadata{
+		TotalData:          int(totalData),
+		TotalPage:          totalPage,
+		PerPage:            perPage,
+		Page:               page,
+		LastUpdateData:     formatDateTime(lastData),
+		LastUpdatePipeline: formatDateTime(lastPipeline),
+	}
+
+	c.JSON(http.StatusOK, models.BaseResponse{
+		Status:   true,
+		Message:  "Get data success",
+		Data:     results,
+		Metadata: metadata,
+	})
+}
+
+// tahunTurunanGroupConfig is the shared config for the tahun-turunan-group
+// endpoints. Filter/sort fields are mapped to qualified join columns because
+// domain_id/var_id live in datacontent while group_turth_* live in
+// master_tahun_turunan (same-name columns would be ambiguous otherwise).
+func tahunTurunanGroupConfig() masterConfig {
+	cols := map[string]string{
+		"domain_id":           "d.domain_id",
+		"var_id":              "d.var_id",
+		"turtahun_id":         "d.turtahun_id",
+		"turtahun_name":       "d.turtahun_name",
+		"group_turth_id":      "m.group_turth_id",
+		"group_turth_name":    "m.group_turth_name",
+		"turtahun_group_id":   "m.group_turth_id",
+		"turtahun_group_name": "m.group_turth_name",
+	}
+	return masterConfig{
+		defaultSort:        "turtahun_group_id",
+		sortable:           []string{"turtahun_group_id", "turtahun_group_name", "group_turth_id", "group_turth_name", "domain_id", "var_id", "turtahun_id", "turtahun_name"},
+		filterable:         []string{"turtahun_group_id", "turtahun_group_name", "group_turth_id", "group_turth_name", "domain_id", "var_id", "turtahun_id", "turtahun_name"},
+		filterColumn:       cols,
+		sortColumn:         cols,
+		lastUpdateCol:      "d.last_updated_at",
+		lastUpdateFiltered: true,
+	}
 }

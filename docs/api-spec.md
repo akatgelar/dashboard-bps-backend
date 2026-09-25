@@ -91,6 +91,8 @@ HTTP status: `200` sukses, `400` bad request / param tidak valid, `404` route-no
 | `master/tahun-distinct` | Distinct `tahun_id`, `tahun_name` dari `datacontent` |
 | `master/tahun-turunan` | Master periode turunan |
 | `master/tahun-turunan-distinct` | Distinct `turtahun_id`, `turtahun_name` dari `datacontent` |
+| `master/tahun-turunan-group` | Group periode turunan (`group_turth_id`, `group_turth_name`) |
+| `master/tahun-turunan-group-distinct` | Distinct group periode turunan dari `datacontent` |
 | `datacontent` | Data nilai content (payload data) |
 
 ### 3.2 Parameter Umum (Query) — Endpoint Master
@@ -313,7 +315,35 @@ Response `data` (array):
 [ { "turtahun_id": "0", "turtahun_name": "Tahun" } ]
 ```
 
-#### 3.4.11 `datacontent`
+#### 3.4.11 `master/tahun-turunan-group`
+
+Group periode dari `webapi.master_tahun_turunan`, di-resolve lewat INNER JOIN ke `webapi.datacontent` supaya bisa difilter `domain_id` & `var_id`. Field filter/sort: `turtahun_group_id`, `turtahun_group_name` (alias dari `group_turth_id`/`group_turth_name`), `group_turth_id`, `group_turth_name`, `domain_id`, `var_id`, `turtahun_id`, `turtahun_name`.
+
+Varian ini **non-distinct**: satu baris per baris `master_tahun_turunan` (versi `get_at`), sehingga bisa memuat group yang sama lebih dari sekali — sama seperti endpoint master `tahun-turunan`.
+
+```
+GET /master/tahun-turunan-group?filter=[{"field":"domain_id","operator":"eq","value":"0000"},{"field":"var_id","operator":"eq","value":"1"}]
+```
+
+Response `data` (array):
+```
+[ { "turtahun_group_id": "1", "turtahun_group_name": "Bulanan" } ]
+```
+
+#### 3.4.12 `master/tahun-turunan-group-distinct`
+
+Distinct group periode dari `webapi.datacontent` ⋈ `webapi.master_tahun_turunan`. Field filter/sort: `turtahun_group_id`, `turtahun_group_name`, `group_turth_id`, `group_turth_name`, `domain_id`, `var_id`, `turtahun_id`, `turtahun_name`.
+
+```
+GET /master/tahun-turunan-group-distinct?filter=[{"field":"domain_id","operator":"eq","value":"0000"},{"field":"var_id","operator":"eq","value":"1"}]
+```
+
+Response `data` (array):
+```
+[ { "turtahun_group_id": "1", "turtahun_group_name": "Bulanan" } ]
+```
+
+#### 3.4.13 `datacontent`
 
 Mengambil daftar isi data (nilai angka) hasil pipeline. Mengikuti parameter master (`filter`, `sort`, `order`, `per_page`, `page`).
 

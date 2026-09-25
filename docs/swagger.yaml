@@ -137,8 +137,17 @@ definitions:
       turtahun_name:
         type: string
     type: object
+  models.TahunTurunanGroup:
+    properties:
+      turtahun_group_id:
+        type: string
+      turtahun_group_name:
+        type: string
+    type: object
   models.Variable:
     properties:
+      def:
+        type: string
       domain_id:
         type: string
       get_at:
@@ -470,6 +479,32 @@ definitions:
       data:
         items:
           $ref: '#/definitions/models.TahunTurunanDistinct'
+        type: array
+      message:
+        type: string
+      metadata:
+        $ref: '#/definitions/models.BaseMetadata'
+      status:
+        type: boolean
+    type: object
+  services.TahunTurunanGroupDistinctListResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/models.TahunTurunanGroup'
+        type: array
+      message:
+        type: string
+      metadata:
+        $ref: '#/definitions/models.BaseMetadata'
+      status:
+        type: boolean
+    type: object
+  services.TahunTurunanGroupListResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/models.TahunTurunanGroup'
         type: array
       message:
         type: string
@@ -1124,6 +1159,114 @@ paths:
           schema:
             $ref: '#/definitions/models.BaseResponse'
       summary: List distinct tahun turunan from datacontent
+      tags:
+      - master
+  /master/tahun-turunan-group:
+    get:
+      consumes:
+      - application/json
+      description: SELECT group_turth_id, group_turth_name FROM webapi.datacontent
+        d INNER JOIN webapi.master_tahun_turunan m
+      parameters:
+      - description: 'JSON array of {field,operator,value}. Operator supports: eq,
+          neq, gt, gte, lt, lte, like'
+        example: '[{"field":"domain_id","operator":"eq","value":"0000"},{"field":"var_id","operator":"eq","value":"1"}]'
+        in: query
+        name: filter
+        type: string
+      - description: sort column (single)
+        example: turtahun_group_id
+        in: query
+        name: sort
+        type: string
+      - default: asc
+        description: asc | desc
+        enum:
+        - asc
+        - desc
+        in: query
+        name: order
+        type: string
+      - description: per page, default 20
+        example: 20
+        in: query
+        name: per_page
+        type: integer
+      - description: page, 1-based
+        example: 1
+        in: query
+        name: page
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/services.TahunTurunanGroupListResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+      summary: List tahun turunan group
+      tags:
+      - master
+  /master/tahun-turunan-group-distinct:
+    get:
+      consumes:
+      - application/json
+      description: SELECT DISTINCT group_turth_id, group_turth_name FROM webapi.datacontent
+        d INNER JOIN webapi.master_tahun_turunan m
+      parameters:
+      - description: 'JSON array of {field,operator,value}. Operator supports: eq,
+          neq, gt, gte, lt, lte, like'
+        example: '[{"field":"domain_id","operator":"eq","value":"0000"},{"field":"var_id","operator":"eq","value":"1"}]'
+        in: query
+        name: filter
+        type: string
+      - description: sort column (single)
+        example: turtahun_group_id
+        in: query
+        name: sort
+        type: string
+      - default: asc
+        description: asc | desc
+        enum:
+        - asc
+        - desc
+        in: query
+        name: order
+        type: string
+      - description: per page, default 20
+        example: 20
+        in: query
+        name: per_page
+        type: integer
+      - description: page, 1-based
+        example: 1
+        in: query
+        name: page
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/services.TahunTurunanGroupDistinctListResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+      summary: List distinct tahun turunan group
       tags:
       - master
   /master/variable:

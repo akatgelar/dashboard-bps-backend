@@ -839,6 +839,158 @@ const docTemplate = `{
                 }
             }
         },
+        "/master/tahun-turunan-group": {
+            "get": {
+                "description": "SELECT group_turth_id, group_turth_name FROM webapi.datacontent d INNER JOIN webapi.master_tahun_turunan m",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "master"
+                ],
+                "summary": "List tahun turunan group",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "example": "[{\"field\":\"domain_id\",\"operator\":\"eq\",\"value\":\"0000\"},{\"field\":\"var_id\",\"operator\":\"eq\",\"value\":\"1\"}]",
+                        "description": "JSON array of {field,operator,value}. Operator supports: eq, neq, gt, gte, lt, lte, like",
+                        "name": "filter",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "example": "turtahun_group_id",
+                        "description": "sort column (single)",
+                        "name": "sort",
+                        "in": "query"
+                    },
+                    {
+                        "enum": [
+                            "asc",
+                            "desc"
+                        ],
+                        "type": "string",
+                        "default": "asc",
+                        "description": "asc | desc",
+                        "name": "order",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "example": 20,
+                        "description": "per page, default 20",
+                        "name": "per_page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "example": 1,
+                        "description": "page, 1-based",
+                        "name": "page",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/services.TahunTurunanGroupListResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/master/tahun-turunan-group-distinct": {
+            "get": {
+                "description": "SELECT DISTINCT group_turth_id, group_turth_name FROM webapi.datacontent d INNER JOIN webapi.master_tahun_turunan m",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "master"
+                ],
+                "summary": "List distinct tahun turunan group",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "example": "[{\"field\":\"domain_id\",\"operator\":\"eq\",\"value\":\"0000\"},{\"field\":\"var_id\",\"operator\":\"eq\",\"value\":\"1\"}]",
+                        "description": "JSON array of {field,operator,value}. Operator supports: eq, neq, gt, gte, lt, lte, like",
+                        "name": "filter",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "example": "turtahun_group_id",
+                        "description": "sort column (single)",
+                        "name": "sort",
+                        "in": "query"
+                    },
+                    {
+                        "enum": [
+                            "asc",
+                            "desc"
+                        ],
+                        "type": "string",
+                        "default": "asc",
+                        "description": "asc | desc",
+                        "name": "order",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "example": 20,
+                        "description": "per page, default 20",
+                        "name": "per_page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "example": 1,
+                        "description": "page, 1-based",
+                        "name": "page",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/services.TahunTurunanGroupDistinctListResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/master/variable": {
             "get": {
                 "description": "Get list master variable",
@@ -1354,9 +1506,23 @@ const docTemplate = `{
                 }
             }
         },
+        "models.TahunTurunanGroup": {
+            "type": "object",
+            "properties": {
+                "turtahun_group_id": {
+                    "type": "string"
+                },
+                "turtahun_group_name": {
+                    "type": "string"
+                }
+            }
+        },
         "models.Variable": {
             "type": "object",
             "properties": {
+                "def": {
+                    "type": "string"
+                },
                 "domain_id": {
                     "type": "string"
                 },
@@ -1866,6 +2032,46 @@ const docTemplate = `{
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/models.TahunTurunanDistinct"
+                    }
+                },
+                "message": {
+                    "type": "string"
+                },
+                "metadata": {
+                    "$ref": "#/definitions/models.BaseMetadata"
+                },
+                "status": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "services.TahunTurunanGroupDistinctListResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.TahunTurunanGroup"
+                    }
+                },
+                "message": {
+                    "type": "string"
+                },
+                "metadata": {
+                    "$ref": "#/definitions/models.BaseMetadata"
+                },
+                "status": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "services.TahunTurunanGroupListResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.TahunTurunanGroup"
                     }
                 },
                 "message": {

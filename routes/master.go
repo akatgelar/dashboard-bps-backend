@@ -53,6 +53,16 @@ func RouteMaster(g *gin.RouterGroup) {
 		ServiceMaster.GetTahunTurunanDistinctData(c)
 	})
 
+	// master/tahun-turunan-group
+	g.GET("/master/tahun-turunan-group", func(c *gin.Context) {
+		ServiceMaster.GetTahunTurunanGroupData(c)
+	})
+
+	// master/tahun-turunan-group-distinct
+	g.GET("/master/tahun-turunan-group-distinct", func(c *gin.Context) {
+		ServiceMaster.GetTahunTurunanGroupDistinctData(c)
+	})
+
 	// master/tahun-distinct
 	g.GET("/master/tahun-distinct", func(c *gin.Context) {
 		ServiceMaster.GetTahunDistinctData(c)

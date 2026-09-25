@@ -263,6 +263,44 @@ func GetTahunTurunanDistinctData(c *gin.Context) {
 	})
 }
 
+// GetTahunTurunanGroupData godoc
+// @Summary      List tahun turunan group
+// @Description  SELECT group_turth_id, group_turth_name FROM webapi.datacontent d INNER JOIN webapi.master_tahun_turunan m
+// @Tags         master
+// @Accept       json
+// @Produce      json
+// @Param        filter    query string false "JSON array of {field,operator,value}. Operator supports: eq, neq, gt, gte, lt, lte, like" example([{"field":"domain_id","operator":"eq","value":"0000"},{"field":"var_id","operator":"eq","value":"1"}])
+// @Param        sort      query string false "sort column (single)" example(turtahun_group_id)
+// @Param        order     query string false "asc | desc" Enums(asc,desc) default(asc)
+// @Param        per_page  query int    false "per page, default 20" example(20)
+// @Param        page      query int    false "page, 1-based" example(1)
+// @Success      200  {object}  TahunTurunanGroupListResponse
+// @Failure      400  {object}  models.BaseResponse
+// @Failure      500  {object}  models.BaseResponse
+// @Router       /master/tahun-turunan-group [get]
+func GetTahunTurunanGroupData(c *gin.Context) {
+	fetchTahunTurunanGroup(c, tahunTurunanGroupConfig(), false)
+}
+
+// GetTahunTurunanGroupDistinctData godoc
+// @Summary      List distinct tahun turunan group
+// @Description  SELECT DISTINCT group_turth_id, group_turth_name FROM webapi.datacontent d INNER JOIN webapi.master_tahun_turunan m
+// @Tags         master
+// @Accept       json
+// @Produce      json
+// @Param        filter    query string false "JSON array of {field,operator,value}. Operator supports: eq, neq, gt, gte, lt, lte, like" example([{"field":"domain_id","operator":"eq","value":"0000"},{"field":"var_id","operator":"eq","value":"1"}])
+// @Param        sort      query string false "sort column (single)" example(turtahun_group_id)
+// @Param        order     query string false "asc | desc" Enums(asc,desc) default(asc)
+// @Param        per_page  query int    false "per page, default 20" example(20)
+// @Param        page      query int    false "page, 1-based" example(1)
+// @Success      200  {object}  TahunTurunanGroupDistinctListResponse
+// @Failure      400  {object}  models.BaseResponse
+// @Failure      500  {object}  models.BaseResponse
+// @Router       /master/tahun-turunan-group-distinct [get]
+func GetTahunTurunanGroupDistinctData(c *gin.Context) {
+	fetchTahunTurunanGroup(c, tahunTurunanGroupConfig(), true)
+}
+
 // GetTahunDistinctData godoc
 // @Summary      List distinct tahun from datacontent
 // @Description  SELECT DISTINCT tahun_id, tahun_name FROM webapi.datacontent

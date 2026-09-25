@@ -86,6 +86,22 @@ type TahunTurunanDistinctListResponse struct {
 	Metadata models.BaseMetadata              `json:"metadata"`
 }
 
+// TahunTurunanGroupListResponse documents GET /master/tahun-turunan-group.
+type TahunTurunanGroupListResponse struct {
+	Status   bool                          `json:"status"`
+	Message  string                        `json:"message"`
+	Data     []ModelData.TahunTurunanGroup `json:"data"`
+	Metadata models.BaseMetadata           `json:"metadata"`
+}
+
+// TahunTurunanGroupDistinctListResponse documents GET /master/tahun-turunan-group-distinct.
+type TahunTurunanGroupDistinctListResponse struct {
+	Status   bool                          `json:"status"`
+	Message  string                        `json:"message"`
+	Data     []ModelData.TahunTurunanGroup `json:"data"`
+	Metadata models.BaseMetadata           `json:"metadata"`
+}
+
 // TahunDistinctListResponse documents GET /master/tahun-distinct.
 type TahunDistinctListResponse struct {
 	Status   bool                      `json:"status"`
