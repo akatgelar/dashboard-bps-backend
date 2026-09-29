@@ -842,6 +842,16 @@ paths:
         in: query
         name: vervar_id
         type: string
+      - description: optional, inclusive lower bound of tahun_id (numeric)
+        example: "110"
+        in: query
+        name: start_tahun_id
+        type: string
+      - description: optional, inclusive upper bound of tahun_id (numeric)
+        example: "125"
+        in: query
+        name: end_tahun_id
+        type: string
       produces:
       - application/json
       responses:

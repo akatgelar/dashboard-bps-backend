@@ -6,6 +6,7 @@ import (
 	"database/sql"
 	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/getsentry/sentry-go"
 	"github.com/gin-gonic/gin"
@@ -45,6 +46,8 @@ type PerWaktuMetadata struct {
 // @Param        turvar_id            query string true  "turvar_id" example(530)
 // @Param        tahun_id             query string false "optional, limit to one tahun_id" example(125)
 // @Param        vervar_id            query string false "optional, limit to one vervar_id" example(1100)
+// @Param        start_tahun_id       query string false "optional, inclusive lower bound of tahun_id (numeric)" example(110)
+// @Param        end_tahun_id         query string false "optional, inclusive upper bound of tahun_id (numeric)" example(125)
 // @Success      200  {object}  PerWaktuResponse
 // @Failure      400  {object}  models.BaseResponse
 // @Failure      500  {object}  models.BaseResponse
@@ -55,6 +58,8 @@ func GetPerWaktuData(c *gin.Context) {
 	turvarID := c.Query("turvar_id")
 	tahunID := c.Query("tahun_id")
 	vervarID := c.Query("vervar_id")
+	startTahunID := c.Query("start_tahun_id")
+	endTahunID := c.Query("end_tahun_id")
 
 	if domainID == "" || varID == "" || turvarID == "" {
 		c.JSON(http.StatusBadRequest, models.BaseResponse{
@@ -64,8 +69,24 @@ func GetPerWaktuData(c *gin.Context) {
 		return
 	}
 
-	// tahun_id & vervar_id are optional: when set, the result is limited to
-	// that period / region.
+	// tahun_id, vervar_id, start_tahun_id & end_tahun_id are optional. The
+	// tahun_id bounds must be numeric because tahun_id is compared as an
+	// integer (so the range follows chronological order).
+	for _, bound := range []struct{ name, value string }{
+		{"start_tahun_id", startTahunID},
+		{"end_tahun_id", endTahunID},
+	} {
+		if bound.value != "" {
+			if _, err := strconv.Atoi(bound.value); err != nil {
+				c.JSON(http.StatusBadRequest, models.BaseResponse{
+					Status:  false,
+					Message: bound.name + " must be numeric",
+				})
+				return
+			}
+		}
+	}
+
 	filter := ""
 	dataArgs := []interface{}{domainID, varID, turvarID}
 	if tahunID != "" {
@@ -75,6 +96,14 @@ func GetPerWaktuData(c *gin.Context) {
 	if vervarID != "" {
 		dataArgs = append(dataArgs, vervarID)
 		filter += fmt.Sprintf(` AND vervar_id=$%d`, len(dataArgs))
+	}
+	if startTahunID != "" {
+		dataArgs = append(dataArgs, startTahunID)
+		filter += fmt.Sprintf(` AND CAST(tahun_id AS integer) >= $%d`, len(dataArgs))
+	}
+	if endTahunID != "" {
+		dataArgs = append(dataArgs, endTahunID)
+		filter += fmt.Sprintf(` AND CAST(tahun_id AS integer) <= $%d`, len(dataArgs))
 	}
 
 	dataQuery := `SELECT

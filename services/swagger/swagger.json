@@ -296,6 +296,20 @@
                         "description": "optional, limit to one vervar_id",
                         "name": "vervar_id",
                         "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "example": "110",
+                        "description": "optional, inclusive lower bound of tahun_id (numeric)",
+                        "name": "start_tahun_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "example": "125",
+                        "description": "optional, inclusive upper bound of tahun_id (numeric)",
+                        "name": "end_tahun_id",
+                        "in": "query"
                     }
                 ],
                 "responses": {
