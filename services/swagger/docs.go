@@ -251,6 +251,67 @@ const docTemplate = `{
                 }
             }
         },
+        "/insight/per-waktu": {
+            "get": {
+                "description": "Get data per region (vervar) grouped by vervar_id across all periods (tahun + turtahun) from webapi.datacontent",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "insight"
+                ],
+                "summary": "Insight per waktu",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "example": "0000",
+                        "description": "domain_id",
+                        "name": "domain_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "example": "286",
+                        "description": "var_id",
+                        "name": "var_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "example": "530",
+                        "description": "turvar_id",
+                        "name": "turvar_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/services.PerWaktuResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/insight/per-wilayah": {
             "get": {
                 "description": "Get data per region with percentile-based color clusters from webapi.datacontent",
@@ -1851,6 +1912,77 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "tahun_name": {
+                    "type": "string"
+                }
+            }
+        },
+        "services.PerWaktuEntry": {
+            "type": "object",
+            "properties": {
+                "datacontent_id": {
+                    "type": "string"
+                },
+                "datacontent_value": {
+                    "type": "number"
+                },
+                "tahun_id": {
+                    "type": "string"
+                },
+                "tahun_name": {
+                    "type": "string"
+                },
+                "turtahun_id": {
+                    "type": "string"
+                },
+                "turtahun_name": {
+                    "type": "string"
+                }
+            }
+        },
+        "services.PerWaktuMetadata": {
+            "type": "object",
+            "properties": {
+                "last_update_data": {
+                    "type": "string"
+                },
+                "last_update_pipeline": {
+                    "type": "string"
+                }
+            }
+        },
+        "services.PerWaktuResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/services.PerWaktuRow"
+                    }
+                },
+                "message": {
+                    "type": "string"
+                },
+                "metadata": {
+                    "$ref": "#/definitions/services.PerWaktuMetadata"
+                },
+                "status": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "services.PerWaktuRow": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/services.PerWaktuEntry"
+                    }
+                },
+                "vervar_id": {
+                    "type": "string"
+                },
+                "vervar_name": {
                     "type": "string"
                 }
             }

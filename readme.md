@@ -128,6 +128,7 @@ Operator filter: `eq`, `neq`, `gt`, `gte`, `lt`, `lte`, `like`.
 |----------|--------------|------------|
 | `GET /insight/big-number` | `domain_id`, `var_id`, `turvar_id`, `tahun_id`, `turtahun_id` | Big number (tahun sekarang vs sebelumnya) |
 | `GET /insight/per-tahun` | `domain_id`, `var_id`, `turvar_id`, `turtahun_id` | Data per wilayah & per tahun |
+| `GET /insight/per-waktu` | `domain_id`, `var_id`, `turvar_id` | Data per wilayah, semua periode (tahun + turtahun) |
 | `GET /insight/per-wilayah` | `domain_id`, `var_id`, `turvar_id`, `tahun_id`, `turtahun_id` | Data per wilayah + klaster percentile |
 | `GET /insight/per-wilayah-turvar` | `domain_id`, `var_id`, `tahun_id`, `turtahun_id` | Data per wilayah & per variable turunan |
 

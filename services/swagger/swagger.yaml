@@ -346,6 +346,52 @@ definitions:
       tahun_name:
         type: string
     type: object
+  services.PerWaktuEntry:
+    properties:
+      datacontent_id:
+        type: string
+      datacontent_value:
+        type: number
+      tahun_id:
+        type: string
+      tahun_name:
+        type: string
+      turtahun_id:
+        type: string
+      turtahun_name:
+        type: string
+    type: object
+  services.PerWaktuMetadata:
+    properties:
+      last_update_data:
+        type: string
+      last_update_pipeline:
+        type: string
+    type: object
+  services.PerWaktuResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/services.PerWaktuRow'
+        type: array
+      message:
+        type: string
+      metadata:
+        $ref: '#/definitions/services.PerWaktuMetadata'
+      status:
+        type: boolean
+    type: object
+  services.PerWaktuRow:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/services.PerWaktuEntry'
+        type: array
+      vervar_id:
+        type: string
+      vervar_name:
+        type: string
+    type: object
   services.PerWilayahData:
     properties:
       range:
@@ -759,6 +805,49 @@ paths:
           schema:
             $ref: '#/definitions/models.BaseResponse'
       summary: Insight per tahun
+      tags:
+      - insight
+  /insight/per-waktu:
+    get:
+      consumes:
+      - application/json
+      description: Get data per region (vervar) grouped by vervar_id across all periods
+        (tahun + turtahun) from webapi.datacontent
+      parameters:
+      - description: domain_id
+        example: "0000"
+        in: query
+        name: domain_id
+        required: true
+        type: string
+      - description: var_id
+        example: "286"
+        in: query
+        name: var_id
+        required: true
+        type: string
+      - description: turvar_id
+        example: "530"
+        in: query
+        name: turvar_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/services.PerWaktuResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+      summary: Insight per waktu
       tags:
       - insight
   /insight/per-wilayah:

@@ -18,6 +18,11 @@ func RouteInsight(g *gin.RouterGroup) {
 		ServiceInsight.GetPerTahunData(c)
 	})
 
+	// insight/per-waktu
+	g.GET("/insight/per-waktu", func(c *gin.Context) {
+		ServiceInsight.GetPerWaktuData(c)
+	})
+
 	// insight/per-wilayah
 	g.GET("/insight/per-wilayah", func(c *gin.Context) {
 		ServiceInsight.GetPerWilayahData(c)

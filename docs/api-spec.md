@@ -387,6 +387,7 @@ Param wajib per endpoint insight (semuanya kode, diambil dari `webapi.dataconten
 |----------|--------------|
 | `insight/big-number` | `domain_id`, `var_id`, `turvar_id`, `tahun_id`, `turtahun_id` |
 | `insight/per-tahun` | `domain_id`, `var_id`, `turvar_id`, `turtahun_id` |
+| `insight/per-waktu` | `domain_id`, `var_id`, `turvar_id` |
 | `insight/per-wilayah` | `domain_id`, `var_id`, `turvar_id`, `tahun_id`, `turtahun_id` |
 | `insight/per-wilayah-turvar` | `domain_id`, `var_id`, `tahun_id`, `turtahun_id` |
 
@@ -539,7 +540,44 @@ Response `data` (array), dikelompokkan per wilayah, tiap wilayah berisi daftar t
 GET /insight/per-tahun?domain_id=0000&var_id=286&turvar_id=530&turtahun_id=0
 ```
 
-#### 4.3.3 `insight/per-wilayah`
+#### 4.3.3 `insight/per-waktu`
+
+Nilai data per wilayah (`vervar`), dikelompokkan per `vervar_id`, mencakup **semua** periode (`tahun` + `turtahun`). Params: `domain_id`, `var_id`, `turvar_id` (tanpa `tahun_id`, `turtahun_id`).
+
+Response `data` (array), tiap wilayah berisi daftar periode:
+
+| Field | Keterangan |
+|-------|------------|
+| `vervar_id` | Kode wilayah |
+| `vervar_name` | Nama wilayah |
+| `data[].tahun_id` | Kode tahun |
+| `data[].tahun_name` | Label tahun |
+| `data[].turtahun_id` | Kode tahun turunan |
+| `data[].turtahun_name` | Label tahun turunan |
+| `data[].datacontent_id` | Kode data |
+| `data[].datacontent_value` | Nilai |
+
+Urutan: `vervar_name` menaik, lalu `tahun_id` & `turtahun_id` numerik menaik.
+
+```json
+[
+  {
+    "vervar_id": "1100",
+    "vervar_name": "ACEH",
+    "data": [
+      { "tahun_id": "110", "tahun_name": "2010",
+        "turtahun_id": "0", "turtahun_name": "Tahun",
+        "datacontent_id": "11002865301100", "datacontent_value": 101545.24 }
+    ]
+  }
+]
+```
+
+```
+GET /insight/per-waktu?domain_id=0000&var_id=286&turvar_id=530
+```
+
+#### 4.3.4 `insight/per-wilayah`
 
 Nilai data per wilayah + klaster (range) berdasarkan percentile `datacontent_value`. Params: `domain_id`, `var_id`, `turvar_id`, `tahun_id`, `turtahun_id`.
 
@@ -585,7 +623,7 @@ GET /insight/per-wilayah?domain_id=0000&var_id=286&turvar_id=530&tahun_id=125&tu
 }
 ```
 
-#### 4.3.4 `insight/per-wilayah-turvar`
+#### 4.3.5 `insight/per-wilayah-turvar`
 
 Nilai data per wilayah (`vervar`) & per variable turunan (`turvar`). Params: `domain_id`, `var_id`, `tahun_id`, `turtahun_id` (tanpa `turvar_id`).
 
@@ -636,6 +674,7 @@ GET /insight/per-wilayah-turvar?domain_id=0000&var_id=286&tahun_id=125&turtahun_
 |----------|--------------|----------------|
 | `insight/big-number` | `domain_id`, `var_id`, `turvar_id`, `tahun_id`, `turtahun_id` | object `{}` |
 | `insight/per-tahun` | `domain_id`, `var_id`, `turvar_id`, `turtahun_id` | array `[]` |
+| `insight/per-waktu` | `domain_id`, `var_id`, `turvar_id` | array `[]` |
 | `insight/per-wilayah` | `domain_id`, `var_id`, `turvar_id`, `tahun_id`, `turtahun_id` | object `{}` (value + range) |
 | `insight/per-wilayah-turvar` | `domain_id`, `var_id`, `tahun_id`, `turtahun_id` | array `[]` |
 
@@ -664,6 +703,9 @@ curl "https://<host>/insight/big-number?domain_id=0000&var_id=286&turvar_id=530&
 
 # Per tahun
 curl "https://<host>/insight/per-tahun?domain_id=0000&var_id=286&turvar_id=530&turtahun_id=0"
+
+# Per waktu (semua periode per wilayah)
+curl "https://<host>/insight/per-waktu?domain_id=0000&var_id=286&turvar_id=530"
 
 # Per wilayah (dgn klaster)
 curl "https://<host>/insight/per-wilayah?domain_id=0000&var_id=286&turvar_id=530&tahun_id=125&turtahun_id=0"

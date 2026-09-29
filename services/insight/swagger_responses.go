@@ -16,6 +16,14 @@ type PerTahunResponse struct {
 	Metadata PerTahunMetadata `json:"metadata"`
 }
 
+// PerWaktuResponse documents GET /insight/per-waktu.
+type PerWaktuResponse struct {
+	Status   bool             `json:"status"`
+	Message  string           `json:"message"`
+	Data     []PerWaktuRow    `json:"data"`
+	Metadata PerWaktuMetadata `json:"metadata"`
+}
+
 // PerWilayahResponse documents GET /insight/per-wilayah.
 type PerWilayahResponse struct {
 	Status   bool               `json:"status"`
