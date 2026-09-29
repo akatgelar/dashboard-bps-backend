@@ -1698,7 +1698,19 @@ const docTemplate = `{
                 "indo_value": {
                     "type": "number"
                 },
+                "jabar_persen": {
+                    "type": "number"
+                },
                 "jabar_value": {
+                    "type": "number"
+                },
+                "kota_persen": {
+                    "type": "number"
+                },
+                "kota_value": {
+                    "type": "number"
+                },
+                "median_persen": {
                     "type": "number"
                 },
                 "median_value": {
@@ -1716,6 +1728,9 @@ const docTemplate = `{
                     "type": "number"
                 },
                 "jabar_value": {
+                    "type": "number"
+                },
+                "kota_value": {
                     "type": "number"
                 },
                 "max_name": {

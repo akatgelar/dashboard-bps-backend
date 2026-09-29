@@ -429,7 +429,7 @@ Endpoint insight TIDAK memakai pagination.
 
 Angka agregat variable per tahun, dibandingkan dengan tahun sebelumnya.
 
-Params: `domain_id`, `var_id`, `turvar_id`, `tahun_id`, `turtahun_id` (semua wajib).
+Params: `domain_id`, `var_id`, `turvar_id`, `tahun_id`, `turtahun_id` (semua wajib), `turtahun_group_id` (opsional).
 
 Response `data` (object):
 
@@ -437,24 +437,39 @@ Response `data` (object):
 |-------|------------|
 | `tahun_sekarang_id` | Kode tahun sekarang |
 | `tahun_sekarang_name` | Label tahun sekarang |
-| `tahun_sekarang_data.max_value` | Nilai tertinggi (excl. `vervar_name = Indonesia`) |
+| `tahun_sekarang_data.max_value` | Nilai tertinggi (di luar baris yang di-exclude, lihat tabel di bawah) |
 | `tahun_sekarang_data.max_name` | Nama wilayah nilai tertinggi |
-| `tahun_sekarang_data.min_value` | Nilai terendah (excl. Indonesia) |
+| `tahun_sekarang_data.min_value` | Nilai terendah (di luar baris yang di-exclude) |
 | `tahun_sekarang_data.min_name` | Nama wilayah nilai terendah |
-| `tahun_sekarang_data.avg_value` | Rata-rata (excl. Indonesia) |
-| `tahun_sekarang_data.median_value` | Median (excl. Indonesia) |
-| `tahun_sekarang_data.indo_value` | Nilai Indonesia (`vervar_name = Indonesia`) |
+| `tahun_sekarang_data.avg_value` | Rata-rata (di luar baris yang di-exclude) |
+| `tahun_sekarang_data.median_value` | Median `percentile_cont(0.5)` (di luar baris yang di-exclude) |
+| `tahun_sekarang_data.indo_value` | Nilai baris Indonesia (`vervar_name = Indonesia`) |
 | `tahun_sekarang_data.jabar_value` | Nilai Jawa Barat (`vervar_id = 3200`) |
+| `tahun_sekarang_data.kota_value` | Nilai kota/kabupaten domain itu sendiri (`vervar_id = domain_id`) |
 | `tahun_sebelumnya_id` | Kode tahun sebelumnya (`tahun_name - 1`) |
 | `tahun_sebelumnya_name` | Label tahun sebelumnya |
 | `tahun_sebelumnya_data.avg_value` | Rata-rata tahun sebelumnya |
 | `tahun_sebelumnya_data.median_value` | Median tahun sebelumnya |
 | `tahun_sebelumnya_data.indo_value` | Nilai Indonesia tahun sebelumnya |
 | `tahun_sebelumnya_data.jabar_value` | Nilai Jawa Barat tahun sebelumnya |
+| `tahun_sebelumnya_data.kota_value` | Nilai kota/kabupaten domain tahun sebelumnya |
 | `tahun_sebelumnya_data.avg_persen` | `((avg_sekarang - avg_sebelumnya)/avg_sebelumnya) * 100` |
+| `tahun_sebelumnya_data.median_persen` | `((median_sekarang - median_sebelumnya)/median_sebelumnya) * 100` |
 | `tahun_sebelumnya_data.indo_persen` | `((indo_sekarang - indo_sebelumnya)/indo_sebelumnya) * 100` |
+| `tahun_sebelumnya_data.jabar_persen` | `((jabar_sekarang - jabar_sebelumnya)/jabar_sebelumnya) * 100` |
+| `tahun_sebelumnya_data.kota_persen` | `((kota_sekarang - kota_sebelumnya)/kota_sebelumnya) * 100` |
 
-> `median_value` dihitung dengan `percentile_cont(0.5)`, memakai filter yang sama dengan `avg_value` (excl. `vervar_name = Indonesia`). `jabar_value` diambil dari baris `vervar_id = 3200` (Jawa Barat) — rumusnya sama dengan `indo_value`, hanya beda kode. Nilai `null` bila barisnya tidak ada (mis. `indo_value` di domain `3200`).
+Baris yang di-exclude dari perhitungan `max`/`min`/`avg`/`median` mengikuti `domain_id`:
+
+| `domain_id` | Baris yang dikecualikan |
+|-------------|-------------------------|
+| `0000` (Pusat) | baris `Indonesia` **dan** baris `vervar_id = 3200` (Jawa Barat) |
+| `3200` (Jawa Barat) | baris `vervar_id = 3200` (Provinsi Jawa Barat) |
+| selain keduanya (kab/kota) | baris `vervar_id = domain_id` (wilayah domain itu sendiri) |
+
+> `indo_value`, `jabar_value`, dan `kota_value` selalu diambil terpisah dari agregat (rumus sama, hanya beda filter baris). Nilai `null` bila barisnya tidak ada — mis. `indo_value` di domain `3200`, atau `jabar_value`/`kota_value` di domain `3204`. Field `*_persen` juga `null` bila nilai tahun sebelumnya `null` atau bernilai `0`.
+
+> `kota_value` hanya diisi saat `domain_id` bukan `0000`/`3200`; pada kedua domain itu field-nya `null`.
 
 ```
 GET /insight/big-number?domain_id=0000&var_id=286&turvar_id=530&tahun_id=125&turtahun_id=0
@@ -471,20 +486,25 @@ GET /insight/big-number?domain_id=0000&var_id=286&turvar_id=530&tahun_id=125&tur
       "max_name": "DKI JAKARTA",
       "min_value": 28377.77,
       "min_name": "PAPUA PEGUNUNGAN",
-      "avg_value": 622000.6855263158,
-      "median_value": 249279.065,
+      "avg_value": 556685.354054054,
+      "median_value": 241055.7,
       "indo_value": 23821103.6,
-      "jabar_value": 3038667.95
+      "jabar_value": 3038667.95,
+      "kota_value": null
     },
     "tahun_sebelumnya_id": "124",
     "tahun_sebelumnya_name": "2024",
     "tahun_sebelumnya_data": {
-      "avg_value": 579549.7536842105,
-      "median_value": 233033.325,
+      "avg_value": 518903.7527027027,
+      "median_value": 222864.5,
       "indo_value": 22138990.8,
       "jabar_value": 2823451.79,
-      "avg_persen": 7.324812334444773,
-      "indo_persen": 7.597965124950505
+      "kota_value": null,
+      "avg_persen": 7.281042226919034,
+      "median_persen": 8.16244848327123,
+      "indo_persen": 7.597965124950505,
+      "jabar_persen": 7.622448549050668,
+      "kota_persen": null
     }
   },
   "metadata": {
@@ -665,5 +685,5 @@ curl "https://<host>/insight/per-wilayah-turvar?domain_id=0000&var_id=286&tahun_
 5. Param filter master memakai `filter` (array) — bukan `where`. Operator: `eq`, `neq`, `gt`, `gte`, `lt`, `lte`, `like`.
 6. Sorting memakai `sort` (satu kolom) + `order` (asc/desc), bukan `sort=kolom:asc`.
 7. `master/variable-distinct` = variable yang memiliki `variable_turunan`.
-8. `insight/big-number`: tahun sebelumnya = `master_tahun.tahun_name - 1`; `avg_persen`/`indo_persen` = perbandingan tahun sekarang terhadap tahun sebelumnya.
+8. `insight/big-number`: tahun sebelumnya = `master_tahun.tahun_name - 1`; field `avg_persen`, `median_persen`, `indo_persen`, `jabar_persen`, `kota_persen` = perbandingan tahun sekarang terhadap tahun sebelumnya. Baris yang di-exclude dari `max`/`min`/`avg`/`median` bergantung `domain_id` (`0000`: Indonesia + Jawa Barat; `3200`: Jawa Barat; lainnya: wilayah domain itu sendiri).
 9. `insight/per-wilayah`: klaster percentile, min 2 / max 5, warna `#FFFFFF` → `#4856FF`.
