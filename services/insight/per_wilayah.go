@@ -76,9 +76,10 @@ func lerpColor(f float64) string {
 // @Produce      json
 // @Param        domain_id            query string true  "domain_id" example(0000)
 // @Param        var_id               query string true  "var_id" example(286)
-// @Param        turvar_id            query string true  "turvar_id" example(530)
+// @Param        turvar_id            query string true  "turvar_id, single or array (e.g. 530 or [530,531])" example(530)
 // @Param        tahun_id             query string true  "tahun_id" example(125)
 // @Param        turtahun_id          query string true  "turtahun_id" example(0)
+// @Param        vervar_id            query string false "optional, vervar_id single or array (e.g. 1100 or [1100,1200])" example(1100)
 // @Param        turtahun_group_id    query string false "optional, filter turtahun by group (group_turth_id)" example(0)
 // @Success      200  {object}  PerWilayahResponse
 // @Failure      400  {object}  models.BaseResponse
@@ -87,12 +88,13 @@ func lerpColor(f float64) string {
 func GetPerWilayahData(c *gin.Context) {
 	domainID := c.Query("domain_id")
 	varID := c.Query("var_id")
-	turvarID := c.Query("turvar_id")
+	turvarIDs := parseIDList(c, "turvar_id")
 	tahunID := c.Query("tahun_id")
 	turtahunID := c.Query("turtahun_id")
+	vervarIDs := parseIDList(c, "vervar_id")
 	turtahunGroupID := c.Query("turtahun_group_id")
 
-	if domainID == "" || varID == "" || turvarID == "" || tahunID == "" || turtahunID == "" {
+	if domainID == "" || varID == "" || len(turvarIDs) == 0 || tahunID == "" || turtahunID == "" {
 		c.JSON(http.StatusBadRequest, models.BaseResponse{
 			Status:  false,
 			Message: "Missing required params: domain_id, var_id, turvar_id, tahun_id, turtahun_id",
@@ -100,10 +102,21 @@ func GetPerWilayahData(c *gin.Context) {
 		return
 	}
 
-	dataArgs := []interface{}{domainID, varID, turvarID, tahunID, turtahunID}
+	filter := ""
+	args := []interface{}{domainID, varID}
+	filter += ` AND ` + sqlInClause("turvar_id", turvarIDs, &args)
+	args = append(args, tahunID)
+	filter += fmt.Sprintf(` AND tahun_id=$%d`, len(args))
+	args = append(args, turtahunID)
+	filter += fmt.Sprintf(` AND turtahun_id=$%d`, len(args))
+	if len(vervarIDs) > 0 {
+		filter += ` AND ` + sqlInClause("vervar_id", vervarIDs, &args)
+	}
+
+	dataArgs := append([]interface{}{}, args...)
 	dataQuery := `SELECT vervar_id, vervar_name, datacontent_id, datacontent_value, unit
 		 FROM webapi.datacontent
-		 WHERE domain_id=$1 AND var_id=$2 AND turvar_id=$3 AND tahun_id=$4 AND turtahun_id=$5` +
+		 WHERE domain_id=$1 AND var_id=$2` + filter +
 		turtahunGroupFilter(domainID, turtahunGroupID, &dataArgs) +
 		` ORDER BY vervar_name ASC`
 
@@ -160,12 +173,12 @@ func GetPerWilayahData(c *gin.Context) {
 
 	// metadata
 	var meta PerWilayahMetadata
-	metaArgs := []interface{}{domainID, varID, turvarID, tahunID, turtahunID}
+	metaArgs := append([]interface{}{}, args...)
 	metaQuery := `SELECT
 		   COALESCE(to_char(MAX(last_updated_at), 'YYYY-MM-DD HH24:MI:SS'), ''),
 		   COALESCE(to_char(MAX(get_at), 'YYYY-MM-DD HH24:MI:SS'), '')
 		 FROM webapi.datacontent
-		 WHERE domain_id=$1 AND var_id=$2 AND turvar_id=$3 AND tahun_id=$4 AND turtahun_id=$5` +
+		 WHERE domain_id=$1 AND var_id=$2` + filter +
 		turtahunGroupFilter(domainID, turtahunGroupID, &metaArgs)
 	if err := DB.DB_SQL_POSTGRES.QueryRow(metaQuery, metaArgs...).Scan(&meta.LastUpdateData, &meta.LastUpdatePipeline); err != nil {
 		sentry.CaptureException(err)

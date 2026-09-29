@@ -41,6 +41,8 @@ type PerWilayahTurvarMetadata struct {
 // @Param        var_id               query string true  "var_id" example(286)
 // @Param        tahun_id             query string true  "tahun_id" example(125)
 // @Param        turtahun_id          query string true  "turtahun_id" example(0)
+// @Param        turvar_id            query string false "optional, turvar_id single or array (e.g. 530 or [530,531])" example(530)
+// @Param        vervar_id            query string false "optional, vervar_id single or array (e.g. 1100 or [1100,1200])" example(1100)
 // @Param        turtahun_group_id    query string false "optional, filter turtahun by group (group_turth_id)" example(0)
 // @Success      200  {object}  PerWilayahTurvarResponse
 // @Failure      400  {object}  models.BaseResponse
@@ -51,6 +53,8 @@ func GetPerWilayahTurvarData(c *gin.Context) {
 	varID := c.Query("var_id")
 	tahunID := c.Query("tahun_id")
 	turtahunID := c.Query("turtahun_id")
+	turvarIDs := parseIDList(c, "turvar_id")
+	vervarIDs := parseIDList(c, "vervar_id")
 	turtahunGroupID := c.Query("turtahun_group_id")
 
 	if domainID == "" || varID == "" || tahunID == "" || turtahunID == "" {
@@ -61,10 +65,19 @@ func GetPerWilayahTurvarData(c *gin.Context) {
 		return
 	}
 
-	dataArgs := []interface{}{domainID, varID, tahunID, turtahunID}
+	filter := ""
+	args := []interface{}{domainID, varID, tahunID, turtahunID}
+	if len(turvarIDs) > 0 {
+		filter += ` AND ` + sqlInClause("turvar_id", turvarIDs, &args)
+	}
+	if len(vervarIDs) > 0 {
+		filter += ` AND ` + sqlInClause("vervar_id", vervarIDs, &args)
+	}
+
+	dataArgs := append([]interface{}{}, args...)
 	dataQuery := `SELECT vervar_id, vervar_name, turvar_id, turvar_name, datacontent_id, datacontent_value
 		 FROM webapi.datacontent
-		 WHERE domain_id=$1 AND var_id=$2 AND tahun_id=$3 AND turtahun_id=$4` +
+		 WHERE domain_id=$1 AND var_id=$2 AND tahun_id=$3 AND turtahun_id=$4` + filter +
 		turtahunGroupFilter(domainID, turtahunGroupID, &dataArgs) +
 		` ORDER BY vervar_name ASC, turvar_name ASC`
 
@@ -118,12 +131,12 @@ func GetPerWilayahTurvarData(c *gin.Context) {
 	}
 
 	var meta PerWilayahTurvarMetadata
-	metaArgs := []interface{}{domainID, varID, tahunID, turtahunID}
+	metaArgs := append([]interface{}{}, args...)
 	metaQuery := `SELECT
 		   COALESCE(to_char(MAX(last_updated_at), 'YYYY-MM-DD HH24:MI:SS'), ''),
 		   COALESCE(to_char(MAX(get_at), 'YYYY-MM-DD HH24:MI:SS'), '')
 		 FROM webapi.datacontent
-		 WHERE domain_id=$1 AND var_id=$2 AND tahun_id=$3 AND turtahun_id=$4` +
+		 WHERE domain_id=$1 AND var_id=$2 AND tahun_id=$3 AND turtahun_id=$4` + filter +
 		turtahunGroupFilter(domainID, turtahunGroupID, &metaArgs)
 	if err := DB.DB_SQL_POSTGRES.QueryRow(metaQuery, metaArgs...).Scan(&meta.LastUpdateData, &meta.LastUpdatePipeline); err != nil {
 		sentry.CaptureException(err)

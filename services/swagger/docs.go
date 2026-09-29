@@ -373,7 +373,7 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "example": "530",
-                        "description": "turvar_id",
+                        "description": "turvar_id, single or array (e.g. 530 or [530,531])",
                         "name": "turvar_id",
                         "in": "query",
                         "required": true
@@ -393,6 +393,13 @@ const docTemplate = `{
                         "name": "turtahun_id",
                         "in": "query",
                         "required": true
+                    },
+                    {
+                        "type": "string",
+                        "example": "1100",
+                        "description": "optional, vervar_id single or array (e.g. 1100 or [1100,1200])",
+                        "name": "vervar_id",
+                        "in": "query"
                     },
                     {
                         "type": "string",
@@ -469,6 +476,20 @@ const docTemplate = `{
                         "name": "turtahun_id",
                         "in": "query",
                         "required": true
+                    },
+                    {
+                        "type": "string",
+                        "example": "530",
+                        "description": "optional, turvar_id single or array (e.g. 530 or [530,531])",
+                        "name": "turvar_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "example": "1100",
+                        "description": "optional, vervar_id single or array (e.g. 1100 or [1100,1200])",
+                        "name": "vervar_id",
+                        "in": "query"
                     },
                     {
                         "type": "string",

@@ -392,8 +392,8 @@ Param wajib per endpoint insight (semuanya kode, diambil dari `webapi.dataconten
 | `insight/big-number` | `domain_id`, `var_id`, `turvar_id`, `tahun_id`, `turtahun_id` |
 | `insight/per-tahun` | `domain_id`, `var_id`, `turvar_id`, `turtahun_id` |
 | `insight/per-waktu` | `domain_id`, `var_id`, `turvar_id` (+ opsional `tahun_id`, `vervar_id`, `start_tahun_id`, `end_tahun_id`; `turvar_id`/`vervar_id` bisa single atau array) |
-| `insight/per-wilayah` | `domain_id`, `var_id`, `turvar_id`, `tahun_id`, `turtahun_id` |
-| `insight/per-wilayah-turvar` | `domain_id`, `var_id`, `tahun_id`, `turtahun_id` |
+| `insight/per-wilayah` | `domain_id`, `var_id`, `turvar_id`, `tahun_id`, `turtahun_id` (+ opsional `vervar_id`; `turvar_id`/`vervar_id` bisa single atau array) |
+| `insight/per-wilayah-turvar` | `domain_id`, `var_id`, `tahun_id`, `turtahun_id` (+ opsional `turvar_id`, `vervar_id`; bisa single atau array) |
 
 Missing param → `400`.
 
@@ -585,7 +585,9 @@ GET /insight/per-waktu?domain_id=0000&var_id=286&turvar_id=530
 
 #### 4.3.4 `insight/per-wilayah`
 
-Nilai data per wilayah + klaster (range) berdasarkan percentile `datacontent_value`. Params: `domain_id`, `var_id`, `turvar_id`, `tahun_id`, `turtahun_id`.
+Nilai data per wilayah + klaster (range) berdasarkan percentile `datacontent_value`. Params wajib: `domain_id`, `var_id`, `turvar_id`, `tahun_id`, `turtahun_id`. Param opsional: `vervar_id`.
+
+`turvar_id` & `vervar_id` menerima **single atau array**: `turvar_id=530`, `turvar_id=[530,531]`, `turvar_id=530,531`, atau `?turvar_id=530&turvar_id=531` (idem `vervar_id`). Catatan: kalau `turvar_id` berisi lebih dari satu nilai, satu wilayah bisa muncul beberapa kali (satu baris per turvar) karena endpoint ini tidak menampilkan `turvar_id` di response.
 
 Response `data` (object):
 
@@ -631,7 +633,7 @@ GET /insight/per-wilayah?domain_id=0000&var_id=286&turvar_id=530&tahun_id=125&tu
 
 #### 4.3.5 `insight/per-wilayah-turvar`
 
-Nilai data per wilayah (`vervar`) & per variable turunan (`turvar`). Params: `domain_id`, `var_id`, `tahun_id`, `turtahun_id` (tanpa `turvar_id`).
+Nilai data per wilayah (`vervar`) & per variable turunan (`turvar`). Params wajib: `domain_id`, `var_id`, `tahun_id`, `turtahun_id`. Param opsional: `turvar_id` dan `vervar_id` (masing-masing single atau array, format sama seperti `per-wilayah`) untuk membatasi hasil.
 
 Response `data` (array), dikelompokkan per wilayah, tiap wilayah berisi daftar turvar:
 
