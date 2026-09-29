@@ -832,6 +832,11 @@ paths:
         name: turvar_id
         required: true
         type: string
+      - description: optional, limit to one tahun_id
+        example: "125"
+        in: query
+        name: tahun_id
+        type: string
       produces:
       - application/json
       responses:

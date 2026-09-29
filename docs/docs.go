@@ -288,6 +288,13 @@ const docTemplate = `{
                         "name": "turvar_id",
                         "in": "query",
                         "required": true
+                    },
+                    {
+                        "type": "string",
+                        "example": "125",
+                        "description": "optional, limit to one tahun_id",
+                        "name": "tahun_id",
+                        "in": "query"
                     }
                 ],
                 "responses": {

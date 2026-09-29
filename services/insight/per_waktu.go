@@ -4,6 +4,7 @@ import (
 	DB "akatgelar/dashboard-bps-backend/database"
 	"akatgelar/dashboard-bps-backend/models"
 	"database/sql"
+	"fmt"
 	"net/http"
 
 	"github.com/getsentry/sentry-go"
@@ -42,6 +43,7 @@ type PerWaktuMetadata struct {
 // @Param        domain_id            query string true  "domain_id" example(0000)
 // @Param        var_id               query string true  "var_id" example(286)
 // @Param        turvar_id            query string true  "turvar_id" example(530)
+// @Param        tahun_id             query string false "optional, limit to one tahun_id" example(125)
 // @Success      200  {object}  PerWaktuResponse
 // @Failure      400  {object}  models.BaseResponse
 // @Failure      500  {object}  models.BaseResponse
@@ -50,6 +52,7 @@ func GetPerWaktuData(c *gin.Context) {
 	domainID := c.Query("domain_id")
 	varID := c.Query("var_id")
 	turvarID := c.Query("turvar_id")
+	tahunID := c.Query("tahun_id")
 
 	if domainID == "" || varID == "" || turvarID == "" {
 		c.JSON(http.StatusBadRequest, models.BaseResponse{
@@ -59,7 +62,14 @@ func GetPerWaktuData(c *gin.Context) {
 		return
 	}
 
+	// tahun_id is optional: when set, only that year's periods are returned.
+	tahunFilter := ""
 	dataArgs := []interface{}{domainID, varID, turvarID}
+	if tahunID != "" {
+		dataArgs = append(dataArgs, tahunID)
+		tahunFilter = fmt.Sprintf(` AND tahun_id=$%d`, len(dataArgs))
+	}
+
 	dataQuery := `SELECT
 		   vervar_id,
 		   vervar_name,
@@ -70,7 +80,7 @@ func GetPerWaktuData(c *gin.Context) {
 		   datacontent_id,
 		   datacontent_value
 		 FROM webapi.datacontent
-		 WHERE domain_id=$1 AND var_id=$2 AND turvar_id=$3
+		 WHERE domain_id=$1 AND var_id=$2 AND turvar_id=$3` + tahunFilter + `
 		 ORDER BY vervar_name ASC, CAST(tahun_id AS integer) ASC, CAST(turtahun_id AS integer) ASC`
 
 	rows, err := DB.DB_SQL_POSTGRES.Query(dataQuery, dataArgs...)
@@ -125,12 +135,12 @@ func GetPerWaktuData(c *gin.Context) {
 	}
 
 	var meta PerWaktuMetadata
-	metaArgs := []interface{}{domainID, varID, turvarID}
+	metaArgs := dataArgs
 	metaQuery := `SELECT
 		   COALESCE(to_char(MAX(last_updated_at), 'YYYY-MM-DD HH24:MI:SS'), ''),
 		   COALESCE(to_char(MAX(get_at), 'YYYY-MM-DD HH24:MI:SS'), '')
 		 FROM webapi.datacontent
-		 WHERE domain_id=$1 AND var_id=$2 AND turvar_id=$3`
+		 WHERE domain_id=$1 AND var_id=$2 AND turvar_id=$3` + tahunFilter
 	if err := DB.DB_SQL_POSTGRES.QueryRow(metaQuery, metaArgs...).Scan(&meta.LastUpdateData, &meta.LastUpdatePipeline); err != nil {
 		sentry.CaptureException(err)
 		c.JSON(http.StatusInternalServerError, models.BaseResponse{Status: false, Message: "Internal server error: " + err.Error()})

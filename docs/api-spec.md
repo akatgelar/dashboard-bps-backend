@@ -387,13 +387,13 @@ Param wajib per endpoint insight (semuanya kode, diambil dari `webapi.dataconten
 |----------|--------------|
 | `insight/big-number` | `domain_id`, `var_id`, `turvar_id`, `tahun_id`, `turtahun_id` |
 | `insight/per-tahun` | `domain_id`, `var_id`, `turvar_id`, `turtahun_id` |
-| `insight/per-waktu` | `domain_id`, `var_id`, `turvar_id` |
+| `insight/per-waktu` | `domain_id`, `var_id`, `turvar_id` (+ opsional `tahun_id`) |
 | `insight/per-wilayah` | `domain_id`, `var_id`, `turvar_id`, `tahun_id`, `turtahun_id` |
 | `insight/per-wilayah-turvar` | `domain_id`, `var_id`, `tahun_id`, `turtahun_id` |
 
 Missing param → `400`.
 
-Semua endpoint insight juga mendukung param **opsional** `turtahun_group_id` (kode `group_turth_id`). Kalau dikirim, baris dibatasi ke `turtahun_id` milik group tersebut untuk `domain_id` yang sama:
+Semua endpoint insight **kecuali `per-waktu`** juga mendukung param **opsional** `turtahun_group_id` (kode `group_turth_id`). Kalau dikirim, baris dibatasi ke `turtahun_id` milik group tersebut untuk `domain_id` yang sama:
 
 ```sql
 AND turtahun_id IN (
@@ -544,7 +544,7 @@ GET /insight/per-tahun?domain_id=0000&var_id=286&turvar_id=530&turtahun_id=0
 
 #### 4.3.3 `insight/per-waktu`
 
-Nilai data per wilayah (`vervar`), dikelompokkan per `vervar_id`, mencakup **semua** periode (`tahun` + `turtahun`). Params: `domain_id`, `var_id`, `turvar_id` (tanpa `tahun_id`, `turtahun_id`).
+Nilai data per wilayah (`vervar`), dikelompokkan per `vervar_id`, mencakup periode (`tahun` + `turtahun`). Params wajib: `domain_id`, `var_id`, `turvar_id`. Param opsional: `tahun_id` — kalau diisi, hanya tahun itu yang dikembalikan (berguna untuk kasus besar spt `domain_id=0000&var_id=1&turvar_id=0`); kalau kosong, semua tahun.
 
 Response `data` (array), tiap wilayah berisi daftar periode:
 
