@@ -391,7 +391,7 @@ Param wajib per endpoint insight (semuanya kode, diambil dari `webapi.dataconten
 |----------|--------------|
 | `insight/big-number` | `domain_id`, `var_id`, `turvar_id`, `tahun_id`, `turtahun_id` |
 | `insight/per-tahun` | `domain_id`, `var_id`, `turvar_id`, `turtahun_id` |
-| `insight/per-waktu` | `domain_id`, `var_id`, `turvar_id` (+ opsional `tahun_id`, `vervar_id`, `start_tahun_id`, `end_tahun_id`) |
+| `insight/per-waktu` | `domain_id`, `var_id`, `turvar_id` (+ opsional `tahun_id`, `vervar_id`, `start_tahun_id`, `end_tahun_id`; `turvar_id`/`vervar_id` bisa single atau array) |
 | `insight/per-wilayah` | `domain_id`, `var_id`, `turvar_id`, `tahun_id`, `turtahun_id` |
 | `insight/per-wilayah-turvar` | `domain_id`, `var_id`, `tahun_id`, `turtahun_id` |
 
@@ -548,7 +548,7 @@ GET /insight/per-tahun?domain_id=0000&var_id=286&turvar_id=530&turtahun_id=0
 
 #### 4.3.3 `insight/per-waktu`
 
-Nilai data per wilayah (`vervar`), dikelompokkan per `vervar_id`, mencakup periode (`tahun` + `turtahun`). Params wajib: `domain_id`, `var_id`, `turvar_id`. Param opsional: `tahun_id`, `vervar_id`, `start_tahun_id`, dan `end_tahun_id` — kalau diisi, hasil dibatasi ke tahun/wilayah itu (berguna untuk kasus besar spt `domain_id=0000&var_id=1&turvar_id=0`); kalau kosong, semua tahun/wilayah. `start_tahun_id`/`end_tahun_id` membatasi **range tahun** secara inklusif dan dibandingkan sebagai angka (mengikuti urutan kronologis `tahun_id`), jadi harus numerik (kalau bukan → `400`). Semua filter digabung **AND** dan ikut ke metadata.
+Nilai data per wilayah (`vervar`), dikelompokkan per `vervar_id`, mencakup periode (`tahun` + `turtahun`). Params wajib: `domain_id`, `var_id`, `turvar_id`. `turvar_id` dan `vervar_id` menerima **single atau array**: `turvar_id=530`, `turvar_id=[530,531]`, `turvar_id=530,531`, atau `?turvar_id=530&turvar_id=531` (idem `vervar_id`). Param opsional: `tahun_id`, `vervar_id`, `start_tahun_id`, dan `end_tahun_id` — kalau diisi, hasil dibatasi ke tahun/wilayah itu (berguna untuk kasus besar spt `domain_id=0000&var_id=1&turvar_id=0`); kalau kosong, semua tahun/wilayah. `start_tahun_id`/`end_tahun_id` membatasi **range tahun** secara inklusif dan dibandingkan sebagai angka (mengikuti urutan kronologis `tahun_id`), jadi harus numerik (kalau bukan → `400`). Semua filter digabung **AND** dan ikut ke metadata.
 
 Response `data` (array), tiap wilayah berisi daftar periode:
 

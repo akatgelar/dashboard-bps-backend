@@ -43,9 +43,9 @@ type PerWaktuMetadata struct {
 // @Produce      json
 // @Param        domain_id            query string true  "domain_id" example(0000)
 // @Param        var_id               query string true  "var_id" example(286)
-// @Param        turvar_id            query string true  "turvar_id" example(530)
+// @Param        turvar_id            query string true  "turvar_id, single or array (e.g. 530 or [530,531])" example(530)
 // @Param        tahun_id             query string false "optional, limit to one tahun_id" example(125)
-// @Param        vervar_id            query string false "optional, limit to one vervar_id" example(1100)
+// @Param        vervar_id            query string false "optional, vervar_id single or array (e.g. 1100 or [1100,1200])" example(1100)
 // @Param        start_tahun_id       query string false "optional, inclusive lower bound of tahun_id (numeric)" example(110)
 // @Param        end_tahun_id         query string false "optional, inclusive upper bound of tahun_id (numeric)" example(125)
 // @Success      200  {object}  PerWaktuResponse
@@ -55,13 +55,13 @@ type PerWaktuMetadata struct {
 func GetPerWaktuData(c *gin.Context) {
 	domainID := c.Query("domain_id")
 	varID := c.Query("var_id")
-	turvarID := c.Query("turvar_id")
+	turvarIDs := parseIDList(c, "turvar_id")
 	tahunID := c.Query("tahun_id")
-	vervarID := c.Query("vervar_id")
+	vervarIDs := parseIDList(c, "vervar_id")
 	startTahunID := c.Query("start_tahun_id")
 	endTahunID := c.Query("end_tahun_id")
 
-	if domainID == "" || varID == "" || turvarID == "" {
+	if domainID == "" || varID == "" || len(turvarIDs) == 0 {
 		c.JSON(http.StatusBadRequest, models.BaseResponse{
 			Status:  false,
 			Message: "Missing required params: domain_id, var_id, turvar_id",
@@ -88,14 +88,14 @@ func GetPerWaktuData(c *gin.Context) {
 	}
 
 	filter := ""
-	dataArgs := []interface{}{domainID, varID, turvarID}
+	dataArgs := []interface{}{domainID, varID}
+	filter += ` AND ` + sqlInClause("turvar_id", turvarIDs, &dataArgs)
 	if tahunID != "" {
 		dataArgs = append(dataArgs, tahunID)
 		filter += fmt.Sprintf(` AND tahun_id=$%d`, len(dataArgs))
 	}
-	if vervarID != "" {
-		dataArgs = append(dataArgs, vervarID)
-		filter += fmt.Sprintf(` AND vervar_id=$%d`, len(dataArgs))
+	if len(vervarIDs) > 0 {
+		filter += ` AND ` + sqlInClause("vervar_id", vervarIDs, &dataArgs)
 	}
 	if startTahunID != "" {
 		dataArgs = append(dataArgs, startTahunID)
@@ -116,7 +116,7 @@ func GetPerWaktuData(c *gin.Context) {
 		   datacontent_id,
 		   datacontent_value
 		 FROM webapi.datacontent
-		 WHERE domain_id=$1 AND var_id=$2 AND turvar_id=$3` + filter + `
+		 WHERE domain_id=$1 AND var_id=$2` + filter + `
 		 ORDER BY vervar_name ASC, CAST(tahun_id AS integer) ASC, CAST(turtahun_id AS integer) ASC`
 
 	rows, err := DB.DB_SQL_POSTGRES.Query(dataQuery, dataArgs...)

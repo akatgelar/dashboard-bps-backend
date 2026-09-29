@@ -284,7 +284,7 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "example": "530",
-                        "description": "turvar_id",
+                        "description": "turvar_id, single or array (e.g. 530 or [530,531])",
                         "name": "turvar_id",
                         "in": "query",
                         "required": true
@@ -299,7 +299,7 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "example": "1100",
-                        "description": "optional, limit to one vervar_id",
+                        "description": "optional, vervar_id single or array (e.g. 1100 or [1100,1200])",
                         "name": "vervar_id",
                         "in": "query"
                     },
