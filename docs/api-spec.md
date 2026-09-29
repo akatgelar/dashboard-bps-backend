@@ -517,6 +517,8 @@ GET /insight/big-number?domain_id=0000&var_id=286&turvar_id=530&tahun_id=125&tur
 
 > Tahun sebelumnya ditentukan via `master_tahun` (`domain_id` + `tahun_name - 1`). Jika tak ada data tahun sebelumnya, field-nya `null`.
 
+> Jika `domain_id` + `tahun_id` tidak punya baris `master_tahun` (mis. domain tidak aktif / belum ada data, seperti `domain_id=3201`), endpoint mengembalikan `200` dengan `{ "status": true, "message": "Data not found", "data": null }` — bukan `500`.
+
 #### 4.3.2 `insight/per-tahun`
 
 Nilai data per wilayah (`vervar`) & per tahun. Params: `domain_id`, `var_id`, `turvar_id`, `turtahun_id` (tanpa `tahun_id`).

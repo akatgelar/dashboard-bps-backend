@@ -4,6 +4,7 @@ import (
 	DB "akatgelar/dashboard-bps-backend/database"
 	"akatgelar/dashboard-bps-backend/models"
 	"database/sql"
+	"errors"
 	"fmt"
 	"net/http"
 	"strconv"
@@ -174,12 +175,22 @@ func GetBigNumberData(c *gin.Context) {
 		return
 	}
 
-	// resolve current tahun name
+	// resolve current tahun name; a domain/year without a master_tahun row means
+	// there is no data at all for these params (e.g. an inactive domain), so it
+	// is reported as an empty result instead of a 500.
 	var tahunSekarangName string
 	if err := DB.DB_SQL_POSTGRES.QueryRow(
 		`SELECT tahun_name FROM webapi.master_tahun WHERE domain_id=$1 AND tahun_id=$2`,
 		domainID, tahunID,
 	).Scan(&tahunSekarangName); err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			c.JSON(http.StatusOK, models.BaseResponse{
+				Status:  true,
+				Message: "Data not found",
+				Data:    nil,
+			})
+			return
+		}
 		sentry.CaptureException(err)
 		c.JSON(http.StatusInternalServerError, models.BaseResponse{Status: false, Message: "Internal server error: " + err.Error()})
 		return
