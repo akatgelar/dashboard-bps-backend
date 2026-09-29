@@ -152,6 +152,14 @@ definitions:
         type: string
       get_at:
         type: string
+      group_id:
+        description: |-
+          GroupID/GroupName are not columns of master_variable: they are filled from
+          master_variable_turunan (group_turvar_id / name_group_turvar) via a select
+          expression set by the variable endpoints.
+        type: string
+      group_name:
+        type: string
       id:
         type: integer
       notes:

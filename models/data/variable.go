@@ -16,6 +16,12 @@ type Variable struct {
 	Notes    string          `gorm:"column:notes" json:"notes"`
 	Unit     string          `gorm:"column:unit" json:"unit"`
 	GetAt    HelperTime.Time `gorm:"column:get_at" json:"get_at"`
+
+	// GroupID/GroupName are not columns of master_variable: they are filled from
+	// master_variable_turunan (group_turvar_id / name_group_turvar) via a select
+	// expression set by the variable endpoints.
+	GroupID   string `gorm:"->;column:group_id" json:"group_id"`
+	GroupName string `gorm:"->;column:group_name" json:"group_name"`
 }
 
 func (Variable) TableName() string { return "webapi.master_variable" }

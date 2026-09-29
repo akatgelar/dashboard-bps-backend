@@ -8,6 +8,18 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// variableGroupSelect adds the turvar group (group_turvar_id / name_group_turvar
+// from master_variable_turunan) to the master_variable data query, aliased as
+// group_id / group_name. Correlated subqueries are used so a variable with
+// several turvar rows (same group) is not multiplied.
+const variableGroupSelect = `webapi.master_variable.*,
+	COALESCE((SELECT mvt.group_turvar_id FROM webapi.master_variable_turunan mvt
+		WHERE mvt.domain_id = webapi.master_variable.domain_id AND mvt.var_id = webapi.master_variable.var_id
+		ORDER BY mvt.id LIMIT 1), '') AS group_id,
+	COALESCE((SELECT mvt.name_group_turvar FROM webapi.master_variable_turunan mvt
+		WHERE mvt.domain_id = webapi.master_variable.domain_id AND mvt.var_id = webapi.master_variable.var_id
+		ORDER BY mvt.id LIMIT 1), '') AS group_name`
+
 // GetDomainData godoc
 // @Summary      List master domain
 // @Description  Get list master domain
@@ -80,6 +92,7 @@ func GetVariableData(c *gin.Context) {
 		sortable:      []string{"id", "domain_id", "var_id", "var_name", "sub_id", "sub_name", "unit", "get_at"},
 		filterable:    []string{"id", "domain_id", "var_id", "var_name", "sub_id", "sub_name", "unit"},
 		lastUpdateCol: "get_at",
+		dataSelect:    variableGroupSelect,
 	}, &dest)
 }
 
@@ -105,6 +118,7 @@ func GetVariableDistinctData(c *gin.Context) {
 		sortable:      []string{"id", "domain_id", "var_id", "var_name", "sub_id", "sub_name", "unit", "get_at"},
 		filterable:    []string{"id", "domain_id", "var_id", "var_name", "sub_id", "sub_name", "unit"},
 		lastUpdateCol: "get_at",
+		dataSelect:    variableGroupSelect,
 		extraWhere: fmt.Sprintf(
 			`var_id IN (SELECT DISTINCT var_id FROM %s)`,
 			ModelData.VariableTurunan{}.TableName(),

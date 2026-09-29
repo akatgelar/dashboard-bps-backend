@@ -1646,6 +1646,13 @@ const docTemplate = `{
                 "get_at": {
                     "type": "string"
                 },
+                "group_id": {
+                    "description": "GroupID/GroupName are not columns of master_variable: they are filled from\nmaster_variable_turunan (group_turvar_id / name_group_turvar) via a select\nexpression set by the variable endpoints.",
+                    "type": "string"
+                },
+                "group_name": {
+                    "type": "string"
+                },
                 "id": {
                     "type": "integer"
                 },

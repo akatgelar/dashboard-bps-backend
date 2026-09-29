@@ -195,6 +195,10 @@ Mengambil daftar master variable/indikator.
 | `notes` | string | Catatan/sumber |
 | `unit` | string | Satuan |
 | `get_at` | string | Waktu pengambilan |
+| `group_id` | string | Alias dari `master_variable_turunan.group_turvar_id` (group variable turunan). Kosong bila variable tidak punya turunan |
+| `group_name` | string | Alias dari `master_variable_turunan.name_group_turvar` |
+
+> `group_id`/`group_name` diambil via subquery ke `master_variable_turunan` (`domain_id` + `var_id`), jadi satu baris `master_variable` tidak tergandakan walau punya beberapa baris turvar.
 
 ```
 GET /master/variable

@@ -26,6 +26,7 @@ type masterConfig struct {
 	lastUpdateCol      string            // column used for metadata.last_update_data
 	lastUpdateFiltered bool              // whether the filter applies to the last_update computation
 	extraWhere         string            // additional raw WHERE clause applied to data & count queries
+	dataSelect         string            // optional raw SELECT list for the data query (adds computed/joined columns)
 	filterColumn       map[string]string // optional filter field -> qualified column (for joins)
 	sortColumn         map[string]string // optional sort field -> qualified column (for joins)
 }
@@ -199,6 +200,11 @@ func fetchMaster(c *gin.Context, cfg masterConfig, model interface{}) {
 
 	if hasOrder, orderClause := buildOrder(c, cfg); hasOrder {
 		q = q.Order(orderClause)
+	}
+
+	// Optional extra SELECT columns (only for the data query, not for count).
+	if cfg.dataSelect != "" {
+		q = q.Select(cfg.dataSelect)
 	}
 
 	if err := q.Limit(perPage).Offset(offset).Find(model).Error; err != nil {
