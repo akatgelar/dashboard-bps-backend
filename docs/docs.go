@@ -295,6 +295,13 @@ const docTemplate = `{
                         "description": "optional, limit to one tahun_id",
                         "name": "tahun_id",
                         "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "example": "1100",
+                        "description": "optional, limit to one vervar_id",
+                        "name": "vervar_id",
+                        "in": "query"
                     }
                 ],
                 "responses": {

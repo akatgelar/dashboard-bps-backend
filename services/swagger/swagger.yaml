@@ -837,6 +837,11 @@ paths:
         in: query
         name: tahun_id
         type: string
+      - description: optional, limit to one vervar_id
+        example: "1100"
+        in: query
+        name: vervar_id
+        type: string
       produces:
       - application/json
       responses:
