@@ -105,7 +105,7 @@ swag init -g main.go -d . -o services/swagger --generatedTime=false
 | `GET /master/domain` | Master domain/wilayah |
 | `GET /master/subjek` | Master subjek |
 | `GET /master/variable` | Master variable |
-| `GET /master/variable-distinct` | Variable yang punya `variable_turunan` |
+| `GET /master/variable-distinct` | Variable yang punya `variable_turunan` (opsional `?tahun_terakhir=<year>`) |
 | `GET /master/variable-turunan` | Master variable turunan |
 | `GET /master/variable-vertical` | Master variable vertical |
 | `GET /master/tahun` | Master tahun |

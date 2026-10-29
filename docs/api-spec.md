@@ -210,9 +210,14 @@ GET /master/variable?sort=var_name&order=asc&per_page=50
 
 Sama dengan `master/variable` (params & isi sama), tetapi **hanya menampilkan variable yang memiliki `variable_turunan`**. Relasi: `var_id` dari `master_variable` harus ada di `master_variable_turunan`.
 
+Param tambahan (opsional): `tahun_terakhir=<year:int>` — hanya menampilkan variable yang **tahun terakhirnya** di `datacontent.tahun_name` (yaitu `MAX(tahun_name)` per `domain_id` + `var_id`) **>= tahun** tsb. Variable tanpa baris `datacontent` (atau tanpa `tahun_name` numerik) tidak ikut. Nilai bukan angka → `400 Invalid tahun_terakhir format`.
+
+Implementasi memakai semi-join (`(domain_id, var_id) IN (SELECT ... FROM datacontent WHERE tahun_name::int >= ... GROUP BY 1,2)`), bukan `MAX` per variable — hasil sama, tapi `datacontent` cukup dipindai sekali. `total_data`/`total_page` dihitung di query yang sama (`count(*) OVER ()`).
+
 ```
 GET /master/variable-distinct
 GET /master/variable-distinct?filter=[{"field":"domain_id","operator":"eq","value":"0000"}]
+GET /master/variable-distinct?tahun_terakhir=2023
 ```
 
 #### 3.4.5 `master/variable-turunan`
