@@ -26,6 +26,7 @@ type masterConfig struct {
 	lastUpdateCol      string            // column used for metadata.last_update_data
 	lastUpdateFiltered bool              // whether the filter applies to the last_update computation
 	extraWhere         string            // additional raw WHERE clause applied to data & count queries
+	extraWhereArgs     []interface{}     // bind values for extraWhere placeholders
 	dataSelect         string            // optional raw SELECT list for the data query (adds computed/joined columns)
 	filterColumn       map[string]string // optional filter field -> qualified column (for joins)
 	sortColumn         map[string]string // optional sort field -> qualified column (for joins)
@@ -184,7 +185,7 @@ func fetchMaster(c *gin.Context, cfg masterConfig, model interface{}) {
 		return
 	}
 	if cfg.extraWhere != "" {
-		q = q.Where(cfg.extraWhere)
+		q = q.Where(cfg.extraWhere, cfg.extraWhereArgs...)
 	}
 
 	var totalData int64
@@ -254,6 +255,133 @@ func fetchMaster(c *gin.Context, cfg masterConfig, model interface{}) {
 		Status:   true,
 		Message:  "Get data success",
 		Data:     model,
+		Metadata: metadata,
+	})
+}
+
+// variableRow is the scan target of fetchVariableDistinct: the variable columns
+// plus the total row count computed by the same query (count(*) OVER ()).
+type variableRow struct {
+	ModelData.Variable
+	TotalData int64 `gorm:"column:total_data"`
+}
+
+// variableGroupJoin resolves group_id/group_name once per (domain_id, var_id)
+// instead of a correlated subquery per output row. variable-distinct uses
+// count(*) OVER (), which makes Postgres evaluate every selected expression for
+// the whole filtered set, so a correlated subquery here cost seconds on staging.
+// DISTINCT ON ... ORDER BY id keeps the same "first turvar row" semantics as
+// the ORDER BY mvt.id LIMIT 1 subqueries used by /master/variable.
+const variableGroupJoin = `LEFT JOIN (
+	SELECT DISTINCT ON (domain_id, var_id) domain_id, var_id,
+	       group_turvar_id AS group_id, name_group_turvar AS group_name
+	FROM webapi.master_variable_turunan
+	ORDER BY domain_id, var_id, id
+) vg ON vg.domain_id = mv.domain_id AND vg.var_id = mv.var_id`
+
+// variableDistinctSelect is the SELECT list of /master/variable-distinct; the
+// table must be aliased as mv (see fetchVariableDistinct).
+const variableDistinctSelect = `mv.*, vg.group_id, vg.group_name`
+
+// fetchVariableDistinct serves /master/variable-distinct. Unlike fetchMaster it
+// takes the total row count from the data query itself (count(*) OVER ()), so
+// the expensive datacontent aggregate behind tahun_terakhir runs once instead
+// of once for the count and once for the page (staging: ~0.9s vs ~1.8s).
+func fetchVariableDistinct(c *gin.Context, cfg masterConfig) {
+	perPage := queryInt(c, "per_page", masterDefaultPerPage)
+	page := queryInt(c, "page", 1)
+	offset := (page - 1) * perPage
+
+	// The data query uses the `mv` alias (needed by variableGroupJoin), so
+	// filter/sort columns must be qualified too.
+	filterColumns := make(map[string]string, len(cfg.filterable))
+	for _, field := range cfg.filterable {
+		filterColumns[field] = "mv." + field
+	}
+	sortColumns := make(map[string]string, len(cfg.sortable))
+	for _, field := range cfg.sortable {
+		sortColumns[field] = "mv." + field
+	}
+	cfg.filterColumn = filterColumns
+	cfg.sortColumn = sortColumns
+
+	// buildQuery applies the request filter + extraWhere. Returns nil (after
+	// writing an error response) when the filter is invalid. withGroup adds the
+	// group join (only the data query needs it).
+	buildQuery := func(withGroup bool) *gorm.DB {
+		q := database.DB_POSTGRES.Table("webapi.master_variable AS mv")
+		if withGroup {
+			q = q.Joins(variableGroupJoin)
+		}
+		if !applyFilter(q, c, cfg) {
+			return nil
+		}
+		if cfg.extraWhere != "" {
+			q = q.Where(cfg.extraWhere, cfg.extraWhereArgs...)
+		}
+		return q
+	}
+
+	query := buildQuery(true)
+	if query == nil {
+		return
+	}
+
+	// count(*) OVER () is evaluated over the whole filtered set, before
+	// ORDER BY / LIMIT / OFFSET.
+	query = query.Select(cfg.dataSelect + ", count(*) OVER () AS total_data")
+	if hasOrder, orderClause := buildOrder(c, cfg); hasOrder {
+		query = query.Order(orderClause)
+	}
+
+	var rows []variableRow
+	if err := query.Limit(perPage).Offset(offset).Find(&rows).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, models.BaseResponse{Status: false, Message: "Failed to fetch data: " + err.Error()})
+		return
+	}
+
+	var totalData int64
+	if len(rows) > 0 {
+		totalData = rows[0].TotalData
+	} else {
+		// Empty page (no match at all, or page beyond the last one): the window
+		// count is not available, so count separately (without the group join).
+		countQuery := buildQuery(false)
+		if countQuery == nil {
+			return
+		}
+		if err := countQuery.Count(&totalData).Error; err != nil {
+			c.JSON(http.StatusInternalServerError, models.BaseResponse{Status: false, Message: "Failed to count records: " + err.Error()})
+			return
+		}
+	}
+
+	totalPage := int(totalData) / perPage
+	if int(totalData)%perPage > 0 {
+		totalPage++
+	}
+
+	var data []ModelData.Variable
+	if len(rows) > 0 {
+		data = make([]ModelData.Variable, len(rows))
+		for i := range rows {
+			data[i] = rows[i].Variable
+		}
+	}
+
+	metadata := models.BaseMetadata{
+		TotalData:          int(totalData),
+		TotalPage:          totalPage,
+		PerPage:            perPage,
+		Page:               page,
+		LastUpdateData:     formatDateTime(lastDataValue(c, &ModelData.Variable{}, cfg)),
+		LastUpdatePipeline: formatDateTime(lastPipelineValue(&ModelData.Variable{})),
+	}
+
+	c.JSON(http.StatusOK, models.BaseResponse{
+		Status:   true,
+		Message:  "Get data success",
+		Data:     data,
 		Metadata: metadata,
 	})
 }

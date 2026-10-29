@@ -1519,6 +1519,12 @@ paths:
         in: query
         name: page
         type: integer
+      - description: only variables whose latest datacontent.tahun_name is >= this
+          year
+        example: 2020
+        in: query
+        name: tahun_terakhir
+        type: integer
       produces:
       - application/json
       responses:

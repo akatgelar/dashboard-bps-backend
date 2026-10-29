@@ -1257,6 +1257,13 @@ const docTemplate = `{
                         "description": "page, 1-based",
                         "name": "page",
                         "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "example": 2020,
+                        "description": "only variables whose latest datacontent.tahun_name is \u003e= this year",
+                        "name": "tahun_terakhir",
+                        "in": "query"
                     }
                 ],
                 "responses": {
