@@ -95,6 +95,57 @@ func GetSubjectData(c *gin.Context) {
 	}, &dest)
 }
 
+// GetSubjectDistinctData godoc
+// @Summary      List master subject that have variable_turunan
+// @Description  Get list master subject that have at least one variable in master/variable-distinct
+// @Tags         master
+// @Accept       json
+// @Produce      json
+// @Param        filter    query string false "JSON array of {field,operator,value}. Operator supports: eq, neq, gt, gte, lt, lte, like" example([{"field":"domain_id","operator":"eq","value":"0000"}])
+// @Param        sort      query string false "sort column (single)" example(sub_name)
+// @Param        order     query string false "asc | desc" Enums(asc,desc) default(asc)
+// @Param        per_page  query int    false "per page, default 20" example(20)
+// @Param        page      query int    false "page, 1-based" example(1)
+// @Param        tahun_terakhir query int false "only subjects with a variable whose latest datacontent.tahun_name is >= this year" example(2020)
+// @Success      200  {object}  SubjectDistinctListResponse
+// @Failure      400  {object}  models.BaseResponse
+// @Failure      500  {object}  models.BaseResponse
+// @Router       /master/subjek-distinct [get]
+func GetSubjectDistinctData(c *gin.Context) {
+	extraWhere := fmt.Sprintf(
+		`(webapi.master_subject.domain_id, webapi.master_subject.sub_id) IN (
+			SELECT DISTINCT mv.domain_id, mv.sub_id
+			FROM %s mv
+			WHERE mv.var_id IN (SELECT DISTINCT var_id FROM %s)`,
+		ModelData.Variable{}.TableName(),
+		ModelData.VariableTurunan{}.TableName(),
+	)
+	var extraWhereArgs []interface{}
+
+	// Optional tahun_terakhir=<year>: same predicate as /master/variable-distinct,
+	// so the subject set matches the variables that endpoint would return.
+	if raw := strings.TrimSpace(c.Query("tahun_terakhir")); raw != "" {
+		year, err := strconv.Atoi(raw)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, models.BaseResponse{Status: false, Message: "Invalid tahun_terakhir format"})
+			return
+		}
+		extraWhere += " AND " + variableLastYearWhere
+		extraWhereArgs = append(extraWhereArgs, year)
+	}
+	extraWhere += ")"
+
+	var dest []ModelData.Subject
+	fetchMaster(c, masterConfig{
+		defaultSort:    "id",
+		sortable:       []string{"id", "domain_id", "sub_id", "sub_name", "get_at"},
+		filterable:     []string{"id", "domain_id", "sub_id", "sub_name"},
+		lastUpdateCol:  "get_at",
+		extraWhere:     extraWhere,
+		extraWhereArgs: extraWhereArgs,
+	}, &dest)
+}
+
 // GetVariableData godoc
 // @Summary      List master variable
 // @Description  Get list master variable

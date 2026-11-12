@@ -18,6 +18,11 @@ func RouteMaster(g *gin.RouterGroup) {
 		ServiceMaster.GetSubjectData(c)
 	})
 
+	// master/subjek-distinct
+	g.GET("/master/subjek-distinct", func(c *gin.Context) {
+		ServiceMaster.GetSubjectDistinctData(c)
+	})
+
 	// master/variable
 	g.GET("/master/variable", func(c *gin.Context) {
 		ServiceMaster.GetVariableData(c)

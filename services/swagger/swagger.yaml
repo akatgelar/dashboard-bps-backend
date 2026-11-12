@@ -499,6 +499,19 @@ definitions:
       vervar_name:
         type: string
     type: object
+  services.SubjectDistinctListResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/models.Subject'
+        type: array
+      message:
+        type: string
+      metadata:
+        $ref: '#/definitions/models.BaseMetadata'
+      status:
+        type: boolean
+    type: object
   services.SubjectListResponse:
     properties:
       data:
@@ -1109,6 +1122,65 @@ paths:
           schema:
             $ref: '#/definitions/models.BaseResponse'
       summary: List master subject
+      tags:
+      - master
+  /master/subjek-distinct:
+    get:
+      consumes:
+      - application/json
+      description: Get list master subject that have at least one variable in master/variable-distinct
+      parameters:
+      - description: 'JSON array of {field,operator,value}. Operator supports: eq,
+          neq, gt, gte, lt, lte, like'
+        example: '[{"field":"domain_id","operator":"eq","value":"0000"}]'
+        in: query
+        name: filter
+        type: string
+      - description: sort column (single)
+        example: sub_name
+        in: query
+        name: sort
+        type: string
+      - default: asc
+        description: asc | desc
+        enum:
+        - asc
+        - desc
+        in: query
+        name: order
+        type: string
+      - description: per page, default 20
+        example: 20
+        in: query
+        name: per_page
+        type: integer
+      - description: page, 1-based
+        example: 1
+        in: query
+        name: page
+        type: integer
+      - description: only subjects with a variable whose latest datacontent.tahun_name
+          is >= this year
+        example: 2020
+        in: query
+        name: tahun_terakhir
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/services.SubjectDistinctListResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+      summary: List master subject that have variable_turunan
       tags:
       - master
   /master/tahun:

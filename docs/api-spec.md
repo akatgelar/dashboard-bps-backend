@@ -83,6 +83,7 @@ HTTP status: `200` sukses, `400` bad request / param tidak valid, `404` route-no
 |----------|------------|
 | `master/domain` | Master domain/wilayah |
 | `master/subjek` | Master subjek (kategori indikator) |
+| `master/subjek-distinct` | Subjek yang memiliki variable di `master/variable-distinct` |
 | `master/variable` | Master variable/indikator |
 | `master/variable-distinct` | Variable yang memiliki `variable_turunan` |
 | `master/variable-turunan` | Master variable turunan |
@@ -180,7 +181,19 @@ GET /master/subjek
 GET /master/subjek?filter=[{"field":"sub_name","operator":"like","value":"Ekonomi"}]
 ```
 
-#### 3.4.3 `master/variable`
+#### 3.4.3 `master/subjek-distinct`
+
+Sama dengan `master/subjek` (params & isi sama), tetapi **hanya menampilkan subjek yang memiliki variable di `master/variable-distinct`**. Relasi: pasangan `domain_id` + `sub_id` dari `master_subject` harus ada di `master_variable` yang `var_id`-nya ada di `master_variable_turunan`.
+
+Param tambahan (opsional): `tahun_terakhir=<year:int>` — memakai syarat yang sama dengan `master/variable-distinct`, sehingga subjek hanya ikut bila punya variable dengan `MAX(datacontent.tahun_name) >= tahun`. Nilai bukan angka → `400 Invalid tahun_terakhir format`.
+
+```
+GET /master/subjek-distinct
+GET /master/subjek-distinct?filter=[{"field":"domain_id","operator":"eq","value":"0000"}]
+GET /master/subjek-distinct?tahun_terakhir=2023
+```
+
+#### 3.4.4 `master/variable`
 
 Mengambil daftar master variable/indikator.
 
@@ -206,7 +219,7 @@ GET /master/variable?filter=[{"field":"var_id","operator":"eq","value":"70"}]
 GET /master/variable?sort=var_name&order=asc&per_page=50
 ```
 
-#### 3.4.4 `master/variable-distinct`
+#### 3.4.5 `master/variable-distinct`
 
 Sama dengan `master/variable` (params & isi sama), tetapi **hanya menampilkan variable yang memiliki `variable_turunan`**. Relasi: `var_id` dari `master_variable` harus ada di `master_variable_turunan`.
 
@@ -220,7 +233,7 @@ GET /master/variable-distinct?filter=[{"field":"domain_id","operator":"eq","valu
 GET /master/variable-distinct?tahun_terakhir=2023
 ```
 
-#### 3.4.5 `master/variable-turunan`
+#### 3.4.6 `master/variable-turunan`
 
 Mengambil daftar master variable turunan.
 
@@ -239,7 +252,7 @@ GET /master/variable-turunan
 GET /master/variable-turunan?filter=[{"field":"var_id","operator":"eq","value":"10"}]
 ```
 
-#### 3.4.6 `master/variable-vertical`
+#### 3.4.7 `master/variable-vertical`
 
 Mengambil daftar master variable vertical (wilayah/tipe penyajian).
 
@@ -258,7 +271,7 @@ GET /master/variable-vertical
 GET /master/variable-vertical?filter=[{"field":"vervar_id","operator":"eq","value":"1106"}]
 ```
 
-#### 3.4.7 `master/tahun`
+#### 3.4.8 `master/tahun`
 
 Mengambil daftar master periode/tahun.
 
@@ -277,7 +290,7 @@ GET /master/tahun?filter=[{"field":"tahun_name","operator":"eq","value":"2026"}]
 GET /master/tahun?sort=tahun_name&order=desc
 ```
 
-#### 3.4.8 `master/tahun-distinct`
+#### 3.4.9 `master/tahun-distinct`
 
 Distinct `tahun_id`, `tahun_name` dari `webapi.datacontent`. Params sama dgn endpoint master (`filter`, `sort`, `order`, `per_page`, `page`). Field filter/sort yang didukung: `tahun_id`, `tahun_name`, `domain_id`, `var_id`.
 
@@ -291,7 +304,7 @@ Response `data` (array):
 [ { "tahun_id": "125", "tahun_name": "2025" } ]
 ```
 
-#### 3.4.9 `master/tahun-turunan`
+#### 3.4.10 `master/tahun-turunan`
 
 Mengambil daftar master periode turunan.
 
@@ -310,7 +323,7 @@ GET /master/tahun-turunan
 GET /master/tahun-turunan?filter=[{"field":"group_turth_name","operator":"eq","value":"Tahunan"}]
 ```
 
-#### 3.4.10 `master/tahun-turunan-distinct`
+#### 3.4.11 `master/tahun-turunan-distinct`
 
 Distinct `turtahun_id`, `turtahun_name` dari `webapi.datacontent`. Params sama dgn endpoint master. Field filter/sort yang didukung: `turtahun_id`, `turtahun_name`, `domain_id`, `var_id`.
 
@@ -324,7 +337,7 @@ Response `data` (array):
 [ { "turtahun_id": "0", "turtahun_name": "Tahun" } ]
 ```
 
-#### 3.4.11 `master/tahun-turunan-group`
+#### 3.4.12 `master/tahun-turunan-group`
 
 Group periode dari `webapi.master_tahun_turunan`, di-resolve lewat INNER JOIN ke `webapi.datacontent` supaya bisa difilter `domain_id` & `var_id`. Field filter/sort: `turtahun_group_id`, `turtahun_group_name` (alias dari `group_turth_id`/`group_turth_name`), `group_turth_id`, `group_turth_name`, `domain_id`, `var_id`, `turtahun_id`, `turtahun_name`.
 
@@ -339,7 +352,7 @@ Response `data` (array):
 [ { "turtahun_group_id": "1", "turtahun_group_name": "Bulanan" } ]
 ```
 
-#### 3.4.12 `master/tahun-turunan-group-distinct`
+#### 3.4.13 `master/tahun-turunan-group-distinct`
 
 Distinct group periode dari `webapi.datacontent` ⋈ `webapi.master_tahun_turunan`. Field filter/sort: `turtahun_group_id`, `turtahun_group_name`, `group_turth_id`, `group_turth_name`, `domain_id`, `var_id`, `turtahun_id`, `turtahun_name`.
 
@@ -352,7 +365,7 @@ Response `data` (array):
 [ { "turtahun_group_id": "1", "turtahun_group_name": "Bulanan" } ]
 ```
 
-#### 3.4.13 `datacontent`
+#### 3.4.14 `datacontent`
 
 Mengambil daftar isi data (nilai angka) hasil pipeline. Mengikuti parameter master (`filter`, `sort`, `order`, `per_page`, `page`).
 
@@ -671,6 +684,7 @@ GET /insight/per-wilayah-turvar?domain_id=0000&var_id=286&tahun_id=125&turtahun_
 |----------|----------------|
 | `master/domain` | array |
 | `master/subjek` | array |
+| `master/subjek-distinct` | array |
 | `master/variable` | array |
 | `master/variable-distinct` | array |
 | `master/variable-turunan` | array |
@@ -740,5 +754,6 @@ curl "https://<host>/insight/per-wilayah-turvar?domain_id=0000&var_id=286&tahun_
 5. Param filter master memakai `filter` (array) — bukan `where`. Operator: `eq`, `neq`, `gt`, `gte`, `lt`, `lte`, `like`.
 6. Sorting memakai `sort` (satu kolom) + `order` (asc/desc), bukan `sort=kolom:asc`.
 7. `master/variable-distinct` = variable yang memiliki `variable_turunan`.
-8. `insight/big-number`: tahun sebelumnya = `master_tahun.tahun_name - 1`; field `avg_persen`, `median_persen`, `indo_persen`, `jabar_persen`, `kota_persen` = perbandingan tahun sekarang terhadap tahun sebelumnya. Baris yang di-exclude dari `max`/`min`/`avg`/`median` bergantung `domain_id` (`0000`: Indonesia + Jawa Barat; `3200`: Jawa Barat; lainnya: wilayah domain itu sendiri).
-9. `insight/per-wilayah`: klaster percentile, min 2 / max 5, warna `#FFFFFF` → `#4856FF`.
+8. `master/subjek-distinct` = subjek yang memiliki variable di `master/variable-distinct` (pasangan `domain_id` + `sub_id`).
+9. `insight/big-number`: tahun sebelumnya = `master_tahun.tahun_name - 1`; field `avg_persen`, `median_persen`, `indo_persen`, `jabar_persen`, `kota_persen` = perbandingan tahun sekarang terhadap tahun sebelumnya. Baris yang di-exclude dari `max`/`min`/`avg`/`median` bergantung `domain_id` (`0000`: Indonesia + Jawa Barat; `3200`: Jawa Barat; lainnya: wilayah domain itu sendiri).
+10. `insight/per-wilayah`: klaster percentile, min 2 / max 5, warna `#FFFFFF` → `#4856FF`.

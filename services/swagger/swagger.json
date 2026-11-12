@@ -667,6 +667,89 @@
                 }
             }
         },
+        "/master/subjek-distinct": {
+            "get": {
+                "description": "Get list master subject that have at least one variable in master/variable-distinct",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "master"
+                ],
+                "summary": "List master subject that have variable_turunan",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "example": "[{\"field\":\"domain_id\",\"operator\":\"eq\",\"value\":\"0000\"}]",
+                        "description": "JSON array of {field,operator,value}. Operator supports: eq, neq, gt, gte, lt, lte, like",
+                        "name": "filter",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "example": "sub_name",
+                        "description": "sort column (single)",
+                        "name": "sort",
+                        "in": "query"
+                    },
+                    {
+                        "enum": [
+                            "asc",
+                            "desc"
+                        ],
+                        "type": "string",
+                        "default": "asc",
+                        "description": "asc | desc",
+                        "name": "order",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "example": 20,
+                        "description": "per page, default 20",
+                        "name": "per_page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "example": 1,
+                        "description": "page, 1-based",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "example": 2020,
+                        "description": "only subjects with a variable whose latest datacontent.tahun_name is \u003e= this year",
+                        "name": "tahun_terakhir",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/services.SubjectDistinctListResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/master/tahun": {
             "get": {
                 "description": "Get list master tahun",
@@ -2194,6 +2277,26 @@
                 },
                 "vervar_name": {
                     "type": "string"
+                }
+            }
+        },
+        "services.SubjectDistinctListResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.Subject"
+                    }
+                },
+                "message": {
+                    "type": "string"
+                },
+                "metadata": {
+                    "$ref": "#/definitions/models.BaseMetadata"
+                },
+                "status": {
+                    "type": "boolean"
                 }
             }
         },

@@ -30,6 +30,14 @@ type SubjectListResponse struct {
 	Metadata models.BaseMetadata `json:"metadata"`
 }
 
+// SubjectDistinctListResponse documents GET /master/subjek-distinct.
+type SubjectDistinctListResponse struct {
+	Status   bool                `json:"status"`
+	Message  string              `json:"message"`
+	Data     []ModelData.Subject `json:"data"`
+	Metadata models.BaseMetadata `json:"metadata"`
+}
+
 // VariableListResponse documents GET /master/variable.
 type VariableListResponse struct {
 	Status   bool                 `json:"status"`
